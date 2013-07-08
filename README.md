@@ -17,4 +17,4 @@ $ composer update
 
 ### Configuration
 
-Before starting to use the UI, you will need to copy settings.example.json (in the config folder) and name it settings.json.
+Before starting to use the UI, you will need to copy index.example.json (in the public folder) and name it index.json. HOSTNAME and STARTPATH variables still need to be set in index.php.

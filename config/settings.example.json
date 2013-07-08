@@ -1,6 +1,0 @@
-{	
-    // Hostname of the datatank installation (with trailing slash!)
-    "host":"http://localhost/",
-    // Path to the local tdt-start folder (with trailing slash!)
-    "startpath":"/home/user/tdt-start/"
-}
