@@ -21,7 +21,7 @@
         <h1>Users</h1>
         <ul>
             {% for user in usernames %}
-                <li>{{user}} <a href="">edit</a> <a href="">remove</a></li>
+                <li>{{user}} <a href="">edit</a> <a href="users/remove/{{user}}">remove</a></li>
         	{% endfor %}
         </ul>
     </body>

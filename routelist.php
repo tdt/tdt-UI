@@ -32,7 +32,7 @@ $filename = $configloader->getSettings("startpath"). "app/config/cores.json";
 $routeObject = json_decode(ConfigLoader::stripComments(file_get_contents($filename)));
 $cores = get_object_vars($routeObject);
 
-// Representing the data in twig.
+// Render a list of routes using Twig
 $app->get('/routes', function () use ($app,$cores) {
 	$data = array();
 	$data['cores'] = $cores;

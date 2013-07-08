@@ -33,14 +33,18 @@ $filename = $configloader->getSettings("startpath"). "app/config/auth.json";
 $users = json_decode(file_get_contents($filename));
 $usernames = array_keys(get_object_vars($users));
 
-// Representing the data in twig.
+// Render a list of users using Twig
 $app->get('/users', function () use ($app,$usernames) {
-	$data = array();
 	$data['usernames'] = $usernames;
 	return $app['twig']->render('userlist.twig',$data);
 });
 
+// Remove a user from the auth.json
+$app->get('/users/remove/{username}', function ($username) use ($app,$users,$filename) {
+	unset($users->$username);
+	file_put_contents($filename, json_encode($users));
+	return $app->redirect('../../users');
+});
+
 // running the application
 $app->run();
-
-
