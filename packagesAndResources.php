@@ -1,8 +1,13 @@
 <?php
  
-// Getting the packages and resources
-// @author Leen De Baets, Jeppe Knockaert, Nicolas Dierck
-// (c) 2013n OKFN. All rights reserved
+/**
+ * Getting the packages and resources
+ * @copyright (C) 2013 by OKFN Belgium
+ * @license AGPLv3
+ * @author Leen De Baets
+ * @author Jeppe Knockaert
+ * @author Nicolas Dierck
+ */
 
 // Making Silex applicatie
 require_once 'vendor/autoload.php';
