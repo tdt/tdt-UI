@@ -1,0 +1,26 @@
+<!--
+  Twig file for the representation of the userlist
+  @copyright (C) 2013 by OKFN Belgium
+  @license AGPLv3
+  @author Leen De Baets
+  @author Jeppe Knockaert
+  @author Nicolas Dierck
+-->
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Userlist</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap -->
+    <link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+  </head>
+  <body>
+    <script src="http://code.jquery.com/jquery.js"></script>
+    <script src="../js/bootstrap.min.js"></script>
+
+    <ul>
+    	{% for user in users %}
+    		<li>{{user.name}}</li>
+    	{% endfor %}
+  </body>
+</html>
