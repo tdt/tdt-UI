@@ -9,8 +9,13 @@
  * @author Nicolas Dierck
  */
 
-// Making Silex application
+error_reporting(E_ALL);
+ini_set('display_errors', True);
+
 require_once 'vendor/autoload.php';
+require_once 'ConfigLoader.php';
+
+// Making Silex application
 $app = new Silex\Application();
 $app['debug'] = true;
 
@@ -19,11 +24,11 @@ $app->register(new Silex\Provider\TwigServiceProvider(), array(
 	'twig.path' => __DIR__.'/views',
 ));
 
-//Get settings
-$settings = json_decode(file_get_contents(__DIR__.'/config/settings.json'));
+//Make a config loader
+$configloader = new ConfigLoader();
 
 //Fetch users from file (existence is already checked when loading configurationfiles)
-$filename = $settings->startpath. "app/config/auth.json";
+$filename = $configloader->getSettings("startpath"). "app/config/auth.json";
 
 $users = json_decode(file_get_contents($filename));
 $usernames = array_keys(get_object_vars($users));
