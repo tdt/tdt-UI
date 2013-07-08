@@ -1,3 +1,5 @@
 composer.*
 !composer.json
 vendor/*
+config/*
+!config/settings.example.json

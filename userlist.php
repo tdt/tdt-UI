@@ -16,19 +16,26 @@ $app['debug'] = true;
 
 //Register the Twig service provider
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-	'twig.path' => __DIR__.'/views'
+	'twig.path' => __DIR__.'/views',
 ));
 
+//Get settings
+$settings = json_decode(file_get_contents(__DIR__.'/config/settings.json'));
+
 //Fetch users from file (existence is already checked when loading configurationfiles)
-// $filename = APPPATH. "config/auth.json";
-// $users = json_decode(Configurator::stripComments(file_get_contents($filename)));
-// var_dump($users);
-$data = array();
+$filename = $settings->startpath. "app/config/auth.json";
+
+$users = json_decode(file_get_contents($filename));
+$usernames = array_keys(get_object_vars($users));
 
 // Representing the data in twig.
-$app->get('/users', function () use ($app) {
+$app->get('/users', function () use ($app,$usernames) {
+	$data = array();
+	$data['usernames'] = $usernames;
 	return $app['twig']->render('userlist.twig',$data);
 });
 
 // running the application
 $app->run();
+
+

@@ -1,6 +1,7 @@
-{
+//before using this file, remove all comment lines!
+{	
     // Hostname of the datatank installation (with trailing slash!)
     "host":"http://localhost/",
-    // Path to the local tdt-start folder
-    "startpath":"/home/user/tdt-start"
+    // Path to the local tdt-start folder (with trailing slash!)
+    "startpath":"/home/user/tdt-start/"
 }
