@@ -12,7 +12,7 @@
 class ConfigLoader{	
 
     function __construct() {
-       	$this->settings = json_decode($this->stripComments(file_get_contents(__DIR__.'/config/settings.json')));
+       	$this->settings = json_decode(self::stripComments(file_get_contents(__DIR__.'/config/settings.json')));
    	}
 
    	/**
