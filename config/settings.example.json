@@ -1,4 +1,3 @@
-//before using this file, remove all comment lines!
 {	
     // Hostname of the datatank installation (with trailing slash!)
     "host":"http://localhost/",
