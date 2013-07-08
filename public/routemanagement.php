@@ -9,11 +9,11 @@
  * @author Nicolas Dierck
  */
 
+//Allows to strip the comments from a json file
 require_once STARTPATH.'app/core/configurator.php';
 
 //Check if another file has already set the cores variable (for example usermanagement.php)
 if (!isset($cores)){
-	echo "test";
 	//Fetch routes from file
 	$filename = STARTPATH. "app/config/cores.json";
 	$routeObject = json_decode(Configurator::stripComments(file_get_contents($filename)));
