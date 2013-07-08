@@ -17,11 +17,11 @@
     <body>
         <script src="http://code.jquery.com/jquery.js"></script>
         <script src="../js/bootstrap.min.js"></script>
-
+        {{ include('navbar.twig') }}
         <h1>Users</h1>
         <ul>
             {% for user in usernames %}
-                <li>{{user}}</li>
+                <li>{{user}} <a href="">edit</a> <a href="">remove</a></li>
         	{% endfor %}
         </ul>
     </body>
