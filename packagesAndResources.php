@@ -9,7 +9,7 @@
  * @author Nicolas Dierck
  */
 
-// Making Silex applicatie
+// Making Silex application
 require_once 'vendor/autoload.php';
 $app = new Silex\Application();
 
