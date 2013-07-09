@@ -58,10 +58,10 @@ define('VENDORPATH', realpath(__DIR__.'/../vendor/').DIRECTORY_SEPARATOR);
 
 // TODO: remove the lines below and use configuration instead
 
-// Hostname of The DataTank installation (With trailing slash!)
+// Hostname of The DataTank installation (Add trailing slash!)
 define('HOSTNAME', "...");
 
-// Path to the local tdt-start folder (With trailing slash!)
+// Path to the local tdt-start folder (Add trailing slash!)
 define("STARTPATH", "...");
 
 //Register the Twig Service Provider
@@ -83,9 +83,10 @@ $app->get('/', function () use ($app) {
     return $app->redirect('/package');
 });
 
-//start with resources management
+// Start with resources management
 require_once 'packagesAndResources.php';
-require_once 'usermanagement.php';
-require_once 'routemanagement.php';
+// User management should always be before route management!
+require_once 'usermanagement.php'; 
+require_once 'routemanagement.php'; 
 
 $app->run();
