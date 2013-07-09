@@ -159,7 +159,7 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 	        	$newname = $data['username'];
 
 	        	// Check if the username has changed, if so, delete the old username
-				if (strcmp($oldname, $newname) != 0 && isset($userObject->$oldname)){
+				if (strcmp($oldname, $newname) != 0){
 					unset($userObject->$oldname);
 				}
 
