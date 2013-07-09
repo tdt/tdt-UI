@@ -118,7 +118,6 @@ $app->match('/users/edit', function (Request $request) use ($app,$users,$filenam
 	            )
 	        )->add('routes','choice', array(
 	        	'label' => 'Routes',
-	        	'label_attr' => array( 'class' => 'checkbox'),
 	        	'choices' => $routecheckboxes,
     			'required' => false,
     			'expanded' => true,
