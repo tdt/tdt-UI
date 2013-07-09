@@ -52,7 +52,7 @@ $app->get('/users', function () use ($app,$users,$routes,$userroutes) {
 });
 
 // Add, edit or remove an existing user
-$app->match('/users/edit', function (Request $request) use ($app,$users,$filename,$userroutes,$routes) {
+$app->match('/users/edit', function (Request $request) use ($app,$users,$filename,$userroutes,$routes,$routeFile,$routeObject,$cores) {
 
 	//If the request comes from the userlist, a parameter oldname will be in the request
 	$oldname = $request->get('oldname',null);
@@ -68,17 +68,24 @@ $app->match('/users/edit', function (Request $request) use ($app,$users,$filenam
 	else{
 		if ($oldname != null){
 			$olduser = $users[$oldname];
+
+			//Make a list with the routes from the current user
+			$number = 0;
+			foreach ($userroutes[$oldname]->routes as $userroute) {
+         		$routedefaults[$number] = $userroute;
+         		$number++;
+         	}
+
 			// Enter default data for the form
 		    $defaultdata = array(
 		    	'function' => 'Edit',
 		    	'oldname' => $oldname,
 		        'username' => $oldname,
 		        'documentation' => $olduser->documentation,
-		        'type' => $users[$oldname]->type
+		        'type' => $users[$oldname]->type,
+		        'routes' => $routedefaults
 		    );
-		    foreach ($userroutes[$oldname]->routes as $index => $userroute) {
-        		$defaultdata['route'.$index] = true;
-        	}
+		    
 		    $twigdata['button'] = "Edit";
 		}
 		else{
@@ -90,7 +97,7 @@ $app->match('/users/edit', function (Request $request) use ($app,$users,$filenam
 
 		// Create the route checkboxes
 		foreach ($routes as $index => $route) {
-        	$routecheckboxes["route".$index] = $routes[$index]->documentation;
+        	$routecheckboxes[$index] = $routes[$index]->documentation;
         }
 
 	    // Create a Silex form with all the needed fields
@@ -151,8 +158,44 @@ $app->match('/users/edit', function (Request $request) use ($app,$users,$filenam
 				$users[$newname]->documentation = $data['documentation'];
 				$users[$newname]->password = $data['password'];
 
-				// Write to file
+				// Write to auth.json
 				file_put_contents($filename, json_format($users));
+
+				// Edit routes
+				foreach ($routes as $index => $route) {
+					// Look for the user in the user array of the current route
+					$foundindex = array_search($newname,$route->users);
+
+					// Route was checked
+					if (in_array($index, $data['routes'])){
+						// If the username has changed, remove the access for the old username first
+						if (strcmp($oldname, $newname) != 0){
+							unset($route->users[$oldname]);
+						}
+						// If user is not allowed to a route yet, add him to it
+						if ($foundindex === false){
+							$route->users[count($route->users)] = $newname;
+						}
+					}
+					// Route was not checked
+					else if ($foundindex !== false){
+						unset($route->users[$foundindex]);
+					}
+				}
+
+				// Put routes back in the object
+				$globalindex = 0;
+				foreach ($cores as $coreindex => $core) {
+					$localindex = 0;
+					foreach ($core->routes as $route) {
+						$routeObject->$coreindex->routes[$localindex] = $routes[$globalindex];
+						$globalindex++;
+						$localindex++;
+					}
+				}
+				
+				// Write to cores.json
+				file_put_contents($routeFile, json_format($routeObject));
 
 	            // Redirect to the userlist
 	            return $app->redirect('../../users'); 
