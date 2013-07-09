@@ -20,13 +20,13 @@ $filename = STARTPATH."app/config/auth.json";
 $users = get_object_vars(json_decode(file_get_contents($filename)));
 
 //Check if another file has already set the cores variable (for example routemanagement.php)
-if (!isset($cores)){
-	echo "test";
-	//Fetch routes from file
-	$routeFile = STARTPATH. "app/config/cores.json";
-	$routeObject = json_decode(Configurator::stripComments(file_get_contents($routeFile)));
-	$cores = get_object_vars($routeObject);
-}
+// if (!isset($cores)){
+// 	echo "test";
+// 	//Fetch routes from file
+// 	$routeFile = STARTPATH. "app/config/cores.json";
+// 	//$routeObject = json_decode(Configurator::stripComments(file_get_contents($routeFile)));
+// 	$cores = get_object_vars($routeObject);
+// }
 
 // List users in auth.json
 $app->get('/users', function () use ($app,$users) {
