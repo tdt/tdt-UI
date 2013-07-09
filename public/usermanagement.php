@@ -70,7 +70,10 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 		foreach ($routes as $index => $route) {
 			// Look for the user in the user array of the current route
 			$oldindex = array_search($oldname,$route->users);
-			unset($route->users[$oldindex]);
+			// If the user has access to the route, remove access
+			if ($oldindex !== false){
+				unset($route->users[$oldindex]);
+			}
 		}
 
 		$write = true;
@@ -159,7 +162,7 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 	        	$newname = $data['username'];
 
 	        	// Check if the username has changed, if so, delete the old username
-				if (strcmp($oldname, $newname) != 0){
+				if (strcmp($oldname, $newname) != 0 && isset($userObject->$oldname)){
 					unset($userObject->$oldname);
 				}
 
