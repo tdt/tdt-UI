@@ -52,9 +52,9 @@ $app->get('/users', function () use ($app,$userObject,$routes,$userroutes) {
 	return $app['twig']->render('userlist.twig',$data);
 });
 
-// Add, edit or remove an existing user
+// Add, edit or remove a user
 $app->match('/users/edit', function (Request $request) use ($app,$userObject,$filename,$userroutes,$routes,$routeFile,$routeObject,$cores) {
-
+	
 	// Default = no write
 	$write = false;
 
@@ -188,7 +188,7 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 					}
 					// Route was not checked
 					else if ($newindex !== false){
-						unset($route->users[$foundindex]);
+						unset($route->users[$newindex]);
 					}
 				}
 				$write = true;
