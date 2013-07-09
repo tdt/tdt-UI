@@ -21,6 +21,7 @@
         <div class="container">
             <h1>{{header}}</h1>
             <form action="#" method="post">
+                {% form_theme form 'formtemplate.twig' %}
                 {{ form_widget(form) }}
                 <button type="submit" class="btn">{{button}}</button>
             </form>
