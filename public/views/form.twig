@@ -1,0 +1,29 @@
+<!--
+    A general form file for eg adding users, adding packages,...
+    @copyright (C) 2013 by OKFN Belgium
+    @license AGPLv3
+    @author Leen De Baets
+    @author Jeppe Knockaert
+    @author Nicolas Dierck
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{{title}}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap -->
+        <link href="../../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    </head>
+    <body>
+        <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="../../assets/bootstrap/js/bootstrap.min.js"></script>
+        {{ include('navbar.twig') }}
+        <div class="container">
+            <h1>{{function}} user</h1>
+            <form action="#" method="post">
+                {{ form_widget(form) }}
+                <button type="submit" class="btn">{{function}}</button>
+            </form>
+        </div>
+    </body>
+</html>
