@@ -78,6 +78,9 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
     'translator.messages' => array(),
 ));
 
+// Register the session service provider object
+$app->register(new Silex\Provider\SessionServiceProvider());
+
 // If root is asked, redirect to the resource management
 $app->get('/', function () use ($app) {
     return $app->redirect('/package');
@@ -87,6 +90,9 @@ $app->get('/', function () use ($app) {
 require_once 'packagesAndResources.php';
 // User management should always be before route management!
 require_once 'usermanagement.php'; 
-require_once 'routemanagement.php'; 
+require_once 'routemanagement.php';
+require_once 'choosefile.php';
+require_once 'generictypes.php';
+require_once 'makingCSV.php'; 
 
 $app->run();
