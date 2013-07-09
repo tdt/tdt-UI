@@ -18,26 +18,26 @@
         <script src="http://code.jquery.com/jquery.js"></script>
         <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
         {{ include ('navbar.twig')}}
-        <div class="accordion" id="accordion2">
-        	{% for key, package in packages %}
-          	<div class="accordion-group">
-        		    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href='#{{key}}'>
-                            {{ key }}
-                        </a>
-        		    </div>
-        		    <div id='{{key}}' class="accordion-body collapse in">
-        		        <div class="accordion-inner">
-            		        {% for resource in package %}
-                                {{resource}} <br/>
-            				{% endfor %}
-                        </div>
-        			</div>
-        		</div>
-        	{% endfor %}
+        <div class="container">
+            <div class="accordion" id="accordion2">
+            	{% for key, package in packages %}
+              	<div class="accordion-group">
+            		    <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href='#{{key}}'>
+                                {{ key }}
+                            </a>
+            		    </div>
+            		    <div id='{{key}}' class="accordion-body collapse in">
+            		        <div class="accordion-inner">
+                		        {% for resource in package %}
+                                    {{resource}} <br/>
+                				{% endfor %}
+                            </div>
+            			</div>
+            		</div>
+            	{% endfor %}
+            </div>
+            <a href="package/resourcetype">Add resource</a>
         </div>
-
-        <a href="package/resourcetype">Add resource</a>
-
     </body>
 </html>
