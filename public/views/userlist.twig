@@ -34,6 +34,14 @@
                         <ul>
                             <li>{{user.type}}</li>
                             <li>{{user.documentation}}</li>
+                            <li>
+                                Routes:
+                                <ul>
+                                    {% for route in userroutes[username].routes %}
+                                        <li>{{routes[route].documentation}}</li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
                         </ul>   
                     </li>
             	{% endfor %}
