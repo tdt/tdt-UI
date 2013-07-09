@@ -75,10 +75,10 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 				unset($route->users[$oldindex]);
 			}
 		}
-
 		$write = true;
 	}
 	else{
+		// If there is an old username, it means an edit is wanted
 		if ($oldname != null){
 			$olduser = $userObject->$oldname;
 
@@ -101,6 +101,7 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 		    
 		    $twigdata['button'] = "Edit";
 		}
+		// If there is no old username, it means an add is wanted 
 		else{
 			$defaultdata = array(
 				'function' => 'Add',
@@ -143,9 +144,7 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
     			'expanded' => true,
     			'multiple' => true
         		)
-        	);
-        
-	   	$form = $form->getForm();
+        	)->getForm();
 
 	    // If the method is POST, validate the form
 	    if ('POST' == $request->getMethod() && !isset($userObject->$oldname)) {
@@ -196,6 +195,7 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 	        }
 	    }
 	}
+	// If a remove/edit/add is executed, we need to write to the config files
     if ($write){
     	// Put routes back in the object
 		$globalindex = 0;
@@ -217,6 +217,7 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
         // Redirect to the userlist
         return $app->redirect('../../users'); 
     }
+    // Show the form
     else{
 	 	$twigdata['form'] = $form->createView();
 	 	$twigdata['title'] = $twigdata['button']." user";
