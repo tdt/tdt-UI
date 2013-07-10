@@ -19,10 +19,6 @@ require_once STARTPATH.'app/core/configurator.php';
 // Used to write json to file, formatted to be read by humans
 require_once APPPATH.'nicejson-php/nicejson.php';
 
-// Fetch users from the auth.json file
-$filename = STARTPATH."app/config/auth.json";
-$userObject = json_decode(file_get_contents($filename));
-
 // Fetch routes from file
 $routeFile = STARTPATH. "app/config/cores.json";
 $routeObject = json_decode(Configurator::stripComments(file_get_contents($routeFile)));

@@ -58,10 +58,10 @@ define('VENDORPATH', realpath(__DIR__.'/../vendor/').DIRECTORY_SEPARATOR);
 
 // TODO: remove the lines below and use configuration instead
 
-// Hostname of The DataTank installation (With trailing slash!)
+// Hostname of The DataTank installation (Add trailing slash!)
 define('HOSTNAME', "...");
 
-// Path to the local tdt-start folder (With trailing slash!)
+// Path to the local tdt-start folder (Add trailing slash!)
 define("STARTPATH", "...");
 
 //Register the Twig Service Provider
@@ -94,6 +94,25 @@ require_once 'authentication.php';
 
 use Symfony\Component\Security\Http\Firewall;
 
+// Load users from file
+// Fetch users from the auth.json file
+$filename = STARTPATH."app/config/auth.json";
+// This object will also be used by user management and route management, so don't delete it
+$userObject = json_decode(file_get_contents($filename));
+$users = get_object_vars($userObject);
+
+// Set custom encoder, this should match the encoding used in auth.json
+use Symfony\Component\Security\Core\Encoder\PlaintextPasswordEncoder;
+$app['security.encoder.digest'] = $app->share(function ($app) {
+    return new PlaintextPasswordEncoder();
+});
+
+// Check for a user called tdtui in auth.json
+if (!isset($users['tdtuiadmin'])){
+    echo "You need a user called tdtui in auth.json to continue.";
+    exit(1);
+}
+
 // Authorization
 $app['security.firewalls'] = array(
     'login' => array(
@@ -102,7 +121,11 @@ $app['security.firewalls'] = array(
     'secured' => array(
         'pattern' => '^.*$',
         'form' => array('login_path' => '/login', 'check_path' => '/admin/login_check'),
-    ),
+        'users' => array(
+        // raw password is foo
+            'tdtuiadmin' => array('ROLE_ADMIN', $users['tdtuiadmin']->password)
+        )
+    )
 );
 
 // If root is asked, redirect to the resource management
