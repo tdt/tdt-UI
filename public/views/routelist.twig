@@ -21,8 +21,14 @@
         <div class="container">
             <h1>Routes</h1>
             <ul>
-                {% for route in routes %}
-                    <li>{{route.documentation}}
+                {% for index,route in routes %}
+                    <li>
+                        <form action="routes/edit" method="post">
+                            {{route.documentation}}
+                            <input type="hidden" name="oldroute" value="{{index}}">
+                            <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
+                            <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
+                        </form>
                         <ul>
                             <li>Method: {{route.method}}</li>
                             <li>Route: {{route.route}}</li>
@@ -42,6 +48,7 @@
 
                 {% endfor %}
             </ul>
+            <a href="routes/edit">Add route</a>
         </div>
   </body>
 </html>

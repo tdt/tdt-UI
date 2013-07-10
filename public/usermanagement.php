@@ -20,79 +20,108 @@ require_once APPPATH.'nicejson-php/nicejson.php';
 
 // Fetch users from the auth.json file
 $filename = STARTPATH."app/config/auth.json";
-$users = get_object_vars(json_decode(file_get_contents($filename)));
+$userObject = json_decode(file_get_contents($filename));
 
 // Fetch routes from file
 $routeFile = STARTPATH. "app/config/cores.json";
 $routeObject = json_decode(Configurator::stripComments(file_get_contents($routeFile)));
-$cores = get_object_vars($routeObject);
-$index = 0;
+$routes = get_object_vars($routeObject);
 
 // Save the routes used per user
-foreach ($cores as $core) {
-	foreach ($core->routes as $route) {
-		$routes[$index] = $route;
+$userroutes = array();
+foreach ($routes as $namespace => $core) {
+	foreach ($core->routes as $index => $route) {
 		foreach ($route->users as $user) {
-				$numberofroutes = 0;
-				if (isset($userroutes[$user]->routes)){
-					$numberofroutes = count($userroutes[$user]->routes);
-				}
-				$userroutes[$user]->routes[$numberofroutes] = $index;
+			$numberofroutes = 0;
+			if (isset($userroutes[$user]->routes)){
+				$numberofroutes = count($userroutes[$user]->routes);
+			}
+			$userroutes[$user]->routes[$numberofroutes]->namespace = $namespace;
+			$userroutes[$user]->routes[$numberofroutes]->index = $index;
 		}
-		$index++;
 	}	
 }
 
 // List users in auth.json
-$app->get('/users', function () use ($app,$users,$routes,$userroutes) {
-	$data['users'] = $users;
+$app->get('/users', function () use ($app,$userObject,$routes,$userroutes) {
+	$data['users'] = get_object_vars($userObject);
 	$data['routes'] = $routes;
 	$data['userroutes'] = $userroutes;
 	return $app['twig']->render('userlist.twig',$data);
 });
 
-// Add, edit or remove an existing user
-$app->match('/users/edit', function (Request $request) use ($app,$users,$filename,$userroutes,$routes) {
+// Add, edit or remove a user
+$app->match('/users/edit', function (Request $request) use ($app,$userObject,$filename,$userroutes,$routes,$routeFile,$routeObject) {
+	
+	// Default = no write
+	$write = false;
 
 	//If the request comes from the userlist, a parameter oldname will be in the request
 	$oldname = $request->get('oldname',null);
 	
-	//Check if the request is to remove the user
+	// Check if the request is to remove the user
 	if ($request->get("remove") != null){
 		//Remove the user from the array
-		unset($users[$oldname]);	
-		//Write to file
-		file_put_contents($filename, json_format($users));
-		return $app->redirect('../../users');
+		unset($userObject->$oldname);
+
+		// Remove routes for the user
+		foreach ($routes as $core) {
+			foreach ($core->routes as $index => $route) {
+				// Look for the user in the user array of the current route
+				$oldindex = array_search($oldname,$route->users);
+				// If the user has access to the route, remove access
+				if ($oldindex !== false){
+					unset($route->users[$oldindex]);
+				}
+			}
+		}
+		$write = true;
 	}
+	// Add or edit a user
 	else{
+		// If there is an old username, it means an edit is wanted
 		if ($oldname != null){
-			$olduser = $users[$oldname];
+			$olduser = $userObject->$oldname;
+
+			//Make a list with the routes from the current user
+			$number = 0;
+			$routedefaults = array();
+
+			if (!empty($userroutes[$oldname])){
+				foreach ($userroutes[$oldname]->routes as $userroute) {
+	         		$routedefaults[count($routedefaults)] = $userroute->namespace.'//'.$userroute->index;
+	         		$number++;
+	         	}
+         	}
+
 			// Enter default data for the form
 		    $defaultdata = array(
 		    	'function' => 'Edit',
 		    	'oldname' => $oldname,
 		        'username' => $oldname,
 		        'documentation' => $olduser->documentation,
-		        'type' => $users[$oldname]->type
+		        'type' => $userObject->$oldname->type,
+		        'routes' => $routedefaults
 		    );
-		    foreach ($userroutes[$oldname]->routes as $index => $userroute) {
-        		$defaultdata['route'.$index] = true;
-        	}
+		    
 		    $twigdata['button'] = "Edit";
 		}
+		// If there is no old username, it means an add is wanted 
 		else{
 			$defaultdata = array(
 				'function' => 'Add',
 			);
 			$twigdata['button'] = "Add";
 		}	 
-
+		
 		// Create the route checkboxes
-		foreach ($routes as $index => $route) {
-        	$routecheckboxes["route".$index] = $routes[$index]->documentation;
-        }
-
+		$routecheckboxes = array();
+		foreach ($routes as $namespace => $core) {
+			foreach ($core->routes as $index => $route) {
+	        	$routecheckboxes[$namespace.'//'.$index] = $routes[$namespace]->routes[$index]->documentation;
+	        }
+	    }
+	    
 	    // Create a Silex form with all the needed fields
 	    $form = $app['form.factory']->createBuilder('form', $defaultdata)
 	    	->add('function','hidden')
@@ -118,18 +147,15 @@ $app->match('/users/edit', function (Request $request) use ($app,$users,$filenam
 	            )
 	        )->add('routes','choice', array(
 	        	'label' => 'Routes',
-	        	'label_attr' => array( 'class' => 'checkbox'),
 	        	'choices' => $routecheckboxes,
     			'required' => false,
     			'expanded' => true,
     			'multiple' => true
         		)
-        	);
-        
-	   	$form = $form->getForm();
+        	)->getForm();
 
 	    // If the method is POST, validate the form
-	    if ('POST' == $request->getMethod() && !isset($users[$oldname])) {
+	    if ('POST' == $request->getMethod() && !isset($userObject->$oldname)) {
 	        $form->bind($request);
 
 	        // Retrieve the function (edit or add) and give it to Twig
@@ -143,22 +169,68 @@ $app->match('/users/edit', function (Request $request) use ($app,$users,$filenam
 	        	$newname = $data['username'];
 
 	        	// Check if the username has changed, if so, delete the old username
-				if (strcmp($oldname, $newname) != 0){
-					unset($users[$oldname]);
+				if (strcmp($oldname, $newname) != 0 && isset($userObject->$oldname)){
+					unset($userObject->$oldname);
 				}
 
 				// Edit user properties
-				$users[$newname]->type = $data['authenticationtype'];
-				$users[$newname]->documentation = $data['documentation'];
-				$users[$newname]->password = $data['password'];
+				$userObject->$newname->type = $data['authenticationtype'];
+				$userObject->$newname->documentation = $data['documentation'];
+				$userObject->$newname->password = $data['password'];
 
-				// Write to file
-				file_put_contents($filename, json_format($users));
+				// Read route data
+				$routedata = array();
+				foreach ($data['routes'] as $element) {
+					$exploded = explode("//", $element);
+					$namespace = $exploded[count($exploded)-2];
+					if (!isset($routedata[$namespace])){
+						$routedata[$namespace] = array();
+					}
+					$routedata[$namespace][count($routedata[$namespace])] = $exploded[count($exploded)-1];
+				}
 
-	            // Redirect to the userlist
-	            return $app->redirect('../../users'); 
+				// Edit routes
+				foreach ($routes as $namespace => $core) {
+					foreach ($core->routes as $index => $route) {
+						// Look for the user in the user array of the current route
+						$newindex = array_search($newname,$route->users);
+						$oldindex = array_search($oldname,$route->users);
+						
+						// Route was checked
+						if (in_array($index, $routedata[$namespace])){
+							// If the username has changed, remove the access for the old username first
+							if (strcmp($oldname, $newname) != 0 && $oldindex !== false){
+								return "test";
+								unset($route->users[$oldindex]);
+							}
+							// If user is not allowed to a route yet, add him to it
+							if ($newindex === false){
+								$route->users[count($route->users)] = $newname;
+							}
+						}
+						// Route was not checked
+						else if ($newindex !== false){
+							unset($route->users[$newindex]);
+						}
+					}
+				}
+				$write = true;
 	        }
 	    }
+	}
+	// If a remove/edit/add is executed, we need to write to the config files
+    if ($write){
+		// Write to auth.json
+		file_put_contents($filename, json_format($userObject));
+
+		// Write to cores.json
+		file_put_contents($routeFile, json_format($routeObject));
+
+        // Redirect to the userlist
+        return $app->redirect('../../users'); 
+    }
+    // Show the form
+    else{
 	 	$twigdata['form'] = $form->createView();
 	 	$twigdata['title'] = $twigdata['button']." user";
 	 	$twigdata['header'] = $twigdata['title'];

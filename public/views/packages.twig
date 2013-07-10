@@ -18,37 +18,38 @@
         <script src="http://code.jquery.com/jquery.js"></script>
         <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
         {{ include ('navbar.twig')}}
-        <div class="accordion" id="accordion2">
-        	{% for key, package in packages %}
-          	<div class="accordion-group">
-        		    <div class="accordion-heading">
-                        <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href='#{{key}}'>
-                            {{ key }}
-                        </a>
-                        <form action="package/remove" method="post">
-                            <input type="hidden" name="path" value="{{key}}">
-                            <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
-                        </form>
-        		    </div>
-        		    <div id='{{key}}' class="accordion-body collapse in">
-        		        <div class="accordion-inner">
-            		        {% for resource in package %}
-                                {{resource}} <br/>
-                                <form action="resource/functions" method="post">
-                                    <input type="hidden" name="path" value="{{key}}/{{resource}}">
-                                    <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
-                                    <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
-                                    <button class="btn btn-mini" type="submit" name="json" value="json">JSON</button> 
-                                    <button class="btn btn-mini" type="submit" name="php" value="json">PHP</button> 
-                                </form>
-            				{% endfor %}
-                        </div>
-        			</div>
-        		</div>
-        	{% endfor %}
+
+        <div class="container">
+            <div class="accordion" id="accordion2">
+            	{% for key, package in packages %}
+              	<div class="accordion-group">
+            		    <div class="accordion-heading">
+                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href='#{{key}}'>
+                                {{ key }}
+                            </a>
+                            <form action="package/remove" method="post">
+                                <input type="hidden" name="path" value="{{key}}">
+                                <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
+                            </form>
+            		    </div>
+            		    <div id='{{key}}' class="accordion-body collapse in">
+            		        <div class="accordion-inner">
+                		        {% for resource in package %}
+                                    {{resource}} <br/>
+                                    <form action="resource/functions" method="post">
+                                        <input type="hidden" name="path" value="{{key}}/{{resource}}">
+                                        <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
+                                        <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
+                                        <button class="btn btn-mini" type="submit" name="json" value="json">JSON</button> 
+                                        <button class="btn btn-mini" type="submit" name="php" value="json">PHP</button> 
+                                    </form>
+                				{% endfor %}
+                            </div>
+            			</div>
+            		</div>
+            	{% endfor %}
+            </div>
+
         </div>
-
-        <a href="package/resourcetype">Add resource</a>
-
     </body>
 </html>

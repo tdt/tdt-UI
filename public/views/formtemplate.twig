@@ -9,7 +9,7 @@
     	{% else %}
     		{% set class = "radio" %}
 		{% endif %}
-    	{{ form_label(child,null,{"starttag" : true, "label_attr" : { "class" : "checkbox"}}) }}
+    	{{ form_label(child,null,{"starttag" : true, "label_attr" : { "class" : class}}) }}
         {{ form_widget(child) }}
 		{{ form_label(child,null,{"endtag" : true}) }}
     {% endfor %}
