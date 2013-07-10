@@ -1,7 +1,7 @@
 <?php
  
 /**
- * Making a CSV file
+ * Publishing a file on datatank
  * @copyright (C) 2013 by OKFN Belgium
  * @license AGPLv3
  * @author Leen De Baets
@@ -26,9 +26,16 @@ $request = $client->get('tdtinfo/admin.json');
 $obj = $request->send()->getBody();
 $jsonobj = json_decode($obj);
 
-$app->match('/package/CVSadd', function (Request $request) use ($jsonobj,$app) {
-	$type = $app['session']->get('type');
-	$requiredcreatevariables = $jsonobj->admin->create->generic->$type->requiredparameters;
+$app->match('/package/add', function (Request $request) use ($jsonobj,$app) {
+	$generaltype = $app['session']->get('generaltype');
+	if ( $generaltype == 'generic'){
+		$type = $app['session']->get('filetype');
+		$requiredcreatevariables = $jsonobj->admin->create->generic->$type->requiredparameters;
+	}
+	else {
+		$requiredcreatevariables = $jsonobj->admin->create->$generaltype->requiredparameters;
+	}
+	
 
 	// Create a Silex form with all the required fields 
 	$form = $app['form.factory']->createBuilder('form');
@@ -38,7 +45,7 @@ $app->match('/package/CVSadd', function (Request $request) use ($jsonobj,$app) {
 	}
 
 	// for not required parameter (this is an example, yet to be included!!)
-	$form = $form->add('username','text',array('required' => false));
+	$form = $form->add('language','text',array('required' => false));
 
 	$form = $form->getForm();
 
@@ -75,25 +82,7 @@ $app->match('/package/CVSadd', function (Request $request) use ($jsonobj,$app) {
 	$twigdata['form'] = $form->createView();
 	// adding the datafields title and function for the twig file
 	$twigdata['title']= "Putting a file";
-	$twigdata['header']= "Putting CSV file";
+	$twigdata['header']= "Putting ".$type." file";
 	$twigdata['button']= "Add";
 	return $app['twig']->render('form.twig', $twigdata);
 });
-
-// //the put request
-// $client = new Client();
-
-// try {
-// 	 $request = $client->put('http://localhost/tdt/start/public/tdtadmin/resources/package4/whiii',null,array(
-//  						'resource_type' => 'generic',
-//  						'generic_type' => 'CSV',
-//  						'documentation' => 'The same but differentyesfefs',
-// 						'uri' => '/home/leen/tdt/start/public/resources/dataJul-4-2013.csv')); 
-
-// 	 $response = $request->send();
-// 	 echo $response->getBody();
-// } catch(BadResponseException $e) {
-// 	echo $e->getMessage();
-// }
-
-

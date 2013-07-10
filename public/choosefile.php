@@ -50,9 +50,16 @@ $app->match('/package/resourcetype', function (Request $request) use ($possibler
 			// getting the data from the form
 			$data = $form->getData();
 			
+			$app['session']->set('generaltype',$data['Type']);
 
 			// Redirect to specific page of the resource type
-			return $app->redirect('../../package/'.$data['Type'].'type');
+			if ($data['Type'] == generic) {
+				$path = '../../package/generictype';
+			} else{
+				$path = '../../package/add';
+			}
+
+			return $app->redirect($path);
 		}
 	}
 

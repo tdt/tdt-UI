@@ -27,8 +27,6 @@ $jsonobj = json_decode($obj);
 
 $types =$jsonobj->admin->create->generic;
 
-$type = "test";
-
 $app->match('/package/generictype', function (Request $request) use ($types,$app) {
 
 	// Create a Silex form with all the possible resourcetypes
@@ -48,8 +46,9 @@ $app->match('/package/generictype', function (Request $request) use ($types,$app
 		if ($form->isValid()) {
 			// getting the data from the form
 			$data = $form->getData();
+			echo $data['Type'];
 			$app['session']->set('filetype',$data['Type']);
-			return $app->redirect('../../package/CVSadd');
+			return $app->redirect('../../package/add');
 		}
 	}
 
