@@ -30,6 +30,7 @@ $index = 0;
 
 // Save the routes used per user
 $userroutes = array();
+$routes = array();
 foreach ($cores as $core) {
 	foreach ($core->routes as $route) {
 		$routes[$index] = $route;
@@ -197,16 +198,8 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 	}
 	// If a remove/edit/add is executed, we need to write to the config files
     if ($write){
-    	// Put routes back in the object
-		$globalindex = 0;
-		foreach ($cores as $coreindex => $core) {
-			$localindex = 0;
-			foreach ($core->routes as $route) {
-				$routeObject->$coreindex->routes[$localindex] = $routes[$globalindex];
-				$globalindex++;
-				$localindex++;
-			}
-		}
+		// Put the info from the routes array into the routeObject
+		routesToObject($cores,$routes);
 
 		// Write to auth.json
 		file_put_contents($filename, json_format($userObject));
@@ -226,3 +219,32 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 	    return $app['twig']->render('form.twig', $twigdata);
 	}
 });
+
+/**
+ * Puts the info from the routes array into the original routeObject, to be able to write to the json properly.
+ * If a route needs to be removed, make it null in the array.
+ * @param $cores An array with the cores from cores.json
+ * @param $routes The array with elements to put into the user object
+ */
+function routesToObject($cores,$routes){
+	$globalindex = 0;
+	foreach ($cores as $coreindex => $core) {
+		$toremove = array();
+		$length = count($core->routes);
+		for ($i=0; $i < $length; $i++) {
+			// Put the array element in the object
+			$core->routes[$i] = $routes[$globalindex];
+			// Check if the route needs to be removed
+			if ($routes[$globalindex] == null){
+				$toremove[count($toremove)] = $i;
+			}
+			$globalindex++;
+		}
+		// Loop over the elements to remove and remove them
+		foreach ($toremove as $i) {
+			unset($core->routes[$i]);
+		}
+		// reindex array
+		$core->routes = array_values($core->routes);
+	}
+}

@@ -23,14 +23,12 @@
             <ul>
                 {% for username,user in users %}
                     <li>
-                        
                         <form action="users/edit" method="post">
                             {{username}}
                             <input type="hidden" name="oldname" value="{{username}}">
                             <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
                             <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
                         </form>
-                        
                         <ul>
                             <li>{{user.type}}</li>
                             <li>{{user.documentation}}</li>
