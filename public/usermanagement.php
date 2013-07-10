@@ -10,6 +10,7 @@
  */
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\Validator\Constraints as Assert;
 
 // Allows to strip the comments from a json file
@@ -162,60 +163,65 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 	        $data = $form->getData();
 	    	$twigdata['button'] = $data['function'];
 
-	    	// Validate the form
+	    	//Validate the form	    	
 	        if ($form->isValid()) {
 	            // Fetch the correct old name of the user from the form
 	        	$oldname = $data['oldname'];
 	        	$newname = $data['username'];
 
-	        	// Check if the username has changed, if so, delete the old username
-				if (strcmp($oldname, $newname) != 0 && isset($userObject->$oldname)){
-					unset($userObject->$oldname);
+	        	// Check if the username is already in use (if it has changed)
+				if (strcmp($oldname, $newname) != 0 && isset($userObject->$newname)){
+					$form->get('username')->addError(new FormError('Username is already in use'));
 				}
-
-				// Edit user properties
-				$userObject->$newname->type = $data['authenticationtype'];
-				$userObject->$newname->documentation = $data['documentation'];
-				$userObject->$newname->password = $data['password'];
-
-				// Read route data
-				$routedata = array();
-				foreach ($data['routes'] as $element) {
-					$exploded = explode("//", $element);
-					$namespace = $exploded[count($exploded)-2];
-					if (!isset($routedata[$namespace])){
-						$routedata[$namespace] = array();
+				else {
+		        	// Check if the username has changed, if so, delete the old username
+					if (strcmp($oldname, $newname) != 0 && isset($userObject->$oldname)){
+						unset($userObject->$oldname);
 					}
-					$routedata[$namespace][count($routedata[$namespace])] = $exploded[count($exploded)-1];
-				}
 
-				// Edit routes
-				foreach ($routes as $namespace => $core) {
-					foreach ($core->routes as $index => $route) {
-						// Look for the user in the user array of the current route
-						$newindex = array_search($newname,$route->users);
-						$oldindex = array_search($oldname,$route->users);
-						
-						// Route was checked
-						if (in_array($index, $routedata[$namespace])){
-							// If the username has changed, remove the access for the old username first
-							if (strcmp($oldname, $newname) != 0 && $oldindex !== false){
-								return "test";
-								unset($route->users[$oldindex]);
+					// Edit user properties
+					$userObject->$newname->type = $data['authenticationtype'];
+					$userObject->$newname->documentation = $data['documentation'];
+					$userObject->$newname->password = $data['password'];
+
+					// Read route data
+					$routedata = array();
+					foreach ($data['routes'] as $element) {
+						$exploded = explode("//", $element);
+						$namespace = $exploded[count($exploded)-2];
+						if (!isset($routedata[$namespace])){
+							$routedata[$namespace] = array();
+						}
+						$routedata[$namespace][count($routedata[$namespace])] = $exploded[count($exploded)-1];
+					}
+
+					// Edit routes
+					foreach ($routes as $namespace => $core) {
+						foreach ($core->routes as $index => $route) {
+							// Look for the user in the user array of the current route
+							$newindex = array_search($newname,$route->users);
+							$oldindex = array_search($oldname,$route->users);
+							
+							// Route was checked
+							if (in_array($index, $routedata[$namespace])){
+								// If the username has changed, remove the access for the old username first
+								if (strcmp($oldname, $newname) != 0 && $oldindex !== false){
+									unset($route->users[$oldindex]);
+								}
+								// If user is not allowed to a route yet, add him to it
+								if ($newindex === false){
+									$route->users[count($route->users)] = $newname;
+								}
 							}
-							// If user is not allowed to a route yet, add him to it
-							if ($newindex === false){
-								$route->users[count($route->users)] = $newname;
+							// Route was not checked
+							else if ($newindex !== false){
+								unset($route->users[$newindex]);
 							}
 						}
-						// Route was not checked
-						else if ($newindex !== false){
-							unset($route->users[$newindex]);
-						}
 					}
-				}
-				$write = true;
-	        }
+					$write = true;
+		        }
+		    }
 	    }
 	}
 	// If a remove/edit/add is executed, we need to write to the config files
