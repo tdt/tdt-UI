@@ -37,7 +37,7 @@
                                 <ul>
                                     {% if userroutes[username] is defined %}
                                         {% for route in userroutes[username].routes %}
-                                            <li>{{routes[route].documentation}}</li>
+                                            <li>{{routes[route.namespace].routes[route.index].documentation}}</li>
                                         {% endfor %}
                                     {% else %}
                                         No routes
