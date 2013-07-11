@@ -32,26 +32,26 @@ class UiResourceController extends \tdt\core\controllers\AController {
      * When GET is received, send the request to index.php from tdt-UI
      */
     function GET($matches){
-        $data['bootstrap_js'] = "";
-        $bootstrap_js = @file_get_contents(__DIR__."/../../../../includes/js/bootstrap.min.js");
-        if($bootstrap_js){
-            $data['bootstrap_js'] .= $bootstrap_js;
-        }
-        $data['jquery_js'] = "";
-        $jquery_js = @file_get_contents(__DIR__."/../../../../includes/js/jquery.js");
-        if($jquery_js){
-            $data['jquery_js'] .= $jquery_js;
-        }
-        $data['bootstrap_css'] = "";
-        $bootstrap_css = @file_get_contents(__DIR__."/../../../../includes/css/bootstrap.min.css");
-        if($bootstrap_css){
-            $data['bootstrap_css'] .= $bootstrap_css;
-        }
-        // $bootstrap_css = @file_get_contents(__DIR__."/../../../../includes/css/bootstrap-responsive.min.css");
-        // if($bootstrap_css){
-        //     $data['bootstrap_css'] .= $bootstrap_css;
-        // }
-        include(__DIR__."/../../../../public/index.php");
+            $data['bootstrap_js'] = "";
+            $bootstrap_js = @file_get_contents(__DIR__."/../../../../includes/js/bootstrap.min.js");
+            if($bootstrap_js){
+                $data['bootstrap_js'] .= $bootstrap_js;
+            }
+            $data['jquery_js'] = "";
+            $jquery_js = @file_get_contents(__DIR__."/../../../../includes/js/jquery.js");
+            if($jquery_js){
+                $data['jquery_js'] .= $jquery_js;
+            }
+            $bootstrap_css = "";
+            $bootstrap_css = @file_get_contents(__DIR__."/../../../../includes/css/bootstrap.min.css");
+            if($bootstrap_css){
+                $data['bootstrap_css'] .= $bootstrap_css;
+            }
+            $bootstrap_css = @file_get_contents(__DIR__."/../../../../includes/css/bootstrap-responsive.min.css");
+            if($bootstrap_css){
+                $data['bootstrap_css'] .= $bootstrap_css;
+            }
+            include(__DIR__."/../../../../public/index.php");
     }
 
     /**

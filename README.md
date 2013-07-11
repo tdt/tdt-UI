@@ -17,4 +17,4 @@ $ composer update
 
 ### Configuration
 
-Before starting to use the UI, you will need to copy index.example.json (in the public folder) and name it index.json. HOSTNAME and STARTPATH variables still need to be set in index.php.
+Before starting to use the UI, you will need to copy index.example.json (in the public folder) and name it index.json. Also, the STARTPATH variable will need to be set in index.php.

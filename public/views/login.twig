@@ -9,14 +9,11 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Resource Management</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Bootstrap -->
-        <link href="../css/bootstrap.min.css" rel="stylesheet" media="screen">
+        <title>Login</title>
+        {{ include('header.twig') }}
     </head>
     <body>
-        <script src="http://code.jquery.com/jquery.js"></script>
-        <script src="../js/bootstrap.min.js"></script>
+        {{ include('navbar.twig') }}
         <form action="{{ path('ui_login_check') }}" method="post">
             {{ error }}
             <input type="text" name="_username" value="{{ last_username }}" />

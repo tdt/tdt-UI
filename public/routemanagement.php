@@ -22,14 +22,14 @@ if (!isset($routes)){
 }
 
 // Render a list of routes using Twig
-$app->get('/routes', function () use ($app,$routes) {
+$app->get('/ui/routes{url}', function () use ($app,$routes,$data) {
 	// Give the array with cores to Twig, it contains the routes per core
 	$data['routes'] = $routes;
 	return $app['twig']->render('routelist.twig',$data);
 });
 
 // Add, edit or remove a route
-$app->match('/routes/edit', function (Request $request) use ($app,$routes,$routeFile,$routeObject,$userObject) {
+$app->match('/ui/routes/edit{url}', function (Request $request) use ($app,$routes,$routeFile,$routeObject,$userObject) {
 	
 	// Default = no write
 	$write = false;
@@ -68,14 +68,14 @@ $app->match('/routes/edit', function (Request $request) use ($app,$routes,$route
 		        'method' => $oldroute->method,
 		        'users' => $oldroute->users
 		    );
-		    $twigdata['button'] = "Edit";
+		    $data['button'] = "Edit";
 		}
 		// If there is no old route, it means an add is wanted 
 		else{
 			$defaultdata = array(
 				'function' => 'Add'
 			);
-			$twigdata['button'] = "Add";
+			$data['button'] = "Add";
 		}
 
 		// Prepare to give the userlist to the form, users should be keys as well as values
@@ -141,14 +141,14 @@ $app->match('/routes/edit', function (Request $request) use ($app,$routes,$route
 	        $form->bind($request);
 
 	        // Retrieve the function (edit or add) and give it to Twig
-	        $data = $form->getData();
-	    	$twigdata['button'] = $data['function'];
+	        $formdata = $form->getData();
+	    	$data['button'] = $formdata['function'];
 
 	    	// Validate the form
 	        if ($form->isValid()) {
 	            // Fetch the correct old route of the route from the form
-				$oldnamespace = $data['namespace'];
-				$oldindex = $data['index'];
+				$oldnamespace = $formdata['namespace'];
+				$oldindex = $formdata['index'];
 
 				// If this is an add, add the route to the end of the list
 				if ($oldindex == null){
@@ -158,11 +158,11 @@ $app->match('/routes/edit', function (Request $request) use ($app,$routes,$route
 				$oldroute = $routes[$oldnamespace]->routes[$oldindex];
 
 	         	// Edit the route properties
-	         	$oldroute->documentation = $data['description'];
-	         	$oldroute->route = $data['route'];
-	         	$oldroute->method = $data['method'];
-	         	$oldroute->controller = $data['controller'];
-	         	$oldroute->users = $data['users'];
+	         	$oldroute->documentation = $formdata['description'];
+	         	$oldroute->route = $formdata['route'];
+	         	$oldroute->method = $formdata['method'];
+	         	$oldroute->controller = $formdata['controller'];
+	         	$oldroute->users = $formdata['users'];
 
 				$write = true;
 	        }
@@ -175,15 +175,15 @@ $app->match('/routes/edit', function (Request $request) use ($app,$routes,$route
 		file_put_contents($routeFile, json_format($routeObject));
 
         // Redirect to the userlist
-        return $app->redirect('../../routes'); 
+        return $app->redirect('../../ui/routes'); 
     }
     // Show the form
     else{
-    	$twigdata['form'] = $form->createView();
-	 	$twigdata['title'] = $twigdata['button']." route";
-	 	$twigdata['header'] = $twigdata['title'];
+    	$data['form'] = $form->createView();
+	 	$data['title'] = $data['button']." route";
+	 	$data['header'] = $data['title'];
 	    // display the form
-	    return $app['twig']->render('form.twig', $twigdata);
+	    return $app['twig']->render('form.twig', $data);
     }
 });
 

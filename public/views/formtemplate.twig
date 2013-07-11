@@ -39,3 +39,13 @@
     {% endif %}
 {% endspaceless %}
 {% endblock form_label %}
+
+{% extends 'form_div_layout.html.twig' %}
+
+{% block form_widget_compound %}
+    {{ parent() }}
+
+    {% if help is defined %}
+        <span class="help">{{ help }}</span>
+    {% endif %}
+{% endblock %}

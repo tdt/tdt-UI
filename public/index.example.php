@@ -14,59 +14,24 @@ require_once '../vendor/autoload.php';
 //Construct the Silex application
 $app = new Silex\Application();
 
-// Set the environment for error reporting
-define('ENVIRONMENT', 'development');
-
-
-/**
- * Alright, here we go!
- *
- * -----------------
- * DANGER ZONE BELOW
- * -----------------
- */
-
-if (defined('ENVIRONMENT'))
-{
-    switch (ENVIRONMENT)
-    {
-        case 'development':
-            error_reporting(E_ALL);
-            ini_set('display_errors', True);
-            $app['debug'] = true;
-        break;
-
-        case 'testing':
-        case 'production':
-            error_reporting(0);
-        break;
-
-        default:
-            exit('The application environment is not set correctly.');
-    }
+if (defined('ENVIRONMENT') && strcmp(ENVIRONMENT,'development') == 0){
+    $app['debug'] = true;
 }
 
-
 // Website document root
-define('DOCROOT', __DIR__.DIRECTORY_SEPARATOR);
-
-// Application directory
-define('APPPATH', realpath(__DIR__.'/../app/').DIRECTORY_SEPARATOR);
+define('UIDOCROOT', __DIR__.DIRECTORY_SEPARATOR);
 
 // Vendor directory
-define('VENDORPATH', realpath(__DIR__.'/../vendor/').DIRECTORY_SEPARATOR);
+define('UIVENDORPATH', realpath(__DIR__.'/../vendor/').DIRECTORY_SEPARATOR);
 
 // TODO: remove the lines below and use configuration instead
-
-// Hostname of The DataTank installation (Add trailing slash!)
-define('HOSTNAME', "...");
 
 // Path to the local tdt-start folder (Add trailing slash!)
 define("STARTPATH", "...");
 
 //Register the Twig Service Provider
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => DOCROOT.'views'
+    'twig.path' => UIDOCROOT.'views'
 ));
 
 // Register the Form Service Provider
@@ -116,21 +81,20 @@ if (!isset($users['tdtuiadmin'])){
 // Authorization
 $app['security.firewalls'] = array(
     'login' => array(
-        'pattern' => '^/login$',
+        'pattern' => '^/ui/login\.?[a-z]*$',
     ),
     'secured' => array(
         'pattern' => '^.*$',
-        'form' => array('login_path' => '/login', 'check_path' => '/admin/login_check'),
+        'form' => array('login_path' => '/ui/login', 'check_path' => '/ui/login_check'),
         'users' => array(
-        // raw password is foo
             'tdtuiadmin' => array('ROLE_ADMIN', $users['tdtuiadmin']->password)
         )
     )
 );
 
 // If root is asked, redirect to the resource management
-$app->get('/', function () use ($app) {
-    return $app->redirect('/package');
+$app->get('/ui{url}', function () use ($app) {
+    return $app->redirect('/ui/package');
 });
 
 // The parameters that cannot be edited
@@ -138,6 +102,9 @@ $app['session']->set('notedible',array('generic_type' => 'generic_type',
                                         'resource_type' => 'resource_type',
                                         'columns' => 'columns',
                                         'column_aliases' => 'column_aliases'));
+
+// Get The DataTank hostname for use in /ui/package
+$hostname = $this->hostname;
 
 //start with resources management
 require_once 'packagesAndResources.php';

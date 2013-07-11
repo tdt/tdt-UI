@@ -10,13 +10,9 @@
 <html>
     <head>
         <title>Routelist</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Bootstrap -->
-        <link href="../assets/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen">
+        {{ include('header.twig') }}
     </head>
     <body>
-        <script src="http://code.jquery.com/jquery.js"></script>
-        <script src="../assets/bootstrap/js/bootstrap.min.js"></script>
         {{ include('navbar.twig') }}
         <div class="container">
             <h1>Routes</h1>
@@ -53,7 +49,7 @@
                     </li>
                 {% endfor %}
             </ul>
-            <a href="routes/edit">Add route</a>
+            <a href="ui/routes/edit">Add route</a>
         </div>
   </body>
 </html>
