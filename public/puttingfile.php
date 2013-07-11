@@ -53,12 +53,14 @@ $app->match('/ui/package/add', function (Request $request) use ($app) {
 		$requiredcreatevariables = $jsonobj->admin->create->$generaltype->requiredparameters;
 	}
 	
+	$explanationvariables = $jsonobj->admin->create->generic->$type->parameters;
 
 	// Create a Silex form with all the required fields 
 	$form = $app['form.factory']->createBuilder('form');
-	$form = $form->add('TargetURI','text',array('label' => "Target URI" ,'constraints' => new Assert\NotBlank()));
+	$form = $form->add('TargetURI','text',array('label' => "Target URI" ,'constraints' => new Assert\NotBlank(), 'label' => 'TargetURI: destination of the file'));
 	foreach ($requiredcreatevariables as $key => $value) {
-		$form = $form->add($value,'text',array('constraints' => new Assert\NotBlank()));
+		$documentation = $explanationvariables->$value;
+		$form = $form->add($value,'text',array('constraints' => new Assert\NotBlank(), 'label' => $value.": ".$documentation));
 	}
 
 	// for not required parameter (this is an example, yet to be included!!)
