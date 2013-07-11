@@ -9,13 +9,16 @@
  * @author Nicolas Dierck
  */
 
-//needed for conntecting to the client
+// Needed for conntecting to the client
 use Guzzle\Http\Client;
 
+// Get The DataTank hostname for use in /ui/package
+$hostname = $this->hostname;
+
 // Representing the data in twig.
-$app->get('/package', function () use ($app) {
+$app->get('/ui/package{url}', function () use ($app,$hostname,$data) {
 	// Create a client (to get the data)
-	$client = new Client(HOSTNAME);
+	$client = new Client($hostname);
 
 	// getting the packages in json format
 	$request = $client->get('tdtinfo/resources.json');

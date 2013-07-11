@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 require_once STARTPATH.'app/core/configurator.php';
 
 // Used to write json to file, formatted to be read by humans
-require_once APPPATH.'nicejson-php/nicejson.php';
+require_once __DIR__.'/../src/nicejson-php/nicejson.php';
 
 // Fetch routes from file
 $routeFile = STARTPATH. "app/config/cores.json";
@@ -40,7 +40,7 @@ foreach ($routes as $namespace => $core) {
 }
 
 // List users in auth.json
-$app->get('/users', function () use ($app,$userObject,$routes,$userroutes) {
+$app->get('/ui/users{url}', function () use ($app,$userObject,$routes,$userroutes,$data) {
 	$data['users'] = get_object_vars($userObject);
 	$data['routes'] = $routes;
 	$data['userroutes'] = $userroutes;
@@ -48,8 +48,7 @@ $app->get('/users', function () use ($app,$userObject,$routes,$userroutes) {
 });
 
 // Add, edit or remove a user
-$app->match('/users/edit', function (Request $request) use ($app,$userObject,$filename,$userroutes,$routes,$routeFile,$routeObject) {
-	
+$app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userObject,$filename,$userroutes,$routes,$routeFile,$routeObject,$data) {
 	// Default = no write
 	$write = false;
 
@@ -101,14 +100,14 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 		        'routes' => $routedefaults
 		    );
 		    
-		    $twigdata['button'] = "Edit";
+		    $data['button'] = "Edit";
 		}
 		// If there is no old username, it means an add is wanted 
 		else{
 			$defaultdata = array(
 				'function' => 'Add',
 			);
-			$twigdata['button'] = "Add";
+			$data['button'] = "Add";
 		}	 
 		
 		// Create the route checkboxes
@@ -156,14 +155,14 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 	        $form->bind($request);
 
 	        // Retrieve the function (edit or add) and give it to Twig
-	        $data = $form->getData();
-	    	$twigdata['button'] = $data['function'];
+	        $formdata = $form->getData();
+	    	$data['button'] = $formdata['function'];
 
 	    	//Validate the form	    	
 	        if ($form->isValid()) {
 	            // Fetch the correct old name of the user from the form
-	        	$oldname = $data['oldname'];
-	        	$newname = $data['username'];
+	        	$oldname = $formdata['oldname'];
+	        	$newname = $formdata['username'];
 
 	        	// Check if the username is already in use (if it has changed)
 				if (strcmp($oldname, $newname) != 0 && isset($userObject->$newname)){
@@ -176,13 +175,13 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 					}
 
 					// Edit user properties
-					$userObject->$newname->type = $data['authenticationtype'];
-					$userObject->$newname->documentation = $data['documentation'];
-					$userObject->$newname->password = $data['password'];
+					$userObject->$newname->type = $formdata['authenticationtype'];
+					$userObject->$newname->documentation = $formdata['documentation'];
+					$userObject->$newname->password = $formdata['password'];
 
 					// Read route data
 					$routedata = array();
-					foreach ($data['routes'] as $element) {
+					foreach ($formdata['routes'] as $element) {
 						$exploded = explode("//", $element);
 						$namespace = $exploded[count($exploded)-2];
 						if (!isset($routedata[$namespace])){
@@ -233,10 +232,10 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
     }
     // Show the form
     else{
-	 	$twigdata['form'] = $form->createView();
-	 	$twigdata['title'] = $twigdata['button']." user";
-	 	$twigdata['header'] = $twigdata['title'];
+	 	$data['form'] = $form->createView();
+	 	$data['title'] = $data['button']." user";
+	 	$data['header'] = $data['title'];
 	    // display the form
-	    return $app['twig']->render('form.twig', $twigdata);
+	    return $app['twig']->render('form.twig', $data);
 	}
 });

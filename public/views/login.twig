@@ -17,7 +17,7 @@
     <body>
         <script src="http://code.jquery.com/jquery.js"></script>
         <script src="../js/bootstrap.min.js"></script>
-        <form action="{{ path('admin_login_check') }}" method="post">
+        <form action="{{ path('ui_login_check') }}" method="post">
             {{ error }}
             <input type="text" name="_username" value="{{ last_username }}" />
             <input type="password" name="_password" value="" />
