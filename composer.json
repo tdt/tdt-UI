@@ -1,14 +1,30 @@
 {
+    "name": "tdt/ui",
+    "description": "A RESTful data adapter",
+    "keywords": ["data adapter", "data transformation", "REST API"],
+    "homepage": "http://thedatatank.com",
+    "type": "library",
+    "license": "AGPLv3",
     "require": {
         "guzzle/guzzle": "~3.7",
         "silex/silex": "1.*",
-		"symfony/form": "~2.3",
-		"symfony/twig-bridge": "~2.3",
-		"twig/twig": "1.*",
-		"symfony/validator": "~2.3",
-    	"symfony/config": "~2.3",
-    	"symfony/translation": "~2.3",
+        "symfony/form": "~2.3",
+        "symfony/twig-bridge": "~2.3",
+        "twig/twig": "1.*",
+        "symfony/validator": "~2.3",
+        "symfony/config": "~2.3",
+        "symfony/translation": "~2.3",
         "symfony/locale": "~2.3",
         "symfony/security": "~2.3"
+    },
+    "minimum-stability" : "dev",
+    "autoload": {
+        "psr-0": {
+            "tdt\\ui\\": "src/"
+        }
     }
+}
+
+
+    
 }
