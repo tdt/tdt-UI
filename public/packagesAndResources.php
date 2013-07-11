@@ -11,15 +11,30 @@
 
 //needed for conntecting to the client
 use Guzzle\Http\Client;
+// included for catching the 401 errors (authorization needed)
+use Guzzle\Http\Exception\ClientErrorResponseException;
 
 // Representing the data in twig.
-$app->get('/package', function () use ($app) {
+$app->get('/ui/package', function () use ($app,$users) {
 	// Create a client (to get the data)
 	$client = new Client(HOSTNAME);
 
-	// getting the packages in json format
-	$request = $client->get('tdtinfo/resources.json');
-	$obj = $request->send()->getBody();
+	try {
+		// getting the packages in json format
+		if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
+			$request = $client->get('tdtinfo/resources.json');
+		} else {
+			$request = $client->get('tdtinfo/resources.json')->setAuth($app['session']->get('userget'),$app['session']->get('pswdget'));
+		}
+		$obj = $request->send()->getBody();
+	} catch (ClientErrorResponseException $e) {
+		if ($e->getResponse()->getStatusCode() == 401) {
+			$app['session']->set('method','get');
+			$app['session']->set('redirect','../../ui/package');
+			return $app->redirect('../../ui/authentication');	
+		}	
+	}
+	
 	$jsonobj = json_decode($obj);
 
 	// All the packages and resources will be stored in an array

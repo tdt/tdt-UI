@@ -21,15 +21,29 @@ use Symfony\Component\Validator\Constraints as Assert;
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
-$app->match('/resource/edit', function (Request $request) use ($app) {
+$app->match('/ui/resource/edit', function (Request $request) use ($app) {
 
 	// Create a client (to get the data)
 	$client = new Client(HOSTNAME);
 	// getting information about all the resources
-	$request2 = $client->get('tdtadmin/resources/'.$app['session']->get('pathtoresource').'.json');
-	$obj = $request2->send()->getBody();
+	try {
+		if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
+			$request2 = $client->get('tdtadmin/resources/'.$app['session']->get('pathtoresource').'.json');
+		} else {
+			$request2 = $client->get('tdtadmin/resources/'.$app['session']->get('pathtoresource').'.json')->setAuth($app['session']->get('userget'),$app['session']->get('pswdget'));
+		}
+		$obj = $request2->send()->getBody();
+	 } catch (ClientErrorResponseException $e) {
+	 	if ($e->getResponse()->getStatusCode() == 401) {
+		 	$app['session']->set('method','get');
+			$app['session']->set('redirect','../../ui/resource/edit');
+			return $app->redirect('../../ui/package');	
+	 	}
+	 } 
+
 	$jsonobj = json_decode($obj);
 
+	// iterating through all the parameters and the ones that are not edible will not be added
 	foreach ($jsonobj as $key => $value) {
 		foreach ($jsonobj->$key as $key2 => $value2) {
 			if(in_array($key2, $app['session']->get('notedible'))){
@@ -65,14 +79,24 @@ $app->match('/resource/edit', function (Request $request) use ($app) {
 			try{
 				$path = HOSTNAME."tdtadmin/resources/".$app['session']->get('pathtoresource');
 				// the put request
-				$request = $client2->patch($path,null,$body);
+				if ($app['session']->get('userpatch') == null || $app['session']->get('pswdpatch') ==null) {
+					$request = $client2->patch($path,null,$body);
+				}
+				else{
+					$request = $client2->patch($path,null,$body)->setAuth($app['session']->get('userpatch'),$app['session']->get('pswdpatch'));
+				}
 				$response = $request->send();
 			} catch(ClientErrorResponseException $e) {
+				$app['session']->set('method','patch');
+				$app['session']->set('path',$path);
+				$app['session']->set('body',$body);
+				$app['session']->set('redirect','../../ui/package');
+				return $app->redirect('../../ui/authentication');
 				
 			}
 
 			// Redirect to list of packages 	
-			return $app->redirect('../../package');
+			return $app->redirect('../../ui/package');
 		}
 	}
 

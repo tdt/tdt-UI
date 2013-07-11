@@ -22,14 +22,14 @@ if (!isset($routes)){
 }
 
 // Render a list of routes using Twig
-$app->get('/routes', function () use ($app,$routes) {
+$app->get('/ui/routes', function () use ($app,$routes) {
 	// Give the array with cores to Twig, it contains the routes per core
 	$data['routes'] = $routes;
 	return $app['twig']->render('routelist.twig',$data);
 });
 
 // Add, edit or remove a route
-$app->match('/routes/edit', function (Request $request) use ($app,$routes,$routeFile,$routeObject,$userObject) {
+$app->match('/ui/routes/edit', function (Request $request) use ($app,$routes,$routeFile,$routeObject,$userObject) {
 	
 	// Default = no write
 	$write = false;
@@ -175,7 +175,7 @@ $app->match('/routes/edit', function (Request $request) use ($app,$routes,$route
 		file_put_contents($routeFile, json_format($routeObject));
 
         // Redirect to the userlist
-        return $app->redirect('../../routes'); 
+        return $app->redirect('../../ui/routes'); 
     }
     // Show the form
     else{

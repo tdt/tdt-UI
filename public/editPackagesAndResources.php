@@ -21,56 +21,91 @@ use Symfony\Component\Validator\Constraints as Assert;
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
-$app->match('/package/remove', function (Request $request) use ($app) {
+$app->match('/ui/package/remove', function (Request $request) use ($app) {
 	
 	$client = new Client();
 
 	try{
 		$path = HOSTNAME."/tdtadmin/resources/".$request->get('path');
-		$request = $client->delete($path);
+		// controlling if once in a time a username and password is given to authorise for deleting
+		// if not, try without authentication
+		if ($app['session']->get('userrm') == null || $app['session']->get('pswdrm') ==null) {
+			$request = $client->delete($path);
+		}
+		else {
+			$request = $client->delete($path)->setAuth($app['session']->get('userrm'),$app['session']->get('pswdrm'));
+		}
 		$response = $request->send();
 	} catch(ClientErrorResponseException $e) {
+		// the error given when authentication needed
 		if ($e->getResponse()->getStatusCode() == 401) {
+			// if tried with authentication and it failed 
+			// or when tried without authentication and authentication is needed
+			if ($e->getResponse()->getStatusCode() == 401) {
+				$app['session']->set('method','remove');
+				$app['session']->set('path',$path);
+				$app['session']->set('redirect','../../ui/package');
+				return $app->redirect('../../ui/authentication');
+			}
 			
 		}
 	}	
-	return $app->redirect('../../package');
+	return $app->redirect('../../ui/package');
 	
 });
 
-$app->match('/resource/functions', function (Request $request) use ($jsonobj,$app) {
+$app->match('/ui/resource/functions', function (Request $request) use ($app) {
 
 	// if you want to remove a resource
 	if ($request->get("remove") != null){
 		$client = new Client();
 		try{
 			$path = HOSTNAME."/tdtadmin/resources/".$request->get('path');
-			$request = $client->delete($path); //->setAuth('tdtadmin','test');
+			// controlling if once in a time a username and password is given to authorise for deleting
+			// if not, try without authentication
+			if ($app['session']->get('userrm') == null || $app['session']->get('pswdrm') ==null) {
+				$request = $client->delete($path);
+			}
+			else {
+				$request = $client->delete($path)->setAuth($app['session']->get('userrm'),$app['session']->get('pswdrm'));
+			}
 			$response = $request->send();
 		} catch(ClientErrorResponseException $e) {
+			// if tried with authentication and it failed 
+			// or when tried without authentication and authentication is needed
 			if ($e->getResponse()->getStatusCode() == 401) {
-				
+				$app['session']->set('method','remove');
+				$app['session']->set('path',$path);
+				$app['session']->set('redirect','../../ui/package');
+				return $app->redirect('../../ui/authentication');
 			}
-			//echo $e->getMessage();
 		}
-		
-		
-		return $app->redirect('../../package');
+		return $app->redirect('../../ui/package');
 	}
 	// if you want to edit a resource
 	else if($request->get("edit") != null){
 		$app['session']->set('pathtoresource',$request->get('path'));
-		return $app->redirect('../../resource/edit');
+		return $app->redirect('../../ui/resource/edit');
 	}
 	// if you want to get a resource in json format
 	else if($request->get("json") != null){
 		$client = new Client();
 		try{
 			$path = "http://localhost/tdt/start/public/".$request->get('path').".json";
-			$request = $client->get($path);
+			if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
+				$request = $client->get($path);
+			}	
+			else{
+				$request = $client->get($path)->setAuth($app['session']->get('userget'),$app['session']->get('pswdget'));
+			}
 			$response = $request->send()->getBody();
-		} catch(BadResponseException $e) {
-			echo $e->getMessage();
+		} catch(ClientErrorResponseException $e) {
+			if ($e->getResponse()->getStatusCode() == 401) {
+				$app['session']->set('method','getFile');
+				$app['session']->set('path',$path);
+				$app['session']->set('redirect','../../ui/package');
+				return $app->redirect('../../ui/authentication');
+			}
 		}
 		return $response;
 	}
@@ -79,10 +114,20 @@ $app->match('/resource/functions', function (Request $request) use ($jsonobj,$ap
 		$client = new Client();
 		try{
 			$path = "http://localhost/tdt/start/public/".$request->get('path').".php";
-			$request = $client->get($path);
+			if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
+				$request = $client->get($path);
+			}	
+			else{
+				$request = $client->get($path)->setAuth($app['session']->get('userget'),$app['session']->get('pswdget'));
+			}
 			$response = $request->send()->getBody();
-		} catch(BadResponseException $e) {
-			echo $e->getMessage();
+		} catch(ClientErrorResponseException $e) {
+			if ($e->getResponse()->getStatusCode() == 401) {
+				$app['session']->set('method','getFile');
+				$app['session']->set('path',$path);
+				$app['session']->set('redirect','../../ui/package');
+				return $app->redirect('../../ui/authentication');
+			}
 		}
 		return $response;
 

@@ -40,7 +40,7 @@ foreach ($routes as $namespace => $core) {
 }
 
 // List users in auth.json
-$app->get('/users', function () use ($app,$userObject,$routes,$userroutes) {
+$app->get('/ui/users', function () use ($app,$userObject,$routes,$userroutes) {
 	$data['users'] = get_object_vars($userObject);
 	$data['routes'] = $routes;
 	$data['userroutes'] = $userroutes;
@@ -48,7 +48,7 @@ $app->get('/users', function () use ($app,$userObject,$routes,$userroutes) {
 });
 
 // Add, edit or remove a user
-$app->match('/users/edit', function (Request $request) use ($app,$userObject,$filename,$userroutes,$routes,$routeFile,$routeObject) {
+$app->match('/ui/users/edit', function (Request $request) use ($app,$userObject,$filename,$userroutes,$routes,$routeFile,$routeObject) {
 	
 	// Default = no write
 	$write = false;
@@ -229,7 +229,7 @@ $app->match('/users/edit', function (Request $request) use ($app,$userObject,$fi
 		file_put_contents($routeFile, json_format($routeObject));
 
         // Redirect to the userlist
-        return $app->redirect('../../users'); 
+        return $app->redirect('../../ui/users'); 
     }
     // Show the form
     else{

@@ -18,16 +18,30 @@ use Guzzle\Http\Query;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
-$client = new Client(HOSTNAME);
 
-// getting information about all possible generic 
-$request = $client->get('tdtinfo/admin.json');
-$obj = $request->send()->getBody();
-$jsonobj = json_decode($obj);
 
-$types =$jsonobj->admin->create->generic;
+$app->match('/ui/package/generictype', function (Request $request) use ($app) {
+	$client = new Client(HOSTNAME);
 
-$app->match('/package/generictype', function (Request $request) use ($types,$app) {
+	// getting information about all possible generic resource types
+	try {
+		if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
+			$request2 = $client->get('tdtinfo/admin.json');
+		} else {
+			$request2 = $client->get('tdtinfo/admin.json')->setAuth($app['session']->get('userget'),$app['session']->get('pswdget'));
+		}
+		$obj = $request2->send()->getBody();
+	 } catch (ClientErrorResponseException $e) {
+	 	if ($e->getResponse()->getStatusCode() == 401) {
+		 	$app['session']->set('method','get');
+			$app['session']->set('redirect','../../ui/package/generictype');
+			return $app->redirect('../../ui/authentication');	
+	 	}
+	 }
+
+	$jsonobj = json_decode($obj);
+
+	$types =$jsonobj->admin->create->generic;
 
 	// Create a Silex form with all the possible resourcetypes
 	$form = $app['form.factory']->createBuilder('form');
@@ -48,7 +62,7 @@ $app->match('/package/generictype', function (Request $request) use ($types,$app
 			$data = $form->getData();
 			echo $data['Type'];
 			$app['session']->set('filetype',$data['Type']);
-			return $app->redirect('../../package/add');
+			return $app->redirect('../../ui/package/add');
 		}
 	}
 

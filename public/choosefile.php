@@ -18,16 +18,31 @@ use Guzzle\Http\Query;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
-$client = new Client(HOSTNAME);
+// included for catching the 401 errors (authorization needed)
+use Guzzle\Http\Exception\ClientErrorResponseException;
 
-// getting information about all possible resource types 
-$request = $client->get('tdtinfo/admin.json');
-$obj = $request->send()->getBody();
-$jsonobj = json_decode($obj);
+$app->match('/ui/package/resourcetype', function (Request $request) use ($app) {
+	$client = new Client(HOSTNAME);
 
-$possibleresourcetype = $jsonobj->admin->create;
+	// getting information about all possible resource types
+	try {
+		if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
+			$request2 = $client->get('tdtinfo/admin.json');
+		} else {
+			$request2 = $client->get('tdtinfo/admin.json')->setAuth($app['session']->get('userget'),$app['session']->get('pswdget'));
+		}
+		$obj = $request2->send()->getBody();
+	 } catch (ClientErrorResponseException $e) {
+	 	if ($e->getResponse()->getStatusCode() == 401) {
+		 	$app['session']->set('method','get');
+			$app['session']->set('redirect','../../ui/package/resourcetype');
+			return $app->redirect('../../ui/authentication');	
+	 	}
+	 } 
 
-$app->match('/package/resourcetype', function (Request $request) use ($possibleresourcetype,$app) {
+	$jsonobj = json_decode($obj);
+
+	$possibleresourcetype = $jsonobj->admin->create;
 
 	// Create a Silex form with all the possible resourcetypes
 	$form = $app['form.factory']->createBuilder('form');
@@ -54,9 +69,9 @@ $app->match('/package/resourcetype', function (Request $request) use ($possibler
 
 			// Redirect to specific page of the resource type
 			if ($data['Type'] == generic) {
-				$path = '../../package/generictype';
+				$path = '../../ui/package/generictype';
 			} else{
-				$path = '../../package/add';
+				$path = '../../ui/package/add';
 			}
 
 			return $app->redirect($path);

@@ -18,15 +18,32 @@ use Guzzle\Http\Query;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
-// Create a client (to get the data)
-$client = new Client(HOSTNAME);
+// included for catching the 401 errors (authorization needed)
+use Guzzle\Http\Exception\ClientErrorResponseException;
 
-// getting information about creating a CSV file
-$request = $client->get('tdtinfo/admin.json');
-$obj = $request->send()->getBody();
-$jsonobj = json_decode($obj);
 
-$app->match('/package/add', function (Request $request) use ($jsonobj,$app) {
+$app->match('/ui/package/add', function (Request $request) use ($app) {
+
+	// Create a client (to get the data)
+	$client = new Client(HOSTNAME);
+
+	// getting information about creating a CSV file
+	try {
+		if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
+			$request2 = $client->get('tdtinfo/admin.json');
+		} else {
+			$request2 = $client->get('tdtinfo/admin.json')->setAuth($app['session']->get('userget'),$app['session']->get('pswdget'));
+		}
+		$obj = $request2->send()->getBody();
+	 } catch (ClientErrorResponseException $e) {
+	 	if ($e->getResponse()->getStatusCode() == 401) {
+		 	$app['session']->set('method','get');
+			$app['session']->set('redirect','../../ui/package/add');
+			return $app->redirect('../../ui/authentication');	
+	 	}
+	 }
+	$jsonobj = json_decode($obj);
+
 	$generaltype = $app['session']->get('generaltype');
 	if ( $generaltype == 'generic'){
 		$type = $app['session']->get('filetype');
@@ -67,14 +84,22 @@ $app->match('/package/add', function (Request $request) use ($jsonobj,$app) {
 
 			try{
 				// the put request
-				$request = $client->put($data['TargetURI'],null,$body);
+				if ($app['session']->get('userput') == null || $app['session']->get('pswdput') ==null) {
+					$request = $client->put($data['TargetURI'],null,$body);
+				} else {
+					$request = $client->put($data['TargetURI'],null,$body)->setAuth($app['session']->get('userput'),$app['session']->get('pswdput'));
+				}
 				$response = $request->send();
-			} catch(BadResponseException $e) {
-				echo $e->getMessage();
+			} catch(ClientErrorResponseException $e) {
+				$app['session']->set('method','put');
+				$app['session']->set('path',$data['TargetURI']);
+				$app['session']->set('body',$body);
+				$app['session']->set('redirect','../../ui/package');
+				return $app->redirect('../../ui/authentication');
 			}
 
 			// Redirect to list of packages 	
-			return $app->redirect('../../package');
+			return $app->redirect('../../ui/package');
 		}
 	}
 
