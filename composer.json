@@ -1,7 +1,7 @@
 {
     "name": "tdt/ui",
-    "description": "A RESTful data adapter",
-    "keywords": ["data adapter", "data transformation", "REST API"],
+    "description": "A user interface for The DataTank",
+    "keywords": ["User interface","User management","Resource management", "Route management"],
     "homepage": "http://thedatatank.com",
     "type": "library",
     "license": "AGPLv3",
