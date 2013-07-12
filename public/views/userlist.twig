@@ -8,43 +8,72 @@
 -->
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>User list</title>
-        {{ include('header.twig') }}
-    </head>
-    <body>
-        {{ include('navbar.twig') }}
-        <div class="container">
-            <h1>Users</h1>
-            <ul>
-                {% for username,user in users %}
+
+<head>
+    <title>User list</title>
+    {{ include('header.twig') }}
+</head>
+
+<body>
+
+    {{ include('navbar.twig') }}
+        
+    <div class="container">
+            
+        <h1>Users</h1>
+        <ul>
+                
+            {% for username,user in users %}
+                    
+            <li>
+                <form action="users/edit" method="post">
+                        
+                    <h2>{{username}}</h2>
+
+                    <input type="hidden" name="oldname" value="{{username}}">
+
+                    <div id="buttons">
+
+                        <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
+
+                        <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
+
+                    </div>
+                    
+                </form>
+
+                <ul>
+
+                    <li>{{user.type}}</li>
+
+                    <li>{{user.documentation}}</li>
+
                     <li>
-                        <form action="users/edit" method="post">
-                            {{username}}
-                            <input type="hidden" name="oldname" value="{{username}}">
-                            <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
-                            <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
-                        </form>
+                        Routes:
                         <ul>
-                            <li>{{user.type}}</li>
-                            <li>{{user.documentation}}</li>
-                            <li>
-                                Routes:
-                                <ul>
-                                    {% if userroutes[username] is defined %}
-                                        {% for route in userroutes[username].routes %}
-                                            <li>{{routes[route.namespace].routes[route.index].documentation}}</li>
-                                        {% endfor %}
-                                    {% else %}
-                                        No routes
-                                    {% endif %}
-                                </ul>
-                            </li>
-                        </ul>   
+                            {% if userroutes[username] is defined %}
+
+                            {% for route in userroutes[username].routes %}
+
+                            <li>{{routes[route.namespace].routes[route.index].documentation}}</li>
+                                
+                            {% endfor %}
+                                
+                            {% else %}
+                                No routes
+                            {% endif %}
+
+                        </ul>
+
                     </li>
-            	{% endfor %}
-            </ul>
-            <a href="ui/users/edit">Add user</a>
-        </div>
-    </body>
+                </ul>   
+            </li>
+
+            {% endfor %}
+        </ul>
+        
+        <a href="ui/users/edit">Add user</a>
+    
+    </div>
+</body>
 </html>
