@@ -21,11 +21,17 @@ use Symfony\Component\Validator\Constraints as Assert;
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
-$app->get('/ui/login{url}', function(Request $request) use ($app,$data) {
+$app->get('/ui/login{url}', function(Request $request) use ($app,$data,$check_url) {
 	$data['error'] = $app['security.last_error']($request);
 	$data['last_username'] = $app['session']->get('_security.last_username');
+	$data['checkurl'] = $check_url;
     return $app['twig']->render('login.twig', $data);
 });
+
+// $app->match('/ui/login_check', function() use ($app) {
+// 	$app->redirect($check_path)
+// });
+
 
 $app->match('/ui/authentication{url}', function (Request $request) use ($app,$data) {
 	$form = $app['form.factory']->createBuilder('form');
