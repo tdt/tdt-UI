@@ -52,8 +52,16 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 	else {
 		$requiredcreatevariables = $jsonobj->admin->create->$generaltype->requiredparameters;
 	}
-	
+
 	$explanationvariables = $jsonobj->admin->create->generic->$type->parameters;
+
+	if (($key = array_search('resource_type', $requiredcreatevariables)) !== false) {
+	    unset($requiredcreatevariables[$key]);
+	}
+
+	if (($key = array_search('generic_type', $requiredcreatevariables)) !== false) {
+	    unset($requiredcreatevariables[$key]);
+	}
 
 	// Create a Silex form with all the required fields 
 	$form = $app['form.factory']->createBuilder('form');
@@ -64,7 +72,7 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 	}
 
 	// for not required parameter (this is an example, yet to be included!!)
-	$form = $form->add('language','text',array('required' => false));
+	// $form = $form->add('language','text',array('required' => false));
 
 	$form = $form->getForm();
 
@@ -79,6 +87,12 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 			$body = array();
 			foreach ($requiredcreatevariables as $key => $value) {
 				$body[$value] = $formdata[$value];
+			}
+
+			// setting the already given info to the body (resource type and if necessary general type)
+			$body['resource_type'] = $app['session']->get('generaltype');
+			if ($body['resource_type'] == 'generic') {
+				$body['generic_type'] = $app['session']->get('filetype');
 			}
 
 			// initializing a new client
