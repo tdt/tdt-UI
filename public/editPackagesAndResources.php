@@ -26,7 +26,7 @@ $app->match('/ui/package/remove{url}', function (Request $request) use ($app,$ho
 	$client = new Client();
 
 	try{
-		$path = $hostname."/tdtadmin/resources/".$request->get('path');
+		$path = $hostname."tdtadmin/resources/".$request->get('path');
 		// controlling if once in a time a username and password is given to authorise for deleting
 		// if not, try without authentication
 		if ($app['session']->get('userrm') == null || $app['session']->get('pswdrm') ==null) {
@@ -37,6 +37,7 @@ $app->match('/ui/package/remove{url}', function (Request $request) use ($app,$ho
 		}
 		$response = $request->send();
 	} catch(ClientErrorResponseException $e) {
+
 		// the error given when authentication needed
 		if ($e->getResponse()->getStatusCode() == 401) {
 			// if tried with authentication and it failed 
@@ -60,7 +61,7 @@ $app->match('/ui/resource/functions', function (Request $request) use ($app,$hos
 	if ($request->get("remove") != null){
 		$client = new Client();
 		try{
-			$path = $hostname."/tdtadmin/resources/".$request->get('path');
+			$path = $hostname."tdtadmin/resources/".$request->get('path');
 			// controlling if once in a time a username and password is given to authorise for deleting
 			// if not, try without authentication
 			if ($app['session']->get('userrm') == null || $app['session']->get('pswdrm') ==null) {

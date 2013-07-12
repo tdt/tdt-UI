@@ -27,7 +27,7 @@ $app->get('/ui/login{url}', function(Request $request) use ($app,$data) {
     return $app['twig']->render('login.twig', $data);
 });
 
-$app->match('/ui/authentication', function (Request $request) use ($app,$data) {
+$app->match('/ui/authentication{url}', function (Request $request) use ($app,$data) {
 	$form = $app['form.factory']->createBuilder('form');
 	
 	$form = $form->add('Username','text',array('constraints' => new Assert\NotBlank()));
