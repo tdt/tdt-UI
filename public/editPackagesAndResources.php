@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
-$app->match('/ui/package/remove{url}', function (Request $request) use ($app,$hostname) {
+$app->match('/ui/package/remove', function (Request $request) use ($app,$hostname) {
 	
 	$client = new Client();
 
