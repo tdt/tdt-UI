@@ -53,12 +53,6 @@ $filename = STARTPATH."app/config/auth.json";
 $userObject = json_decode(file_get_contents($filename));
 $users = get_object_vars($userObject);
 
-// Check for a user called tdtuiadmin in auth.json
-if (!isset($users['tdtuiadmin'])){
-    echo "You need a user called tdtui in auth.json to continue.";
-    exit(1);
-}
-
 // must be included first
 require_once 'authentication.php';
 
