@@ -20,7 +20,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 
 
-$app->match('/ui/package/generictype{url}', function (Request $request) use ($app,$hostname) {
+$app->match('/ui/package/generictype{url}', function (Request $request) use ($app,$hostname,$data) {
 	$client = new Client($hostname);
 
 	// getting information about all possible generic resource types
