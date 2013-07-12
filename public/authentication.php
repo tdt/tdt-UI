@@ -54,7 +54,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$request = $client->delete($app['session']->get('path'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
-					$app->redirect('../../ui/authentication');
+					return $app->redirect('../../ui/authentication');
 				}
 				
 			}
@@ -66,7 +66,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$request = $client->get($app['session']->get('path'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send()->getBody();
 				} catch (ClientErrorResponseException $e) {
-					$app->redirect('../../ui/authentication');
+					return $app->redirect('../../ui/authentication');
 				}
 				// return the response (the json or php file)
 				return $response;

@@ -37,7 +37,7 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
 	 	if ($e->getResponse()->getStatusCode() == 401) {
 		 	$app['session']->set('method','get');
 			$app['session']->set('redirect','../../ui/resource/edit');
-			return $app->redirect('../../ui/package');	
+			return $app->redirect('../../ui/authentication');	
 	 	}
 	 } 
 
