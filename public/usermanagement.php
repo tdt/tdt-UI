@@ -238,4 +238,4 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 	    // display the form
 	    return $app['twig']->render('form.twig', $data);
 	}
-});
+})->value('url', '');
