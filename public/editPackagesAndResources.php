@@ -54,7 +54,7 @@ $app->match('/ui/package/remove{url}', function (Request $request) use ($app,$ho
 	
 });
 
-$app->match('/ui/resource/functions{url}', function (Request $request) use ($app,$hostname) {
+$app->match('/ui/resource/functions', function (Request $request) use ($app,$hostname) {
 
 	// if you want to remove a resource
 	if ($request->get("remove") != null){
