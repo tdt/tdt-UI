@@ -16,7 +16,7 @@
         {{ include('navbar.twig') }}
         <div class="container">
           <h1>Login</h1>
-          <form action="{{ path('ui_login_check') }}" method="post">
+          <form action="{{ checkurl }}" method="post">
               {{ error }}
               <div>
                 <label>Username</label>

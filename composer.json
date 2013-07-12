@@ -15,7 +15,6 @@
         "symfony/config": "~2.3",
         "symfony/translation": "~2.3",
         "symfony/locale": "~2.3",
-        "symfony/security": "~2.3",
         "simplethings/form-extra-bundle": "dev-master"
     },
     "minimum-stability" : "dev",
