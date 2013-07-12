@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
-$app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hostname) {
+$app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hostname,$data) {
 
 	// Create a client (to get the data)
 	$client = new Client($hostname);
@@ -65,12 +65,12 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
 		$form->bind($request);
 		if ($form->isValid()) {
 			// getting the data from the form
-			$data = $form->getData();
+			$formdata = $form->getData();
 
 			// making array for the body of the put request
 			$body = array();
 			foreach ($parameterstobechanged as $key => $value) {
-				$body[$key] = $data[$key];
+				$body[$key] = $formdata[$key];
 			}
 
 			// initializing a new client
@@ -101,11 +101,11 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
 	}
 
 	// display the form
-	$twigdata['form'] = $form->createView();
+	$data['form'] = $form->createView();
 	// adding the datafields title and function for the twig file
-	$twigdata['title']= "Changing the data";
-	$twigdata['header']= "Changing the data";
-	$twigdata['button']= "Change";
-	return $app['twig']->render('form.twig', $twigdata);
+	$data['title']= "Changing the data";
+	$data['header']= "Changing the data";
+	$data['button']= "Change";
+	return $app['twig']->render('form.twig', $data);
 
 });

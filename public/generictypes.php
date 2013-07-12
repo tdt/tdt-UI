@@ -59,19 +59,19 @@ $app->match('/ui/package/generictype{url}', function (Request $request) use ($ap
 		$form->bind($request);
 		if ($form->isValid()) {
 			// getting the data from the form
-			$data = $form->getData();
-			echo $data['Type'];
-			$app['session']->set('filetype',$data['Type']);
+			$formdata = $form->getData();
+			echo $formdata['Type'];
+			$app['session']->set('filetype',$formdata['Type']);
 			return $app->redirect('../../ui/package/add');
 		}
 	}
 
 	// display the form
-	$twigdata['form'] = $form->createView();
+	$data['form'] = $form->createView();
 	// adding the datafields title and function for the twig file
-	$twigdata['title']= "Choose file type";
-	$twigdata['header']= "file types";
-	$twigdata['button']= "Choose";
-	return $app['twig']->render('form.twig', $twigdata);
+	$data['title']= "Choose file type";
+	$data['header']= "file types";
+	$data['button']= "Choose";
+	return $app['twig']->render('form.twig', $data);
 
 });

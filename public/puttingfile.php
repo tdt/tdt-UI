@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
 
-$app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostname) {
+$app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostname,$data) {
 
 	// Create a client (to get the data)
 	$client = new Client($hostname);
@@ -73,12 +73,12 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 		$form->bind($request);
 		if ($form->isValid()) {
 			// getting the data from the form
-			$data = $form->getData();
+			$formdata = $form->getData();
 			
 			// making array for the body of the put request
 			$body = array();
 			foreach ($requiredcreatevariables as $key => $value) {
-				$body[$value] = $data[$value];
+				$body[$value] = $formdata[$value];
 			}
 
 			// initializing a new client
@@ -87,14 +87,14 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 			try{
 				// the put request
 				if ($app['session']->get('userput') == null || $app['session']->get('pswdput') ==null) {
-					$request = $client->put($data['TargetURI'],null,$body);
+					$request = $client->put($formdata['TargetURI'],null,$body);
 				} else {
-					$request = $client->put($data['TargetURI'],null,$body)->setAuth($app['session']->get('userput'),$app['session']->get('pswdput'));
+					$request = $client->put($formdata['TargetURI'],null,$body)->setAuth($app['session']->get('userput'),$app['session']->get('pswdput'));
 				}
 				$response = $request->send();
 			} catch(ClientErrorResponseException $e) {
 				$app['session']->set('method','put');
-				$app['session']->set('path',$data['TargetURI']);
+				$app['session']->set('path',$formdata['TargetURI']);
 				$app['session']->set('body',$body);
 				$app['session']->set('redirect','../../ui/package');
 				return $app->redirect('../../ui/authentication');
@@ -106,10 +106,10 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 	}
 
 	// display the form
-	$twigdata['form'] = $form->createView();
+	$data['form'] = $form->createView();
 	// adding the datafields title and function for the twig file
-	$twigdata['title']= "Putting a file";
-	$twigdata['header']= "Putting ".$type." file";
-	$twigdata['button']= "Add";
-	return $app['twig']->render('form.twig', $twigdata);
+	$data['title']= "Putting a file";
+	$data['header']= "Putting ".$type." file";
+	$data['button']= "Add";
+	return $app['twig']->render('form.twig', $data);
 });

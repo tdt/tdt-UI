@@ -29,7 +29,7 @@ $app->get('/ui/routes{url}', function () use ($app,$routes,$data) {
 });
 
 // Add, edit or remove a route
-$app->match('/ui/routes/edit{url}', function (Request $request) use ($app,$routes,$routeFile,$routeObject,$userObject) {
+$app->match('/ui/routes/edit{url}', function (Request $request) use ($app,$routes,$routeFile,$routeObject,$userObject,$data) {
 	
 	// Default = no write
 	$write = false;

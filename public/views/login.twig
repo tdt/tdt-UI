@@ -14,12 +14,20 @@
     </head>
     <body>
         {{ include('navbar.twig') }}
-        <form action="{{ path('ui_login_check') }}" method="post">
-            {{ error }}
-            <input type="text" name="_username" value="{{ last_username }}" />
-            <input type="password" name="_password" value="" />
-            <input type="submit" />
-        </form>
-        
+        <div class="container">
+          <h1>Login</h1>
+          <form action="{{ path('ui_login_check') }}" method="post">
+              {{ error }}
+              <div>
+                <label>Username</label>
+                <input type="text" name="_username" value="{{ last_username }}" />
+              </div>
+              <div>
+                <label>Password</label>
+                <input type="password" name="_password" value="" />
+              </div>  
+              <input type="submit" class="btn"/>
+          </form>
+        </div>
     </body>
 </html>

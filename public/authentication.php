@@ -41,17 +41,17 @@ $app->match('/ui/authentication', function (Request $request) use ($app,$data) {
 		$form->bind($request);
 		if ($form->isValid()) {
 			// getting the data from the form
-			$data = $form->getData();
+			$formdata = $form->getData();
 
 			$client = new Client();
 
 			// if a delete request must be authorized
 			if ($app['session']->get('method') == 'remove') {
 				$title = $title."for deleting";
-				$app['session']->set('userrm',$data['Username']);
-				$app['session']->set('pswdrm',$data['Password']);
+				$app['session']->set('userrm',$formdata['Username']);
+				$app['session']->set('pswdrm',$formdata['Password']);
 				try {
-					$request = $client->delete($app['session']->get('path'))->setAuth($data['Username'],$data['Password']);
+					$request = $client->delete($app['session']->get('path'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
 					$app->redirect('../../ui/authentication');
@@ -60,10 +60,10 @@ $app->match('/ui/authentication', function (Request $request) use ($app,$data) {
 			}
 			elseif ($app['session']->get('method') == 'getFile') {
 				$title = $title."for getting File";
-				$app['session']->set('userget',$data['Username']);
-				$app['session']->set('pswdget',$data['Password']);
+				$app['session']->set('userget',$formdata['Username']);
+				$app['session']->set('pswdget',$formdata['Password']);
 				try {
-					$request = $client->get($app['session']->get('path'))->setAuth($data['Username'],$data['Password']);
+					$request = $client->get($app['session']->get('path'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send()->getBody();
 				} catch (ClientErrorResponseException $e) {
 					$app->redirect('../../ui/authentication');
@@ -73,15 +73,15 @@ $app->match('/ui/authentication', function (Request $request) use ($app,$data) {
 			}
 			elseif ($app['session']->get('method') == 'get') {
 				$title = $title."for getting";
-				$app['session']->set('userget',$data['Username']);
-				$app['session']->set('pswdget',$data['Password']);
+				$app['session']->set('userget',$formdata['Username']);
+				$app['session']->set('pswdget',$formdata['Password']);
 			}
 			elseif ($app['session']->get('method') == 'patch') {
 				$title = $title."for editing";
-				$app['session']->set('userpatch',$data['Username']);
-				$app['session']->set('pswdpatch',$data['Password']);
+				$app['session']->set('userpatch',$formdata['Username']);
+				$app['session']->set('pswdpatch',$formdata['Password']);
 				try {
-					$request = $client->patch($app['session']->get('path'),null,$app['session']->get('body'))->setAuth($data['Username'],$data['Password']);
+					$request = $client->patch($app['session']->get('path'),null,$app['session']->get('body'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
 					return $app->redirect('../../ui/authentication');
@@ -89,10 +89,10 @@ $app->match('/ui/authentication', function (Request $request) use ($app,$data) {
 			}
 			elseif ($app['session']->get('method') == 'put') {
 				$title = $title."for putting";
-				$app['session']->set('userput',$data['Username']);
-				$app['session']->set('pswdput',$data['Password']);
+				$app['session']->set('userput',$formdata['Username']);
+				$app['session']->set('pswdput',$formdata['Password']);
 				try {
-					$request = $client->put($app['session']->get('path'),null,$app['session']->get('body'))->setAuth($data['Username'],$data['Password']);
+					$request = $client->put($app['session']->get('path'),null,$app['session']->get('body'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
 					return $app->redirect('../../ui/authentication');
@@ -104,10 +104,10 @@ $app->match('/ui/authentication', function (Request $request) use ($app,$data) {
 	}
 
 	// display the form
-	$twigdata['form'] = $form->createView();
+	$data['form'] = $form->createView();
 	// adding the datafields title and function for the twig file
-	$twigdata['title']= "Authentication";
-	$twigdata['header']= $title;
-	$twigdata['button']= "OK";
-	return $app['twig']->render('form.twig', $twigdata);
+	$data['title']= "Authentication";
+	$data['header']= $title;
+	$data['button']= "OK";
+	return $app['twig']->render('form.twig', $data);
 });
