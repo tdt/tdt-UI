@@ -36,7 +36,8 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
 	 } catch (ClientErrorResponseException $e) {
 	 	if ($e->getResponse()->getStatusCode() == 401) {
 		 	$app['session']->set('method','get');
-			$app['session']->set('redirect','../../ui/resource/edit');
+			$app['session']->set('redirect',$hostname.'ui/resource/edit');
+			$app['session']->set('referer',$hostname.'ui/resource/edit');
 			return $app->redirect('../../ui/authentication');	
 	 	}
 	 } 
@@ -90,7 +91,8 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
 				$app['session']->set('method','patch');
 				$app['session']->set('path',$path);
 				$app['session']->set('body',$body);
-				$app['session']->set('redirect','../../ui/package');
+				$app['session']->set('redirect',$hostname.'ui/package');
+				$app['session']->set('referer',$hostname.'ui/resource/edit');
 				return $app->redirect('../../ui/authentication');
 				
 			}
@@ -107,5 +109,4 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
 	$data['header']= "Changing the data";
 	$data['button']= "Change";
 	return $app['twig']->render('form.twig', $data);
-
-});
+})->value('url', '');

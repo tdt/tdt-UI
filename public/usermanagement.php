@@ -19,6 +19,13 @@ require_once STARTPATH.'app/core/configurator.php';
 // Used to write json to file, formatted to be read by humans
 require_once __DIR__.'/../src/nicejson-php/nicejson.php';
 
+// Load users from file
+// Fetch users from the auth.json file
+$filename = STARTPATH."app/config/auth.json";
+// This object will be used by user management and route management, so don't delete it
+$userObject = json_decode(file_get_contents($filename));
+$users = get_object_vars($userObject);
+
 // Fetch routes from file
 $routeFile = STARTPATH. "app/config/cores.json";
 $routeObject = json_decode(Configurator::stripComments(file_get_contents($routeFile)));
@@ -45,7 +52,7 @@ $app->get('/ui/users{url}', function () use ($app,$userObject,$routes,$userroute
 	$data['routes'] = $routes;
 	$data['userroutes'] = $userroutes;
 	return $app['twig']->render('userlist.twig',$data);
-});
+})->value('url', '');;
 
 // Add, edit or remove a user
 $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userObject,$filename,$userroutes,$routes,$routeFile,$routeObject,$data) {

@@ -38,7 +38,8 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 	 } catch (ClientErrorResponseException $e) {
 	 	if ($e->getResponse()->getStatusCode() == 401) {
 		 	$app['session']->set('method','get');
-			$app['session']->set('redirect','../../ui/package/add');
+		 	$app['session']->set('redirect',$hostname.'ui/package/add');
+		 	$app['session']->set('referer',$hostname.'ui/package/add');
 			return $app->redirect('../../ui/authentication');	
 	 	}
 	 }
@@ -110,7 +111,8 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 				$app['session']->set('method','put');
 				$app['session']->set('path',$formdata['TargetURI']);
 				$app['session']->set('body',$body);
-				$app['session']->set('redirect','../../ui/package');
+				$app['session']->set('redirect',$hostname.'ui/package');
+				$app['session']->set('referer',$hostname.'ui/package/add');
 				return $app->redirect('../../ui/authentication');
 			}
 
@@ -126,4 +128,4 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 	$data['header']= "Putting ".$type." file";
 	$data['button']= "Add";
 	return $app['twig']->render('form.twig', $data);
-});
+})->value('url', '');

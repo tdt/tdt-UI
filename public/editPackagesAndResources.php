@@ -21,7 +21,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
-$app->match('/ui/package/remove', function (Request $request) use ($app,$hostname) {
+$app->match('/ui/package/remove{url}', function (Request $request) use ($app,$hostname) {
 	
 	$client = new Client();
 
@@ -37,25 +37,21 @@ $app->match('/ui/package/remove', function (Request $request) use ($app,$hostnam
 		}
 		$response = $request->send();
 	} catch(ClientErrorResponseException $e) {
-
-		// the error given when authentication needed
+		// if tried with authentication and it failed 
+		// or when tried without authentication and authentication is needed
 		if ($e->getResponse()->getStatusCode() == 401) {
-			// if tried with authentication and it failed 
-			// or when tried without authentication and authentication is needed
-			if ($e->getResponse()->getStatusCode() == 401) {
-				$app['session']->set('method','remove');
-				$app['session']->set('path',$path);
-				$app['session']->set('redirect','../../ui/package');
-				return $app->redirect('../../ui/authentication');
-			}
-			
+			$app['session']->set('method','remove');
+			$app['session']->set('path',$path);
+			$app['session']->set('redirect',$hostname.'ui/package');
+			$app['session']->set('referer',$hostname.'ui/package/remove');
+			return $app->redirect('../../ui/authentication');
 		}
 	}	
 	return $app->redirect('../../ui/package');
 	
-});
+})->value('url', '');
 
-$app->match('/ui/resource/functions', function (Request $request) use ($app,$hostname) {
+$app->match('/ui/resource/functions{url}', function (Request $request) use ($app,$hostname) {
 
 	// if you want to remove a resource
 	if ($request->get("remove") != null){
@@ -77,7 +73,8 @@ $app->match('/ui/resource/functions', function (Request $request) use ($app,$hos
 			if ($e->getResponse()->getStatusCode() == 401) {
 				$app['session']->set('method','remove');
 				$app['session']->set('path',$path);
-				$app['session']->set('redirect','../../ui/package');
+				$app['session']->set('redirect',$hostname.'ui/package');
+				$app['session']->set('referer',$hostname.'ui/resource/functions');
 				return $app->redirect('../../ui/authentication');
 			}
 		}
@@ -90,9 +87,9 @@ $app->match('/ui/resource/functions', function (Request $request) use ($app,$hos
 	}
 	// if you want to get a resource in json format
 	else if($request->get("json") != null){
-		$client = new Client();
+		$client = new Client($hostname);
 		try{
-			$path = "http://localhost/tdt/start/public/".$request->get('path').".json";
+			$path = $request->get('path').".json";
 			if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
 				$request = $client->get($path);
 			}	
@@ -104,7 +101,8 @@ $app->match('/ui/resource/functions', function (Request $request) use ($app,$hos
 			if ($e->getResponse()->getStatusCode() == 401) {
 				$app['session']->set('method','getFile');
 				$app['session']->set('path',$path);
-				$app['session']->set('redirect','../../ui/package');
+				$app['session']->set('redirect',$hostname.'ui/package');
+				$app['session']->set('referer',$hostname.'ui/resource/functions');
 				return $app->redirect('../../ui/authentication');
 			}
 		}
@@ -112,9 +110,9 @@ $app->match('/ui/resource/functions', function (Request $request) use ($app,$hos
 	}
 	// if you want to get a resource in php format
 	else{
-		$client = new Client();
+		$client = new Client($hostname);
 		try{
-			$path = "http://localhost/tdt/start/public/".$request->get('path').".php";
+			$path = $request->get('path').".php";
 			if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
 				$request = $client->get($path);
 			}	
@@ -126,11 +124,12 @@ $app->match('/ui/resource/functions', function (Request $request) use ($app,$hos
 			if ($e->getResponse()->getStatusCode() == 401) {
 				$app['session']->set('method','getFile');
 				$app['session']->set('path',$path);
-				$app['session']->set('redirect','../../ui/package');
+				$app['session']->set('redirect',$hostname.'ui/package');
+				$app['session']->set('referer',$hostname.'ui/resource/functions');
 				return $app->redirect('../../ui/authentication');
 			}
 		}
 		return $response;
 
 	}
-});
+})->value('url', '');

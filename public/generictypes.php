@@ -34,7 +34,8 @@ $app->match('/ui/package/generictype{url}', function (Request $request) use ($ap
 	 } catch (ClientErrorResponseException $e) {
 	 	if ($e->getResponse()->getStatusCode() == 401) {
 		 	$app['session']->set('method','get');
-			$app['session']->set('redirect','../../ui/package/generictype');
+			$app['session']->set('redirect',$hostname.'ui/package/generictype');
+			$app['session']->set('referer',$hostname.'ui/package/generictype');
 			return $app->redirect('../../ui/authentication');	
 	 	}
 	 }
@@ -74,4 +75,4 @@ $app->match('/ui/package/generictype{url}', function (Request $request) use ($ap
 	$data['button']= "Choose";
 	return $app['twig']->render('form.twig', $data);
 
-});
+})->value('url', '');

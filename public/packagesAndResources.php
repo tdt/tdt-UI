@@ -30,7 +30,8 @@ $app->get('/ui/package{url}', function () use ($app,$hostname,$data) {
 	} catch (ClientErrorResponseException $e) {
 		if ($e->getResponse()->getStatusCode() == 401) {
 			$app['session']->set('method','get');
-			$app['session']->set('redirect','../../ui/package');
+			$app['session']->set('redirect',$hostname.'ui/package');
+			$app['session']->set('referer',$hostname.'ui/package');
 			return $app->redirect('../../ui/authentication');	
 		}	
 	}
@@ -54,4 +55,4 @@ $app->get('/ui/package{url}', function () use ($app,$hostname,$data) {
 	}
 	$data["packages"] = $packages;
 	return $app['twig']->render('packages.twig',$data);
-});
+})->value('url', '');

@@ -15,25 +15,50 @@ use Guzzle\Http\Client;
 use Guzzle\Http\Message;
 use Guzzle\Http\Query;
 
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints as Assert;
 
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
-$app->match('/ui/authentication{url}', function (Request $request) use ($app,$data) {
+$app->match('/ui/authentication{url}', function (Request $request) use ($app,$data,$hostname) {
+	$referer = $app['session']->get('referer');
+
+	if ($referer === null){
+		$internalreferer = $app['session']->get('internalreferer');
+	}
+	else{
+		// If before, a form was already posted with the same referer url,
+		// it means the login failed (otherwise, you wouldn't be back at authentication)
+		if ($referer == $app['session']->get('formerreferer')){
+			// Indicate that the combination is wrong and reset the former referer
+			// This is needed to make sure there isn't given an error when you wouldn't post the form 
+			// and try the same function again at a later time (before the session got reset)
+			$wrongcombo = true;
+			$app['session']->remove('formerreferer');
+		}
+	}
+
 	$form = $app['form.factory']->createBuilder('form');
-	
 	$form = $form->add('Username','text',array('constraints' => new Assert\NotBlank()));
 	$form = $form->add('Password','password',array('constraints' => new Assert\NotBlank()));
 
 	$form = $form->getForm();
 
+	// Two times the authentication form for the same page => wrong combination was given!
+	if ($wrongcombo){
+		$form->get('Username')->addError(new FormError('Wrong username and/or password'));
+	}
+
 	$title = "Authentication";
 
 	if ('POST' == $request->getMethod()) {
+
 		$form->bind($request);
 		if ($form->isValid()) {
+			// When the form is posted, keep the referer url in session for validation of user/pass combination
+			$app['session']->set('formerreferer',$internalreferer);
 			// getting the data from the form
 			$formdata = $form->getData();
 
@@ -48,7 +73,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$request = $client->delete($app['session']->get('path'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
-					return $app->redirect('../../ui/authentication');
+					return $app->redirect($hostname.'ui/authentication');
 				}
 				
 			}
@@ -60,7 +85,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$request = $client->get($app['session']->get('path'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send()->getBody();
 				} catch (ClientErrorResponseException $e) {
-					return $app->redirect('../../ui/authentication');
+					return $app->redirect($hostname.'ui/authentication');
 				}
 				// return the response (the json or php file)
 				return $response;
@@ -78,10 +103,10 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$request = $client->patch($app['session']->get('path'),null,$app['session']->get('body'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
-					return $app->redirect('../../ui/authentication');
+					return $app->redirect($hostname.'ui/authentication');
 				}
 			}
-			elseif ($app['session']->get('method') == 'put') {
+			elseif ($app['session']->get('method') == 'put') {				
 				$title = $title."for putting";
 				$app['session']->set('userput',$formdata['Username']);
 				$app['session']->set('pswdput',$formdata['Password']);
@@ -89,10 +114,9 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$request = $client->put($app['session']->get('path'),null,$app['session']->get('body'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
-					return $app->redirect('../../ui/authentication');
+					return $app->redirect($hostname.'ui/authentication');
 				}
 			}
-
 			return $app->redirect($app['session']->get('redirect'));
 		}
 	}
@@ -104,4 +128,4 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 	$data['header']= $title;
 	$data['button']= "OK";
 	return $app['twig']->render('form.twig', $data);
-});
+})->value('url', '');

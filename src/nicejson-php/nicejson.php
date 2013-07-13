@@ -21,7 +21,7 @@ function json_format($json) {
   $result      = '';
   $pos         = 0;               // indentation level
   $strLen      = strlen($json);
-  $indentStr   = "\t";
+  $indentStr   = "    ";
   $newLine     = "\n";
   $prevChar    = '';
   $outOfQuotes = true;

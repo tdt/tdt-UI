@@ -42,7 +42,7 @@ class UiResourceController extends \tdt\core\controllers\AController {
             if($jquery_js){
                 $data['jquery_js'] .= $jquery_js;
             }
-            $bootstrap_css = "";
+            $data['bootstrap_css'] = "";
             $bootstrap_css = @file_get_contents(__DIR__."/../../../../includes/css/bootstrap.min.css");
             if($bootstrap_css){
                 $data['bootstrap_css'] .= $bootstrap_css;
@@ -50,6 +50,16 @@ class UiResourceController extends \tdt\core\controllers\AController {
             $bootstrap_css = @file_get_contents(__DIR__."/../../../../includes/css/bootstrap-responsive.min.css");
             if($bootstrap_css){
                 $data['bootstrap_css'] .= $bootstrap_css;
+            }
+            $data['main_css'] = "";
+            $main_css = @file_get_contents(__DIR__."/../../../../includes/css/main.css");
+            if($main_css){
+                $data['main_css'] .= $main_css;
+            }
+            $data['logo'] = "";
+            $logo = @file_get_contents(__DIR__."/../../../../includes/img/logo.png");
+            if ($logo){
+                $data['logo'] .= base64_encode($logo);
             }
             include(__DIR__."/../../../../public/index.php");
     }

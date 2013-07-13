@@ -13,43 +13,77 @@
         {{ include('header.twig') }}
     </head>
     <body>
+
         {{ include('navbar.twig') }}
+
         <div class="container">
+            
             <h1>Routes</h1>
             <ul>
+
                 {% for namespace,core in routes %}
-                    <li>{{core.namespace}}
-                        <ul>
-                            {% for index,route in core.routes %}
+                
+                <li>
+                    <h2>{{core.namespace}}</h2>
+                    <ul>
+
+                        {% for index,route in core.routes %}
+                        <form action="routes/edit" method="post">
+
+                            
+                                            
+                            {{route.documentation}}
+
+                            <input type="hidden" name="oldroute" value="{{namespace}}//{{index}}">
+
+                            <div id="buttons">
+
+                                <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
+
+                                <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
+
+                            </div>
+
+                        </form>
+
+                        <li>
+
+                            
+
+                            <ul>
+                                
+                                <li>Method: {{route.method}}</li>
+                                
+                                <li>Route: {{route.route}}</li>
+                                
+                                <li>Controller: {{route.controller}}</li>
+                                
                                 <li>
-                                    <form action="routes/edit" method="post">
-                                        {{route.documentation}}
-                                        <input type="hidden" name="oldroute" value="{{namespace}}//{{index}}">
-                                        <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
-                                        <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
-                                    </form>
+                                    Users:
                                     <ul>
-                                        <li>Method: {{route.method}}</li>
-                                        <li>Route: {{route.route}}</li>
-                                        <li>Controller: {{route.controller}}</li>
-                                        <li>
-                                            Users:
-                                            <ul>
-                                                {% for user in route.users %}
-                                                    <li>{{user}}</li>
-                                                {% else %}
-                                                    No restrictions
-                                                {% endfor %}
-                                            </ul>
-                                        </li>
+                                        {% for user in route.users %}
+
+                                        <li>{{user}}</li>
+       
+                                        {% else %}
+                                            No restrictions
+                                        {% endfor %}
                                     </ul>
                                 </li>
-                            {% endfor %}
-                        </ul>
-                    </li>
+                            </ul>
+                        </li>
+
+                        {% endfor %}
+
+                    </ul>
+                </li>
+
                 {% endfor %}
+
             </ul>
+
             <a href="ui/routes/edit">Add route</a>
+
         </div>
   </body>
 </html>

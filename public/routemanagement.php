@@ -20,7 +20,7 @@ $app->get('ui/routes{url}', function () use ($app,$routes,$data) {
 	// Give the array with cores to Twig, it contains the routes per core
 	$data['routes'] = $routes;
 	return $app['twig']->render('routelist.twig',$data);
-});
+})->value('url', '');
 
 // Add, edit or remove a route
 $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes,$routeFile,$routeObject,$userObject,$data) {
@@ -45,6 +45,8 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
 	// Check if the request is to remove the route
 	if ($request->get("remove") != null){
 		unset($routes[$oldnamespace]->routes[$oldindex]);
+		// Reindex array
+		$routes[$oldnamespace]->routes = array_values($routes[$oldnamespace]->routes);
 		$write = true;
 	}
 	// Add or edit a route
@@ -179,5 +181,5 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
 	    // display the form
 	    return $app['twig']->render('form.twig', $data);
     }
-});
+})->value('url', '');
 

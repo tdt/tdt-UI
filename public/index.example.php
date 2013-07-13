@@ -46,12 +46,9 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 // Register the session service provider object
 $app->register(new Silex\Provider\SessionServiceProvider());
 
-// Load users from file
-// Fetch users from the auth.json file
-$filename = STARTPATH."app/config/auth.json";
-// This object will be used by user management and route management, so don't delete it
-$userObject = json_decode(file_get_contents($filename));
-$users = get_object_vars($userObject);
+// Get The DataTank hostname for use in /ui/package
+$hostname = $this->hostname.$this->subdir;
+$data['relpath'] = '/'.$this->subdir.'ui/';
 
 // must be included first
 require_once 'authentication.php';
@@ -59,16 +56,13 @@ require_once 'authentication.php';
 // If root is asked, redirect to the resource management
 $app->get('/ui{url}', function () use ($app) {
     return $app->redirect('ui/package');
-});
+})->value('url', '');
 
 // The parameters that cannot be edited
 $app['session']->set('notedible',array('generic_type' => 'generic_type', 
                                         'resource_type' => 'resource_type',
                                         'columns' => 'columns',
                                         'column_aliases' => 'column_aliases'));
-
-// Get The DataTank hostname for use in /ui/package
-$hostname = $this->hostname;
 
 //start with resources management
 require_once 'packagesAndResources.php';
