@@ -49,7 +49,41 @@ $app->match('/ui/input{url}', function (Request $request) use ($app,$hostname,$d
             }
             // Else, the usual submit button was used
             else{
-                return "test3";
+                // defining the extract part
+                $filetype = $app['session']->get('typeinput');
+                switch ($filetype) {
+                    case 'CSV0':
+                        $extract = array("type"=> "CSV","delimiter"=> ";","has_header_row"=> "1");
+                        break;
+                    case 'CSV1':
+                        $extract = array("type"=> "CSV","delimiter"=> ",","has_header_row"=> "1");
+                        break;
+                    case 'CSV2':
+                        $extract = array("type"=> "CSV","delimiter"=> ";","has_header_row"=> "0");
+                        break;
+                    case 'CSV3':
+                        $extract = array("type"=> "CSV","delimiter"=> ",","has_header_row"=> "0");
+                        break;
+                    case 'XML':
+                        $extract = array("type"=> "XML");
+                        break;
+                    case 'JSON':
+                        $extract = array("type"=> "JSON");
+                        break;
+                    default:
+                }
+                // $config->mapping = urlencode($formdata['mapping']);
+                // $config->extract = $extract;
+                // $config->chunk = ($formdata['input']);
+                $config = array(
+                  "mapping"=> htmlentities($formdata['mapping']),
+                  "extract"=> $extract,
+                  "chunk"=> ($formdata['input'])
+                );
+                //$config = json_encode($config);
+                $client = new Client();
+                $request = $client->post($hostname."tdtinput/test",null,$config);
+                $response = $request->send();                
             }
             if ($write){
                 $filename = $app['session']->get($fieldname.'file');
