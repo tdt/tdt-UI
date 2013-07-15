@@ -4,9 +4,6 @@ This is a user interface created for The DataTank. It allows to manage resources
 
 - - -
 
-## Installation
-
-```
 ## Configuration in tdt/start
 
 Create a new project using composer:
