@@ -6,15 +6,22 @@ This is a user interface created for The DataTank. It allows to manage resources
 
 ## Installation
 
-### Composer
+```
+## Configuration in tdt/start
 
-If you already have Composer installed, you can just execute an update (because the composer.json is provided).
-Navigate in terminal to the tdt-UI folder and execute the following command:
-
-``` bash
-$ composer update
+Create a new project using composer:
+```bash
+composer create-project tdt/start
 ```
 
-### Configuration
+Alter composer.json and require:
 
-Before starting to use the UI, you will need to copy index.example.json (in the public folder) and name it index.json. Also, the STARTPATH variable will need to be set in index.php.
+```json
+"tdt/ui" : "dev-master"
+```
+
+Now update your project in order for input to be configured:
+
+```bash
+composer update
+```

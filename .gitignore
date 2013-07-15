@@ -3,4 +3,3 @@ composer.*
 vendor/*
 config/*
 !config/settings.example.json
-index.php

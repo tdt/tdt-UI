@@ -24,10 +24,8 @@ define('UIDOCROOT', __DIR__.DIRECTORY_SEPARATOR);
 // Vendor directory
 define('UIVENDORPATH', realpath(__DIR__.'/../vendor/').DIRECTORY_SEPARATOR);
 
-// TODO: remove the lines below and use configuration instead
-
-// Path to the local tdt-start folder (Add trailing slash!)
-define("STARTPATH", "...");
+// Path to the local tdt-start folder
+define("STARTPATH", __DIR__.'/../../../../');
 
 //Register the Twig Service Provider
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
