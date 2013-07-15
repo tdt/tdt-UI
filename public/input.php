@@ -18,15 +18,12 @@ use Symfony\Component\HttpFoundation\Request;
 // Used to write json to file, formatted to be read by humans
 require_once __DIR__.'/../src/nicejson-php/nicejson.php';
 
-$app->match('/ui/input.about', function (Request $request) use ($app,$hostname,$data) {
-	$fileMapping = @file_get_contents("/home/leen/Downloads/uitdb-events.xml.spec.ttl");
-
-    $fileInput = @file_get_contents("/home/leen/Downloads/uitdb-events-test.xml");
-    // echo "<pre>";
-    // print_r($fileInput);
-    $defaultData = array('Input' => $fileInput,'Mapping' => $fileMapping);
-
-    $form = $app['form.factory']->createBuilder('form',$defaultData);
+$app->match('/ui/input{url}', function (Request $request) use ($app,$hostname,$data) {
+    // getting the input and mapping file (inserted by the user and saved in session-object)
+	$fileInput = @file_get_contents($app['session']->get('inputfile'));
+    $fileMapping = @file_get_contents($app['session']->get('mappingfile'));
+    
+    $form = $app['form.factory']->createBuilder('form',array('Input' => $fileInput,'Mapping' => $fileMapping));
     $form = $form->add('input','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
     $form = $form->add('saveFile','submit');
     $form = $form->add('mapping','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
