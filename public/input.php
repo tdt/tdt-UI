@@ -22,8 +22,11 @@ $app->get('/ui/input{url}', function () use ($app,$hostname,$data) {
     // print_r($fileInput);
 
     $form = $app['form.factory']->createBuilder('form',array('Input' => $fileInput,'Mapping' => $fileMapping));
+    $form = $form->add('bestand','file');
     $form = $form->add('Input','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
-    $form = $form->add('Mapping','textarea',array('attr' => array('cols' => "100", 'rows' => "500")));
+    $form = $form->add('saveFile','submit');
+    $form = $form->add('Mapping','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
+    $form = $form->add('saveMappingFile','submit');
     $form = $form->getForm();
 
     $data['form'] = $form->createView();
