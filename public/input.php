@@ -59,7 +59,29 @@ $app->match('/ui/input{url}', function (Request $request) use ($app,$hostname,$d
             }
             // Else, the usual submit button was used
             else{
-                return "test3";
+                // defining the extract part
+                $filetype = $app['session']->get('typeinput');
+                switch ($filetype) {
+                    case 'CSV0':
+                        extract = {"type": "CSV","delimiter": ";","has_header_row": "1"}
+                        break;
+                    case 'CSV1':
+                        extract = {"type": "CSV","delimiter": ",","has_header_row": "1"}
+                        break;
+                    case 'CSV2':
+                        extract = {"type": "CSV","delimiter": ";","has_header_row": "0"}
+                        break;
+                    case 'CSV3':
+                        extract = {"type": "CSV","delimiter": ",","has_header_row": "0"}
+                        break;
+                    case 'XML':
+                        extract = {"type": "XML"}
+                        break;
+                    case 'JSON':
+                        extract = {"type": "JSON"}
+                        break;
+                    default:
+                }
             }
 
         }

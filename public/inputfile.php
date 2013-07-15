@@ -24,10 +24,10 @@ $app->match('/ui/inputfile{url}', function (Request $request) use ($app,$hostnam
 	// enumerating the possible types of input files
 	$possibilities['JSON'] = "JSON";
 	$possibilities['XML'] = "XML";
-	$possibilities['CSV1'] = "CSV with header row and ; as a delimiter";
-	$possibilities['CSV2'] = "CSV with header row and , as a delimiter";
-	$possibilities['CSV3'] = "CSV without header row and ; as a delimiter";
-	$possibilities['CSV4'] = "CSV without header row and , as a delimiter";
+	$possibilities['CSV0'] = "CSV with header row and ; as a delimiter";
+	$possibilities['CSV1'] = "CSV with header row and , as a delimiter";
+	$possibilities['CSV2'] = "CSV without header row and ; as a delimiter";
+	$possibilities['CSV3'] = "CSV without header row and , as a delimiter";
 
 	$form = $app['form.factory']->createBuilder('form');
 	$form = $form->add('typeinput','choice',array('choices' => $possibilities, 'multiple' => false, 'expanded' => false, 'label' => false));
