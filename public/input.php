@@ -15,14 +15,11 @@ use Guzzle\Http\Client;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
 $app->get('/ui/input{url}', function () use ($app,$hostname,$data) {
-	$fileMapping = @file_get_contents("/home/leen/Downloads/uitdb-events.xml.spec.ttl");
-
-    $fileInput = @file_get_contents("/home/leen/Downloads/uitdb-events-test.xml");
-    // echo "<pre>";
-    // print_r($fileInput);
+    // getting the input and mapping file (inserted by the user and saved in session-object)
+	$fileInput = @file_get_contents($app['session']->get('inputfile'));
+    $fileMapping = @file_get_contents($app['session']->get('mappingfile'));
 
     $form = $app['form.factory']->createBuilder('form',array('Input' => $fileInput,'Mapping' => $fileMapping));
-    $form = $form->add('bestand','file');
     $form = $form->add('Input','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
     $form = $form->add('saveFile','submit');
     $form = $form->add('Mapping','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
