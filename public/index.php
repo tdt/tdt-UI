@@ -71,7 +71,9 @@ require_once 'generictypes.php';
 require_once 'puttingfile.php';
 require_once 'editPackagesAndResources.php';
 require_once 'editResource.php';
+require_once 'inputfile.php';
 require_once 'input.php';
+
 
 // Make sure REQUEST_URI starts with a slash. This is needed for Silex to work properly.
 if (strpos($_SERVER['REQUEST_URI'],"/") !== 0){

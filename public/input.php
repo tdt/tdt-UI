@@ -25,7 +25,9 @@ $app->match('/ui/input{url}', function (Request $request) use ($app,$hostname,$d
 
     $form = $app['form.factory']->createBuilder('form',$defaultData);
     $form = $form->add('Input','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
-    $form = $form->add('Mapping','textarea',array('attr' => array('cols' => "100", 'rows' => "500")));
+    $form = $form->add('saveFile','submit');
+    $form = $form->add('Mapping','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
+    $form = $form->add('saveMappingFile','submit');
     $form = $form->getForm();
 
     $data['form'] = $form->createView();
