@@ -47,6 +47,7 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 // Get The DataTank hostname for use in /ui/package
 $hostname = $this->hostname.$this->subdir;
 $data['relpath'] = '/'.$this->subdir.'ui/';
+$data['hostname'] = $hostname;
 
 // must be included first
 require_once 'authentication.php';
@@ -73,6 +74,7 @@ require_once 'editPackagesAndResources.php';
 require_once 'editResource.php';
 require_once 'inputfile.php';
 require_once 'input.php';
+require_once 'addjob.php';
 
 
 // Make sure REQUEST_URI starts with a slash. This is needed for Silex to work properly.

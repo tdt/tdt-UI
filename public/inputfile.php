@@ -13,10 +13,8 @@
 use Guzzle\Http\Client;
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
-
 use Symfony\Component\HttpFoundation\Request;
-// for loading the files
-use Symfony\Component\HttpFoundation\File\UploadedFile;
+
 
 $app->match('/ui/inputfile{url}', function (Request $request) use ($app,$hostname,$data) {
 	
