@@ -22,11 +22,12 @@ $app->match('/ui/input{url}', function (Request $request) use ($app,$hostname,$d
 	$fileInput = @file_get_contents($app['session']->get('inputfile'));
     $fileMapping = @file_get_contents($app['session']->get('mappingfile'));
 
-    $form = $app['form.factory']->createBuilder('form',array('input' => $fileInput,'mapping' => $fileMapping));
+    $form = $app['form.factory']->createBuilder('form',array('input' => $fileInput,'mapping' => $fileMapping,'format' => $app['session']->get('typeinput')));
     $form = $form->add('input','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
     $form = $form->add('saveFile','submit',array('attr' => array('class' => 'btn')));
     $form = $form->add('mapping','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
     $form = $form->add('saveMappingFile','submit',array('attr' => array('class' => 'btn')));
+    $form = $form->add('format','hidden');
     $form = $form->getForm();
 
     if ('POST' == $request->getMethod()){
@@ -46,45 +47,7 @@ $app->match('/ui/input{url}', function (Request $request) use ($app,$hostname,$d
             else if ($form->get('saveMappingFile')->isClicked()){
                 $fieldname = "mapping";
                 $write = true;
-            }
-            // Else, the usual submit button was used
-            else{
-                // defining the extract part
-                $filetype = $app['session']->get('typeinput');
-                switch ($filetype) {
-                    case 'CSV0':
-                        $extract = array("type"=> "CSV","delimiter"=> ";","has_header_row"=> "1");
-                        break;
-                    case 'CSV1':
-                        $extract = array("type"=> "CSV","delimiter"=> ",","has_header_row"=> "1");
-                        break;
-                    case 'CSV2':
-                        $extract = array("type"=> "CSV","delimiter"=> ";","has_header_row"=> "0");
-                        break;
-                    case 'CSV3':
-                        $extract = array("type"=> "CSV","delimiter"=> ",","has_header_row"=> "0");
-                        break;
-                    case 'XML':
-                        $extract = array("type"=> "XML");
-                        break;
-                    case 'JSON':
-                        $extract = array("type"=> "JSON");
-                        break;
-                    default:
-                }
-                // $config->mapping = urlencode($formdata['mapping']);
-                // $config->extract = $extract;
-                // $config->chunk = ($formdata['input']);
-                $config = array(
-                  "mapping"=> htmlentities($formdata['mapping']),
-                  "extract"=> $extract,
-                  "chunk"=> ($formdata['input'])
-                );
-                //$config = json_encode($config);
-                $client = new Client();
-                $request = $client->post($hostname."tdtinput/test",null,$config);
-                $response = $request->send();                
-            }
+            }            
             if ($write){
                 $filename = $app['session']->get($fieldname.'file');
                 $error = writeToFile($filename,$formdata[$fieldname]);
@@ -95,14 +58,11 @@ $app->match('/ui/input{url}', function (Request $request) use ($app,$hostname,$d
 
         }
     }
-
+    $data['hostname'] = $hostname;
     $data['form'] = $form->createView();
     // adding the datafields title and function for the twig file
-    $data['title']= "";
-    $data['header']= "";
-    $data['button']= "Change";
 
-	return $app['twig']->render('form.twig', $data);
+	return $app['twig']->render('tdtinput.twig', $data);
 })->value('url', '');
 
 /**
