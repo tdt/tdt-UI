@@ -92,9 +92,10 @@
                 </div>
             </div>
 
-            <button id="submit" class="btn">Add</button><br />
-            <div id="error" style="display:none; color:red; font-style: italic">
-            <div id="result" style="display:none; color:green; ">Job added!</div>
+            <button id="submit" class="btn">Add</button>
+            <div id="error" style="display:none; color:red; font-style: italic"></div>
+            <div id="result" style="display:none; color:green; "><p>Job added!</p></div>
+            <br /><br /><br />
         </div>
         <script>
             $(function(){
@@ -186,11 +187,12 @@
                         data: JSON.stringify(config),
                         success: function(data, status){
                             $("#error").hide();
+                            console.log($("#result"));
                             $("#result").show();
                         },
                         error : function(data){
                             $("#result").hide();
-                            $("#error").html(data || "An error occurred with adding the job.").show();
+                            $("#error").html("Error "+data.status+": "+data.statusText).show();
                         }
                     });
                 });
