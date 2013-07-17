@@ -75,6 +75,7 @@ require_once 'editResource.php';
 require_once 'inputfile.php';
 require_once 'input.php';
 require_once 'addjob.php';
+require_once 'error.php';
 
 
 // Make sure REQUEST_URI starts with a slash. This is needed for Silex to work properly.

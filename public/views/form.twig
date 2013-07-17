@@ -28,5 +28,22 @@
 
         <div class="push"></div>
         
+        {% if infobuttons is defined %}
+            <script>
+                $('document').ready(function(){
+                    var infobuttons = new Array();
+                    {% for index,value in infobuttons %}
+                        infobuttons[{{index}}] = {% autoescape false %} "{{value}}" {% endautoescape %};
+                    {% endfor %}
+                    $('a[id^="infobutton"]').each(function( index, value) {
+                        $("#"+value.id).popover({
+                            "content" : infobuttons[index],
+                            "html" : true,
+                            "trigger": "hover"
+                        }); 
+                    });
+                });
+            </script>
+        {% endif %}
     </body>
 </html>

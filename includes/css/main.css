@@ -247,4 +247,6 @@ ul {
 	color:#FF2C4C;
 	text-decoration: none;
 
+.popover{
+	max-width: 500px;
 }

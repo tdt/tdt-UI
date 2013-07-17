@@ -38,7 +38,7 @@
                             <ul class="routelist">
                                 {% if userroutes[username] is defined %}
                                     {% for route in userroutes[username].routes %}
-                                        <li>{{routes[route.namespace].routes[route.index].documentation}}</li>
+                                        <li>{{routes[route.namespace].routes[route.index].documentation}}<a id="pop_{{route.namespace}}{{route.index}}" onclick="return false;"> (i)</a></li>
                                     {% endfor %}
                                 {% else %}
                                     No routes
@@ -53,8 +53,24 @@
             <div class="push"></div>
         
         </div>
-
-    {{ include('footer.twig') }}
-
+        {{ include('footer.twig') }}
+        <script>
+            $(function () {
+                {% for username,user in users %}
+                    {% if userroutes[username] is defined %}
+                        {% for route in userroutes[username].routes %}
+                            {% autoescape false %}
+                                {% set controller = routes[route.namespace].routes[route.index].controller %}
+                            {% endautoescape %}
+                            $("#pop_{{route.namespace}}{{route.index}}").popover({
+                                "content" : "Method: {{routes[route.namespace].routes[route.index].method}}<br />Route: {{routes[route.namespace].routes[route.index].route}}<br />Controller: {{controller|replace({'\\':'\\\\'})}}",
+                                "html" : true,
+                                "trigger": "hover"
+                            }); 
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            });
+        </script>
     </body>
 </html>
