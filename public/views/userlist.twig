@@ -13,7 +13,9 @@
         {{ include('header.twig') }}
     </head>
     <body>
+        
         {{ include('navbar.twig') }}
+        
         <div class="container">
             <h1>User management</h1>
             <a href="{{relpath}}users/edit" class="add" id="user">Add user</a>
@@ -47,7 +49,12 @@
                 </li>
                	{% endfor %}
             </ul>
-            {{ include('footer.twig') }}
+
+            <div class="push"></div>
+        
         </div>
+
+    {{ include('footer.twig') }}
+
     </body>
 </html>
