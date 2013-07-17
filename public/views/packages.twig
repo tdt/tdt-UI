@@ -8,77 +8,50 @@
 -->
 <!DOCTYPE html>
 <html>
-
-<head>
-    <title>Resource Management</title>
-    {{ include ('header.twig') }}
-</head>
-
-<body>
- 
-    {{ include ('navbar.twig') }}
-
-    <div class="container">
-
-        <h1>Resource management</h1>
-
-        <a href="{{relpath}}package/resourcetype" class="add" id="resource">Add resource</a>
- 
-        <div>
-          	{% for key, package in packages %}
-          	<div>
- 
-       		    <div>
- 
-                    <h2>{{ key }}</h2>
-                    
- 
-                    <form class="buttons" id="rempack" action="package/remove" method="post">
-                        <input type="hidden" name="path" value="{{key}}">
-                        <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
-                    </form>
-            
-                </div>
-            
-                <div id='{{key}}' class="accordion-body collapse in">
-            
-                    <div class="routes" id="resources">
-            	        {% for resource in package %}
-                        {{resource}} <br/>
-            
-                        <form action="resource/functions" method="post">
-                            
-                            <input type="hidden" name="path" value="{{key}}/{{resource}}">
-
-                            <div class="buttons" id="remres"> 
-
-                              <button class="btnedit" type="submit" name="edit" value="edit"></button> 
-      
-                              <button class="btnremove" type="submit" name="remove" value="remove"><img src="data:image/png;base64,{{remove}}" alt="delete"></button>
-
-                           </div>
-                           
-                           <div id="view">
-
-                              <h4 id="viewtitle">view:</h4>
-
-                              <div class="buttons" id="butview">
-                                <button class="btnview" type="submit" name="json" value="json">JSON</button> 
-        
-                                <button class="btnview" type="submit" name="php" value="json">PHP</button> 
-                              </div>
-                        
-                          </div>
-                        
+    <head>
+        <title>Resource Management</title>
+        {{ include ('header.twig') }}
+    </head>
+    <body>
+        {{ include ('navbar.twig') }}
+        <div class="container">
+            <h1>Resource management</h1>
+            <a href="{{relpath}}package/resourcetype" class="add" id="resource">Add resource</a>
+            <div>
+              	{% for key, package in packages %}
+              	<div>
+        		    <div>
+                        <h2>{{ key }}</h2>
+                        <form class="buttons" id="rempack" action="package/remove" method="post">
+                            <input type="hidden" name="path" value="{{key}}">
+                            <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
                         </form>
-           				{% endfor %}
-                    </div>
-      			</div>
-       		</div>
-           	{% endfor %}
+                    </div>            
+                    <div id='{{key}}' class="accordion-body collapse in">
+                        <div class="routes" id="resources">
+                	        {% for resource in package %}
+                            {{resource}} <br/>            
+                            <form action="resource/functions" method="post">
+                                <input type="hidden" name="path" value="{{key}}/{{resource}}">
+                                <div class="buttons" id="remres"> 
+                                    <button class="btnedit" type="submit" name="edit" value="edit"></button> 
+                                    <button class="btnremove" type="submit" name="remove" value="remove"><img src="data:image/png;base64,{{remove}}" alt="delete"></button>
+                                </div>
+                                <div id="view">
+                                    <h4 id="viewtitle">view:</h4>
+                                    <div class="buttons" id="butview">
+                                        <button class="btnview" type="submit" name="json" value="json">JSON</button> 
+                                        <button class="btnview" type="submit" name="php" value="json">PHP</button> 
+                                    </div>
+                                </div>
+                            </form>
+               				{% endfor %}
+                        </div>
+          			</div>
+           		</div>
+               	{% endfor %}
+            </div>
+            {{ include('footer.twig') }}
         </div>
-    
-    </div>
-
-</body>
+    </body>
 </html>

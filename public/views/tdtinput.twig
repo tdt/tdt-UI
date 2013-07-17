@@ -24,75 +24,76 @@
             <div id="error" style="display:none; color:red; font-style: italic"></div><br />
             <button id="submit1" class="btn">Map</button>
             <button onclick="location.href='{{relpath}}addjob'" class="btn">Add job</button>
+            {{ include('footer.twig') }}
         </div>
-    <script>
-        $(function(){  
-            var editor = document.getElementById("mapping");
+        <script>
+            $(function(){  
+                // When submit is clicked, fill in the details according to the chosen format
+                $("#submit1").click(function(){
+                    var extract = {};
+                    switch($("#form_format").val()){
+                        case "CSV0":
+                        extract = {
+                        "type": "CSV",
+                        "delimiter": ";",
+                        "has_header_row": "1"
+                        }
+                        break;
+                        case "CSV1":
+                        extract = {
+                        "type": "CSV",
+                        "delimiter": ",",
+                        "has_header_row": "1"
+                        }
+                        break;
+                        case "CSV2":
+                        extract = {
+                        "type": "CSV",
+                        "delimiter": ";",
+                        "has_header_row": "0"
+                        }
+                        break;  
+                        case "CSV3":
+                        extract = {
+                        "type": "CSV",
+                        "delimiter": ",",
+                        "has_header_row": "0"
+                        }
+                        break;
+                        case "JSON":
+                        extract = {
+                        "type": "JSON"
+                        }
+                        break;
 
-            $("#submit1").click(function(){
-                var extract = {};
-                switch($("#form_format").val()){
-                    case "CSV0":
-                    extract = {
-                    "type": "CSV",
-                    "delimiter": ";",
-                    "has_header_row": "1"
-                    }
-                    break;
-                    case "CSV1":
-                    extract = {
-                    "type": "CSV",
-                    "delimiter": ",",
-                    "has_header_row": "1"
-                    }
-                    break;
-                    case "CSV2":
-                    extract = {
-                    "type": "CSV",
-                    "delimiter": ";",
-                    "has_header_row": "0"
-                    }
-                    break;  
-                    case "CSV3":
-                    extract = {
-                    "type": "CSV",
-                    "delimiter": ",",
-                    "has_header_row": "0"
-                    }
-                    break;
-                    case "JSON":
-                    extract = {
-                    "type": "JSON"
-                    }
-                    break;
-
-                    case "XML":
-                    extract = {
-                    "type": "XML"
-                    }
-                    break;
-                    default:
-                }           
-
-                var config = {
-                    "mapping": $('#form_mapping').val(),
-                    "extract": extract,
-                    "chunk": $('#form_input').val()
-                };
-                $.ajax({
-                    type: "POST",
-                    url: "{{hostname}}tdtinput/test",
-                    data: JSON.stringify(config),
-                    success: function(data, status){
-                        $("#error").hide();
-                        $("#result").val(data);
-                    },
-                    error : function(data){
-                        $("#error").html("Error "+data.status+": "+data.statusText).show();
-                    }
+                        case "XML":
+                        extract = {
+                        "type": "XML"
+                        }
+                        break;
+                        default:
+                    }           
+                    // Read the data from the form 
+                    var config = {
+                        "mapping": $('#form_mapping').val(),
+                        "extract": extract,
+                        "chunk": $('#form_input').val()
+                    };
+                    // Send a POST to The DataTank with the data from the form
+                    $.ajax({
+                        type: "POST",
+                        url: "{{hostname}}tdtinput/test",
+                        data: JSON.stringify(config),
+                        success: function(data, status){
+                            $("#error").hide();
+                            $("#result").val(data);
+                        },
+                        error : function(data){
+                            $("#error").html("Error "+data.status+": "+data.statusText).show();
+                        }
+                    });
                 });
             });
-        });
-    </script>
+        </script>
     </body>
 </html>
