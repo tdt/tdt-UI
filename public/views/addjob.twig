@@ -44,6 +44,10 @@
                     <option value="XML" {% if inputfiletype == "XML" %} selected="selected" {% endif %}>XML</option>
                 </select>
             </div>
+            <div id="arrayleveldiv" {% if inputfiletype != "XML" %}style="display:none"{% endif %}>
+                <label for="form_arraylevel">Array level</label> 
+                <input id="form_arraylevel" type="text" />
+            </div>
             <div>
                 <label for="form_inputfile">Data file</label> <input id="form_inputfile" type="text" value="{{inputfilepath}}"/>
             </div>
@@ -53,8 +57,8 @@
             <div>
                 <label for="form_loadtype">Load type</label>
                 <select id="form_loadtype" name="loadtype">
-                    <option value="CLI">CLI</option>
                     <option value="RDF">RDF</option>
+                    <option value="CLI">CLI</option>
                 </select>
             </div>
             <div id="RDF" style="display:none">
@@ -99,12 +103,24 @@
         </div>
         <script>
             $(function(){
+                $(document).ready(function() {
+                    $("#form_loadtype").click();
+                });
                 $("#form_loadtype").click(function(){
                     if ($("#form_loadtype").val() == "CLI"){
                         $("#RDF").hide();
                     }
                     else{
                         $("#RDF").show();
+                    }
+                });
+                $("#form_format").click(function(){
+                    if ($("#form_format").val() == "XML"){
+                        $("#arrayleveldiv").show();
+                    }
+                    else{
+                        $("#arrayleveldiv").hide();
+                        
                     }
                 });
                 $("#submit").click(function(){
@@ -147,7 +163,7 @@
                         case "XML":
                             extract = {
                                 "type": "XML",
-                                "arraylevel":"3" // TODO: make this dynamic
+                                "arraylevel": $('#form_arraylevel').val()
                             }
                             break;
                         default:
@@ -188,7 +204,6 @@
                         data: JSON.stringify(config),
                         success: function(data, status){
                             $("#error").hide();
-                            console.log($("#result"));
                             $("#result").show();
                         },
                         error : function(data){
