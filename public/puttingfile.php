@@ -27,7 +27,7 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 	// Create a client (to get the data)
 	$client = new Client($hostname);
 
-	// getting information about creating a CSV file
+	// getting information about creating a file
 	try {
 		if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
 			$request2 = $client->get('tdtinfo/admin.json');

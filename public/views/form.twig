@@ -16,7 +16,7 @@
         {{ include('navbar.twig') }}
         <div class="container">
             <h1>{{header}}</h1>
-            <form action="#" method="post">
+            <form action="#" method="post" {{form_enctype(form)}}>
                 {% form_theme form 'formtemplate.twig' %}
                 <div class="formtitle">{{ form_widget(form) }}</div>
                 <button type="submit" class="btn">{{button}}</button>
