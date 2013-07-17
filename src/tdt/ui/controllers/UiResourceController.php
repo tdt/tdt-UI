@@ -61,6 +61,11 @@ class UiResourceController extends \tdt\core\controllers\AController {
             if ($logo){
                 $data['logo'] .= base64_encode($logo);
             }
+            $data['remove'] = "";
+            $remove = @file_get_contents(__DIR__."/../../../../includes/img/remove.png");
+            if ($remove){
+                $data['remove'] .= base64_encode($remove);
+            }
             include(__DIR__."/../../../../public/index.php");
     }
 

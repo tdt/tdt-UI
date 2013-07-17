@@ -20,19 +20,22 @@
         
     <div class="container">
             
-        <h1>Users</h1>
-        <ul>
+        <h1>User management</h1>
+
+        <a href="{{relpath}}users/edit" class="add" id="user">Add user</a>
+
+        <ul class="ul">
                 
             {% for username,user in users %}
                     
-            <li>
+            <li class="useritem">
                 <form action="{{relpath}}users/edit" method="post">
                         
                     <h2>{{username}}</h2>
 
                     <input type="hidden" name="oldname" value="{{username}}">
 
-                    <div id="buttons">
+                    <div class="buttons" id="remuser">
 
                         <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
 
@@ -42,15 +45,16 @@
                     
                 </form>
 
-                <ul>
+                <ul class="routes">
 
                     <li>{{user.type}}</li>
 
                     <li>{{user.documentation}}</li>
 
                     <li>
-                        Routes:
-                        <ul>
+                        <h4>Routes:</h4>
+
+                        <ul class="routelist">
                             {% if userroutes[username] is defined %}
 
                             {% for route in userroutes[username].routes %}
@@ -64,11 +68,14 @@
                             {% endif %}
 
                         </ul>
-
                     </li>
-            	{% endfor %}
-            </ul>
-            <a href="{{relpath}}users/edit">Add user</a>
-        </div>
-    </body>
+
+                </ul>
+            </li>
+           	{% endfor %}
+
+        </ul>
+    
+    </div>
+</body>
 </html>

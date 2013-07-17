@@ -8,6 +8,7 @@
 -->
 <!DOCTYPE html>
 <html>
+    
     <head>
         <title>Routelist</title>
         {{ include('header.twig') }}
@@ -17,54 +18,58 @@
         {{ include('navbar.twig') }}
 
         <div class="container">
-            
-            <h1>Routes</h1>
-            <ul>
+
+            <h1>Routes management</h1>
+
+            <a href="ui/routes/edit" class="add" id="route">Add route</a>
+
+            <ul class="ul">
 
                 {% for namespace,core in routes %}
-                
-                <li>
-                    <h2>{{core.namespace}}</h2>
-                    <ul>
 
+                <li class="useritem">
+                    <form action="routes/edit" method="post">
+
+                        <h2>{{core.namespace}}</h2>
+
+                        <input type="hidden" name="oldroute" value="{{namespace}}//{{index}}">
+
+                    </form>
+
+                    <ul class="routes">
+                        
                         {% for index,route in core.routes %}
-                        <form action="routes/edit" method="post">
+                        
+                        <li class="block">
+                            <form action="routes/edit" method="post">
+                                        
+                               <h3>{{route.documentation}}</h3>
 
+                                <input type="hidden" name="oldroute" value="{{namespace}}//{{index}}">
+
+                                <div class="buttons" id="remroute">
+
+                                    <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
+                                    
+                                    <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
+
+                                </div>
+
+                            </form>
                             
-                                            
-                            {{route.documentation}}
-
-                            <input type="hidden" name="oldroute" value="{{namespace}}//{{index}}">
-
-                            <div id="buttons">
-
-                                <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
-
-                                <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
-
-                            </div>
-
-                        </form>
-
-                        <li>
-
-                            
-
-                            <ul>
+                            <ul class="routedoc">
+            
+                                <li> <h4>Method:</h4> {{route.method}}</li>
                                 
-                                <li>Method: {{route.method}}</li>
+                                <li> <h4>Route:</h4> {{route.route}}</li>
                                 
-                                <li>Route: {{route.route}}</li>
-                                
-                                <li>Controller: {{route.controller}}</li>
+                                <li> <h4>Controller:</h4> {{route.controller}}</li>
                                 
                                 <li>
-                                    Users:
+                                    <h4>Users:</h4>
                                     <ul>
                                         {% for user in route.users %}
-
                                         <li>{{user}}</li>
-       
                                         {% else %}
                                             No restrictions
                                         {% endfor %}
@@ -72,17 +77,11 @@
                                 </li>
                             </ul>
                         </li>
-
                         {% endfor %}
-
                     </ul>
                 </li>
-
                 {% endfor %}
-
             </ul>
-
-            <a href="ui/routes/edit">Add route</a>
 
         </div>
   </body>
