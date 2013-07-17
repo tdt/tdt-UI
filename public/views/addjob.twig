@@ -16,25 +16,26 @@
         {{ include('navbar.twig') }}
         <div class="container">
             <div>
-                <label for="form_jobname">Job name</label> <input id="form_jobname" type="text" />
+                <label class="formtitle" for="form_jobname">Job name</label> <input id="form_jobname" type="text" />
             </div>
             <div>
-                <label for="form_occurence">Occurence</label> <input id="form_occurence" type="text" />
+                <label class="formtitle" for="form_occurence">Occurence</label> <input id="form_occurence" type="text" />
             </div>
             <div>
-                <label for="form_tdturimapping">DataTank URL for mapping</label> 
+                <label class="formtitle" for="form_tdturimapping">DataTank URL for mapping</label> 
                 <input id="form_tdturimapping" type="text" value="{{hostname}}" />
             </div>
             <div>
-                <label for="form_packagemapping">DataTank package for mapping</label> 
+                <label class="formtitle" for="form_packagemapping">DataTank package for mapping</label> 
                 <input id="form_packagemapping" type="text" />
             </div>
             <div>
-                <label for="form_resourcemapping">DataTank resource for mapping</label> 
+                <label class="formtitle" for="form_resourcemapping">DataTank resource for mapping</label> 
                 <input id="form_resourcemapping" type="text" />
             </div>
             <div>
-                <label for="form_format">Data file type</label>
+                <label class="formtitle" for="form_format">Data file type</label>
+                
                 <select id="form_format" name="type">
                     <option value="CSV0" {% if inputfiletype == "CSV0" %} selected="selected" {% endif %}>CSV with header row and ; as a delimiter</option>
                     <option value="CSV1" {% if inputfiletype == "CSV1" %} selected="selected" {% endif %}>CSV with header row and , as a delimiter</option>
