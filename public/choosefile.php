@@ -38,6 +38,8 @@ $app->match('/ui/package/resourcetype{url}', function (Request $request) use ($a
 			$app['session']->set('redirect',$hostname.'ui/package/resourcetype');
 			$app['session']->set('referer',$hostname.'ui/package/resourcetype');
 			return $app->redirect('../../ui/authentication');	
+	 	} else {
+	 		echo $e->getResponse()->getMessage();
 	 	}
 	 } 
 

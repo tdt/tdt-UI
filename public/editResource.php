@@ -39,6 +39,8 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
 			$app['session']->set('redirect',$hostname.'ui/resource/edit');
 			$app['session']->set('referer',$hostname.'ui/resource/edit');
 			return $app->redirect('../../ui/authentication');	
+	 	} else {
+	 		echo $e->getResponse()->getMessage();
 	 	}
 	 } 
 
@@ -58,6 +60,8 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
 		 	$app['session']->set('redirect',$hostname.'ui/package/add');
 		 	$app['session']->set('referer',$hostname.'ui/package/add');
 			return $app->redirect('../../ui/authentication');	
+	 	} else {
+	 		echo $e->getResponse()->getMessage();
 	 	}
 	 }
 	$jsonobj2 = json_decode($obj2);

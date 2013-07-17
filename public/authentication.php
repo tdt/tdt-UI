@@ -73,7 +73,11 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$request = $client->delete($app['session']->get('path'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
-					return $app->redirect($hostname.'ui/authentication');
+					if ($e->getResponse()->getStatusCode() == 401) {
+						return $app->redirect($hostname.'ui/authentication');
+					} else{
+						echo $e->getResponse()->getMessage();
+					}
 				}
 				
 			}
@@ -85,7 +89,11 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$request = $client->get($app['session']->get('path'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send()->getBody();
 				} catch (ClientErrorResponseException $e) {
-					return $app->redirect($hostname.'ui/authentication');
+					if ($e->getResponse()->getStatusCode() == 401) {
+						return $app->redirect($hostname.'ui/authentication');
+					} else{
+						echo $e->getResponse()->getMessage();
+					}
 				}
 				// return the response (the json or php file)
 				return $response;
@@ -103,7 +111,11 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$request = $client->patch($app['session']->get('path'),null,$app['session']->get('body'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
-					return $app->redirect($hostname.'ui/authentication');
+					if ($e->getResponse()->getStatusCode() == 401) {
+						return $app->redirect($hostname.'ui/authentication');
+					} else{
+						echo $e->getResponse()->getMessage();
+					}
 				}
 			}
 			elseif ($app['session']->get('method') == 'put') {				
@@ -114,7 +126,11 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$request = $client->put($app['session']->get('path'),null,$app['session']->get('body'))->setAuth($formdata['Username'],$formdata['Password']);
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
-					return $app->redirect($hostname.'ui/authentication');
+					if ($e->getResponse()->getStatusCode() == 401) {
+						return $app->redirect($hostname.'ui/authentication');
+					} else{
+						echo $e->getResponse()->getMessage();
+					}
 				}
 			}
 			return $app->redirect($app['session']->get('redirect'));

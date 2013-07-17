@@ -41,6 +41,8 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 		 	$app['session']->set('redirect',$hostname.'ui/package/add');
 		 	$app['session']->set('referer',$hostname.'ui/package/add');
 			return $app->redirect('../../ui/authentication');	
+	 	} else {
+	 		echo $e->getResponse()->getMessage();
 	 	}
 	 }
 	$jsonobj = json_decode($obj);

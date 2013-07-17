@@ -33,7 +33,9 @@ $app->get('/ui/package{url}', function () use ($app,$hostname,$data) {
 			$app['session']->set('redirect',$hostname.'ui/package');
 			$app['session']->set('referer',$hostname.'ui/package');
 			return $app->redirect('../../ui/authentication');	
-		}	
+		} else {
+	 		echo $e->getResponse()->getMessage();
+	 	}
 	}
 	
 	$jsonobj = json_decode($obj);

@@ -45,7 +45,9 @@ $app->match('/ui/package/remove{url}', function (Request $request) use ($app,$ho
 			$app['session']->set('redirect',$hostname.'ui/package');
 			$app['session']->set('referer',$hostname.'ui/package/remove');
 			return $app->redirect('../../ui/authentication');
-		}
+		} else {
+	 		echo $e->getResponse()->getMessage();
+	 	}
 	}	
 	return $app->redirect('../../ui/package');
 	
@@ -76,7 +78,9 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 				$app['session']->set('redirect',$hostname.'ui/package');
 				$app['session']->set('referer',$hostname.'ui/resource/functions');
 				return $app->redirect('../../ui/authentication');
-			}
+			} else {
+		 		echo $e->getResponse()->getMessage();
+		 	}
 		}
 		return $app->redirect('../../ui/package');
 	}
@@ -127,7 +131,9 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 				$app['session']->set('redirect',$hostname.'ui/package');
 				$app['session']->set('referer',$hostname.'ui/resource/functions');
 				return $app->redirect('../../ui/authentication');
-			}
+			} else {
+		 		echo $e->getResponse()->getMessage();
+		 	}
 		}
 		return $response;
 
