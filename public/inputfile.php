@@ -28,9 +28,17 @@ $app->match('/ui/inputfile{url}', function (Request $request) use ($app,$hostnam
 	$possibilities['CSV3'] = "CSV without header row and , as a delimiter";
 
 	$form = $app['form.factory']->createBuilder('form');
-	$form = $form->add('typeinput','choice',array('choices' => $possibilities, 'multiple' => false, 'expanded' => false, 'label' => false));
-	$form = $form->add('inputfile','text',array('label' => 'Choose data file'));
-	$form = $form->add('mappingfile','text',array('label' => 'Choose mapping file'));
+	$form = $form->add('typeinput','choice',array(
+		'choices' => $possibilities, 
+		'multiple' => false, 
+		'expanded' => false, 
+		'label' => false
+		)
+	);
+	$form = $form->add('inputfile','text',array('label' => 'Choose data file', 'required' => false));
+	$form = $form->add('mappingfile','text',array('label' => 'Choose mapping file', 'required' => false));
+	$form = $form->add('addjobbutton','submit',array('label' => 'Add job', 'attr' => array('class' => 'btn')));
+	$form = $form->add('testmappingbutton','submit',array('label' => 'Test mapping', 'attr' => array('class' => 'btn')));
 	$form = $form->getForm();
 
 	if ('POST' == $request->getMethod()) {
@@ -39,14 +47,19 @@ $app->match('/ui/inputfile{url}', function (Request $request) use ($app,$hostnam
 		$app['session']->set('inputfile',$data2['inputfile']);
 		$app['session']->set('mappingfile',$data2['mappingfile']);
 		$app['session']->set('typeinput',$data2['typeinput']);
-		return $app->redirect('/ui/input');
+
+		if ($form->get('addjobbutton')->isClicked()){
+			return $app->redirect('/ui/addjob');
+		}
+		else{
+			return $app->redirect('/ui/input');
+		}
 	}
 
 	$data['form'] = $form->createView();
 	// adding the datafields title and function for the twig file
 	$data['title']= "";
 	$data['header']= "";
-	$data['button']= "Further";
 	return $app['twig']->render('form.twig', $data);
 
 })->value('url', '');

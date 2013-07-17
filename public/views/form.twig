@@ -19,7 +19,9 @@
             <form action="#" method="post" {{form_enctype(form)}}>
                 {% form_theme form 'formtemplate.twig' %}
                 <div class="formtitle">{{ form_widget(form) }}</div>
-                <button type="submit" class="btn">{{button}}</button>
+                {% if button is defined %}
+                    <button type="submit" class="btn">{{button}}</button>
+                {% endif %}
             </form>
         </div>
     </body>
