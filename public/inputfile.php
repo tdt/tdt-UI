@@ -29,7 +29,7 @@ $app->match('/ui/inputfile{url}', function (Request $request) use ($app,$hostnam
 
 	$form = $app['form.factory']->createBuilder('form');
 	$form = $form->add('typeinput','choice',array('choices' => $possibilities, 'multiple' => false, 'expanded' => false, 'label' => false));
-	$form = $form->add('inputfile','text',array('label' => 'Choose input file'));
+	$form = $form->add('inputfile','text',array('label' => 'Choose data file'));
 	$form = $form->add('mappingfile','text',array('label' => 'Choose mapping file'));
 	$form = $form->getForm();
 

@@ -34,7 +34,7 @@
                 <input id="form_resourcemapping" type="text" />
             </div>
             <div>
-                <label for="form_format">Input file type</label>
+                <label for="form_format">Data file type</label>
                 <select id="form_format" name="type">
                     <option value="CSV0" {% if inputfiletype == "CSV0" %} selected="selected" {% endif %}>CSV with header row and ; as a delimiter</option>
                     <option value="CSV1" {% if inputfiletype == "CSV1" %} selected="selected" {% endif %}>CSV with header row and , as a delimiter</option>
@@ -45,7 +45,7 @@
                 </select>
             </div>
             <div>
-                <label for="form_inputfile">Input file</label> <input id="form_inputfile" type="text" value="{{inputfilepath}}"/>
+                <label for="form_inputfile">Data file</label> <input id="form_inputfile" type="text" value="{{inputfilepath}}"/>
             </div>
             <div>
                 <label for="form_mappingfile">Mapping file</label> <input id="form_mappingfile" type="text" value="{{mappingfilepath}}"/>
@@ -146,7 +146,8 @@
 
                         case "XML":
                             extract = {
-                                "type": "XML"
+                                "type": "XML",
+                                "arraylevel":"3" // TODO: make this dynamic
                             }
                             break;
                         default:
