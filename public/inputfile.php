@@ -49,10 +49,10 @@ $app->match('/ui/inputfile{url}', function (Request $request) use ($app,$hostnam
 		$app['session']->set('typeinput',$data2['typeinput']);
 
 		if ($form->get('addjobbutton')->isClicked()){
-			return $app->redirect('/ui/addjob');
+			return $app->redirect($data['relpath'].'addjob');
 		}
 		else{
-			return $app->redirect('/ui/input');
+			return $app->redirect($data['relpath'].'input');
 		}
 	}
 
