@@ -52,7 +52,19 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 		$form->get('Username')->addError(new FormError('Wrong username and/or password'));
 	}
 
-	$title = "Authentication";
+	// creating the title
+	$title = "Authentication ";
+	if ($app['session']->get('method') == 'remove') {
+				$title = $title."for deleting";
+	} elseif ($app['session']->get('method') == 'getFile') {
+				$title = $title."for getting File";
+	} elseif ($app['session']->get('method') == 'get') {
+				$title = $title."for getting";
+	} elseif ($app['session']->get('method') == 'patch') {
+				$title = $title."for editing";
+	} elseif ($app['session']->get('method') == 'put') {				
+				$title = $title."for putting";
+	}
 
 	if ('POST' == $request->getMethod()) {
 
@@ -77,7 +89,8 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					if ($e->getResponse()->getStatusCode() == 401) {
 						return $app->redirect($hostname.'ui/authentication');
 					} else{
-						echo $e->getResponse()->getMessage();
+						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+                    	return $app->redirect('../../ui/error');
 					}
 				}
 				
@@ -93,7 +106,8 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					if ($e->getResponse()->getStatusCode() == 401) {
 						return $app->redirect($hostname.'ui/authentication');
 					} else{
-						echo $e->getResponse()->getMessage();
+						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+                    	return $app->redirect('../../ui/error');
 					}
 				}
 				// return the response (the json or php file)
@@ -115,7 +129,8 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					if ($e->getResponse()->getStatusCode() == 401) {
 						return $app->redirect($hostname.'ui/authentication');
 					} else{
-						echo $e->getResponse()->getMessage();
+						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+                    	return $app->redirect('../../ui/error');
 					}
 				}
 			}
@@ -130,7 +145,8 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					if ($e->getResponse()->getStatusCode() == 401) {
 						return $app->redirect($hostname.'ui/authentication');
 					} else{
-						echo $e->getResponse()->getMessage();
+						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+                    	return $app->redirect('../../ui/error');
 					}
 				}
 			}
