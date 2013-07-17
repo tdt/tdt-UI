@@ -13,46 +13,46 @@
         {{ include('header.twig') }}
     </head>
     <body>
-        
-        {{ include('navbar.twig') }}
-        
-        <div class="container">
-            <h1>User management</h1>
-            <a href="{{relpath}}users/edit" class="add" id="user">Add user</a>
-            <ul class="ul">
-                {% for username,user in users %}
-                <li class="useritem">
-                    <form action="{{relpath}}users/edit" method="post">
-                        <h2>{{username}}</h2>
-                        <input type="hidden" name="oldname" value="{{username}}">
-                        <div class="buttons" id="remuser">
-                            <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
-                            <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
-                        </div>
-                    </form>
-                    <ul class="routes">
-                        <li>{{user.type}}</li>
-                        <li>{{user.documentation}}</li>
-                        <li>
-                            <h4>Routes:</h4>
-                            <ul class="routelist">
-                                {% if userroutes[username] is defined %}
-                                    {% for route in userroutes[username].routes %}
-                                        <li>{{routes[route.namespace].routes[route.index].documentation}}<a id="pop_{{route.namespace}}{{route.index}}" onclick="return false;"> (i)</a></li>
-                                    {% endfor %}
-                                {% else %}
-                                    No routes
-                                {% endif %}
-                            </ul>
-                        </li>
-                    </ul>
-                </li>
-               	{% endfor %}
-            </ul>
-
-            <div class="push"></div>
-        
+        <div class="wrapper">
+            {{ include('navbar.twig') }}
+            
+            <div class="container">
+                <h1>User management</h1>
+                <a href="{{relpath}}users/edit" class="add" id="user">Add user</a>
+                <ul class="ul">
+                    {% for username,user in users %}
+                    <li class="useritem">
+                        <form action="{{relpath}}users/edit" method="post">
+                            <h2>{{username}}</h2>
+                            <input type="hidden" name="oldname" value="{{username}}">
+                            <div class="buttons" id="remuser">
+                                <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
+                                <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
+                            </div>
+                        </form>
+                        <ul class="routes">
+                            <li>{{user.type}}</li>
+                            <li>{{user.documentation}}</li>
+                            <li>
+                                <h4>Routes:</h4>
+                                <ul class="routelist">
+                                    {% if userroutes[username] is defined %}
+                                        {% for route in userroutes[username].routes %}
+                                            <li>{{routes[route.namespace].routes[route.index].documentation}}<a id="pop_{{route.namespace}}{{route.index}}" onclick="return false;"> (i)</a></li>
+                                        {% endfor %}
+                                    {% else %}
+                                        No routes
+                                    {% endif %}
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                   	{% endfor %}
+                </ul>               
+            
+            </div>
         </div>
+        
         {{ include('footer.twig') }}
         <script>
             $(function () {

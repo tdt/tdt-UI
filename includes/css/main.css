@@ -224,10 +224,10 @@ ul {
 .btn:hover {
 	background-color: #F5F4EE;
 	background-image: url('data:image/png;base64,{{removered}}');
+}
 
 .push {
 	height: 50px;
-
 }
 
 .footer {
@@ -246,7 +246,7 @@ ul {
 .link:hover {
 	color:#FF2C4C;
 	text-decoration: none;
-
+}
 .popover{
 	max-width: 500px;
 }
