@@ -27,7 +27,7 @@ $app->match('/ui/package/remove{url}', function (Request $request) use ($app,$ho
 
 	try{
 		$path = $hostname."tdtadmin/resources/".$request->get('path');
-		// controlling if once in a time a username and password is given to authorise for deleting
+		// checking if once in a session time a username and password is given to authorise for deleting
 		// if not, try without authentication
 		if ($app['session']->get('userrm') == null || $app['session']->get('pswdrm') ==null) {
 			$request = $client->delete($path);
@@ -40,6 +40,7 @@ $app->match('/ui/package/remove{url}', function (Request $request) use ($app,$ho
 		// if tried with authentication and it failed 
 		// or when tried without authentication and authentication is needed
 		if ($e->getResponse()->getStatusCode() == 401) {
+			// necessary information is stored in the session object, needed to redo the request after authentication
 			$app['session']->set('method','remove');
 			$app['session']->set('path',$path);
 			$app['session']->set('redirect',$hostname.'ui/package');
@@ -73,6 +74,7 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 			// if tried with authentication and it failed 
 			// or when tried without authentication and authentication is needed
 			if ($e->getResponse()->getStatusCode() == 401) {
+				// necessary information is stored in the session object, needed to redo the request after authentication
 				$app['session']->set('method','remove');
 				$app['session']->set('path',$path);
 				$app['session']->set('redirect',$hostname.'ui/package');
@@ -86,6 +88,7 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 	}
 	// if you want to edit a resource
 	else if($request->get("edit") != null){
+		// redirecting to the page that will render the form for editing
 		$app['session']->set('pathtoresource',$request->get('path'));
 		return $app->redirect('../../ui/resource/edit');
 	}
@@ -93,7 +96,10 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 	else if($request->get("json") != null){
 		$client = new Client($hostname);
 		try{
+			// adding .json to the path to get it in a json format
 			$path = $request->get('path').".json";
+			// controlling if once in a time a username and password is given to authorise for getting
+			// if not, try without authentication
 			if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
 				$request = $client->get($path);
 			}	
@@ -102,7 +108,10 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 			}
 			$response = $request->send()->getBody();
 		} catch(ClientErrorResponseException $e) {
+			// if tried with authentication and it failed 
+			// or when tried without authentication and authentication is needed
 			if ($e->getResponse()->getStatusCode() == 401) {
+				// necessary information is stored in the session object, needed to redo the request after authentication
 				$app['session']->set('method','getFile');
 				$app['session']->set('path',$path);
 				$app['session']->set('redirect',$hostname.'ui/package');
@@ -116,7 +125,10 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 	else{
 		$client = new Client($hostname);
 		try{
+			// adding .php to the path to get it in a php format
 			$path = $request->get('path').".php";
+			// controlling if once in a time a username and password is given to authorise for getting
+			// if not, try without authentication
 			if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
 				$request = $client->get($path);
 			}	
@@ -125,7 +137,10 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 			}
 			$response = $request->send()->getBody();
 		} catch(ClientErrorResponseException $e) {
+			// if tried with authentication and it failed 
+			// or when tried without authentication and authentication is needed
 			if ($e->getResponse()->getStatusCode() == 401) {
+				// necessary information is stored in the session object, needed to redo the request after authentication
 				$app['session']->set('method','getFile');
 				$app['session']->set('path',$path);
 				$app['session']->set('redirect',$hostname.'ui/package');
