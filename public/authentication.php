@@ -89,7 +89,8 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					if ($e->getResponse()->getStatusCode() == 401) {
 						return $app->redirect($hostname.'ui/authentication');
 					} else{
-						echo $e->getResponse()->getMessage();
+						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+                    	return $app->redirect('../../ui/error');
 					}
 				}
 				
@@ -105,7 +106,8 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					if ($e->getResponse()->getStatusCode() == 401) {
 						return $app->redirect($hostname.'ui/authentication');
 					} else{
-						echo $e->getResponse()->getMessage();
+						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+                    	return $app->redirect('../../ui/error');
 					}
 				}
 				// return the response (the json or php file)
@@ -127,7 +129,8 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					if ($e->getResponse()->getStatusCode() == 401) {
 						return $app->redirect($hostname.'ui/authentication');
 					} else{
-						echo $e->getResponse()->getMessage();
+						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+                    	return $app->redirect('../../ui/error');
 					}
 				}
 			}
@@ -142,7 +145,8 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					if ($e->getResponse()->getStatusCode() == 401) {
 						return $app->redirect($hostname.'ui/authentication');
 					} else{
-						echo $e->getResponse()->getMessage();
+						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+                    	return $app->redirect('../../ui/error');
 					}
 				}
 			}

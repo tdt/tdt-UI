@@ -39,7 +39,8 @@ $app->get('/ui/package{url}', function () use ($app,$hostname,$data) {
 			$app['session']->set('referer',$hostname.'ui/package');
 			return $app->redirect('../../ui/authentication');	
 		} else {
-	 		echo $e->getResponse()->getMessage();
+	 		$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+            return $app->redirect('../../ui/error');
 	 	}
 	}
 	

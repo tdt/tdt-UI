@@ -47,7 +47,8 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
             $app['session']->set('referer',$hostname.'ui/package/add');
             return $app->redirect('../../ui/authentication');   
         } else {
-            echo $e->getResponse()->getMessage();
+            $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+            return $app->redirect('../../ui/error');
         }
     }
     // transform to a json object
@@ -136,7 +137,8 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
                     $app['session']->set('referer',$hostname.'ui/package/add');
                     return $app->redirect('../../ui/authentication');
                 } else {
-                    return $e->getResponse()->getMessage();
+                    $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+                    return $app->redirect('../../ui/error');
                 }
             }
 

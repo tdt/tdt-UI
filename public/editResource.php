@@ -45,7 +45,8 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
             $app['session']->set('referer',$hostname.'ui/resource/edit');
             return $app->redirect('../../ui/authentication');   
         } else {
-            echo $e->getResponse()->getMessage();
+            $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+            return $app->redirect('../../ui/error');
         }
      } 
 
@@ -72,7 +73,8 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
             $app['session']->set('referer',$hostname.'ui/package/add');
             return $app->redirect('../../ui/authentication');   
         } else {
-            echo $e->getResponse()->getMessage();
+            $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+            return $app->redirect('../../ui/error');
         }
      }
     $jsonobj2 = json_decode($obj2);
@@ -168,7 +170,8 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
                     $app['session']->set('referer',$hostname.'ui/resource/edit');
                     return $app->redirect('../../ui/authentication');
                 } else {
-                    echo $e->getResponse()->getMessage();
+                    $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+                    return $app->redirect('../../ui/error');
                 } 
             }
 
