@@ -24,7 +24,7 @@
     
     {% if closingtag is defined %}
         {% if closingtag %}
-            <a href="#" onclick="return false;" id="infobutton_{{id}}">(i)</a>
+            <a href="#" onclick="return false;" id="infobutton_{{id}}" data-html="true">(i)</a>
         {% endif %}
         </label>
     {% elseif label is not sameas(false) %}
@@ -40,7 +40,7 @@
         {% if starttag is not defined and endtag is not defined %}
         <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}
             {% if "infobutton" in attr %}
-                <a href="#" onclick="return false;" id="infobutton_{{id}}">(i)</a>
+                <a href="#" onclick="return false;" id="infobutton_{{id}}" data-html="true">(i)</a>
             {% endif %}
         </label>
         {% elseif starttag is defined %}

@@ -123,7 +123,9 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 		foreach ($routes as $namespace => $core) {
 			foreach ($core->routes as $index => $route) {
 	        	$routecheckboxes[$namespace.'//'.$index] = $routes[$namespace]->routes[$index]->documentation;
-	        	$data['infobuttons'][$globalindex] = "test-".$globalindex;
+	        	// Add infotext for infobuttons
+	        	$controllerstring = str_replace('\\', '\\\\', $routes[$namespace]->routes[$index]->controller);
+	        	$data['infobuttons'][$globalindex] = "Method: ".$routes[$namespace]->routes[$index]->method."<br />Route: ".$routes[$namespace]->routes[$index]->route."<br />Controller: ".$controllerstring;
 	        	$globalindex++;
 	        }
 	    }
@@ -150,7 +152,6 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 	        ->add('authenticationtype', 'choice', array(
 	        	'label' => 'Authentication type',
 	            'choices' => array('BasicAuth' => 'BasicAuth'),
-	            'attr' => array('class' => 'infobutton')
 	            )
 	        )->add('routes','choice', array(
 	        	'label' => "Routes",

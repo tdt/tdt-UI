@@ -54,8 +54,11 @@
                 {% for username,user in users %}
                     {% if userroutes[username] is defined %}
                         {% for route in userroutes[username].routes %}
+                            {% autoescape false %}
+                                {% set controller = routes[route.namespace].routes[route.index].controller %}
+                            {% endautoescape %}
                             $("#pop_{{route.namespace}}{{route.index}}").popover({
-                                "content" : "Method: {{routes[route.namespace].routes[route.index].method}}<br />Route: {{routes[route.namespace].routes[route.index].route}}<br />Controller: {{routes[route.namespace].routes[route.index].controller}}",
+                                "content" : "Method: {{routes[route.namespace].routes[route.index].method}}<br />Route: {{routes[route.namespace].routes[route.index].route}}<br />Controller: {{controller|replace({'\\':'\\\\'})}}",
                                 "html" : true,
                                 "trigger": "hover"
                             }); 
