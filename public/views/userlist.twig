@@ -36,7 +36,7 @@
                             <ul class="routelist">
                                 {% if userroutes[username] is defined %}
                                     {% for route in userroutes[username].routes %}
-                                        <li>{{routes[route.namespace].routes[route.index].documentation}}</li>
+                                        <li>{{routes[route.namespace].routes[route.index].documentation}}<a id="pop_{{route.namespace}}{{route.index}}" onclick="return false;"> (i)</a></li>
                                     {% endfor %}
                                 {% else %}
                                     No routes
@@ -49,5 +49,20 @@
             </ul>
             {{ include('footer.twig') }}
         </div>
+        <script>
+            $(function () {
+                {% for username,user in users %}
+                    {% if userroutes[username] is defined %}
+                        {% for route in userroutes[username].routes %}
+                            $("#pop_{{route.namespace}}{{route.index}}").popover({
+                                "content" : "Method: {{routes[route.namespace].routes[route.index].method}}<br />Route: {{routes[route.namespace].routes[route.index].route}}<br />Controller: {{routes[route.namespace].routes[route.index].controller}}",
+                                "html" : true,
+                                "trigger": "hover"
+                            }); 
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+            });
+        </script>
     </body>
 </html>

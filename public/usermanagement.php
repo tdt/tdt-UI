@@ -119,9 +119,12 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 		
 		// Create the route checkboxes
 		$routecheckboxes = array();
+		$globalindex = 0;
 		foreach ($routes as $namespace => $core) {
 			foreach ($core->routes as $index => $route) {
 	        	$routecheckboxes[$namespace.'//'.$index] = $routes[$namespace]->routes[$index]->documentation;
+	        	$data['infobuttons'][$globalindex] = "test-".$globalindex;
+	        	$globalindex++;
 	        }
 	    }
 	    
@@ -146,17 +149,18 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 	        )
 	        ->add('authenticationtype', 'choice', array(
 	        	'label' => 'Authentication type',
-	            'choices' => array('BasicAuth' => 'BasicAuth')
+	            'choices' => array('BasicAuth' => 'BasicAuth'),
+	            'attr' => array('class' => 'infobutton')
 	            )
 	        )->add('routes','choice', array(
-	        	'label' => 'Routes',
+	        	'label' => "Routes",
 	        	'choices' => $routecheckboxes,
     			'required' => false,
     			'expanded' => true,
-    			'multiple' => true
+    			'multiple' => true,
+    			'attr' => array('class' => 'infobuttonlist')
         		)
         	)->getForm();
-
 	    // If the method is POST, validate the form
 	    if ('POST' == $request->getMethod() && !isset($userObject->$oldname)) {
 	        $form->bind($request);

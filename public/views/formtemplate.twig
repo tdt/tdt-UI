@@ -9,9 +9,11 @@
     	{% else %}
     		{% set class = "radio" %}
 		{% endif %}
-    	{{ form_label(child,null,{"starttag" : true, "label_attr" : { "class" : class}}) }}
+	    {{ form_label(child,null,{"starttag" : true, "label_attr" : { "class" : class }}) }}
         {{ form_widget(child) }}
 		{{ form_label(child,null,{"endtag" : true}) }}
+        {{ form_label(child,null,{"closingtag" : ("infobuttonlist" in attr)}) }}
+        
     {% endfor %}
     </div>
 {% endspaceless %}
@@ -19,7 +21,13 @@
 
 {% block form_label %}
 {% spaceless %}
-    {% if label is not sameas(false) %}
+    
+    {% if closingtag is defined %}
+        {% if closingtag %}
+            <a href="#" onclick="return false;" id="infobutton_{{id}}">(i)</a>
+        {% endif %}
+        </label>
+    {% elseif label is not sameas(false) %}
         {% if not compound %}
             {% set label_attr = label_attr|merge({'for': id}) %}
         {% endif %}
@@ -30,22 +38,16 @@
             {% set label = name|humanize %}
         {% endif %}
         {% if starttag is not defined and endtag is not defined %}
-        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}</label>
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}
+            {% if "infobutton" in attr %}
+                <a href="#" onclick="return false;" id="infobutton_{{id}}">(i)</a>
+            {% endif %}
+        </label>
         {% elseif starttag is defined %}
         	<label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
     	{% elseif endtag is defined %}
-    		{{ label|trans({}, translation_domain) }}</label>
+    		{{ label|trans({}, translation_domain) }}
         {% endif %}
     {% endif %}
 {% endspaceless %}
 {% endblock form_label %}
-
-{% extends 'form_div_layout.html.twig' %}
-
-{% block form_widget_compound %}
-    {{ parent() }}
-
-    {% if help is defined %}
-        <span class="help">{{ help }}</span>
-    {% endif %}
-{% endblock %}
