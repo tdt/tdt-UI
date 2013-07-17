@@ -29,6 +29,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 		$internalreferer = $app['session']->get('internalreferer');
 	}
 	else{
+		$internalreferer = $app['session']->get('referer');
 		// If before, a form was already posted with the same referer url,
 		// it means the login failed (otherwise, you wouldn't be back at authentication)
 		if ($referer == $app['session']->get('formerreferer')){
