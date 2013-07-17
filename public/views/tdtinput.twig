@@ -20,11 +20,10 @@
                 {{ form_widget(form) }}
             </form>
             <br />
-            <textarea id="result"></textarea><br />
+            <textarea id="result" cols="100" rows="20" style="width: 99.5%; height: 110px;"></textarea><br />
             <div id="error" style="display:none; color:red; font-style: italic"></div><br />
-
-            <button id="submit1" class="btn">Map</button><br />
-            <a href="{{relpath}}addjob">Add job</a>
+            <button id="submit1" class="btn">Map</button>
+            <button onclick="location.href='{{relpath}}addjob'" class="btn">Add job</button>
         </div>
     <script>
         $(function(){  
