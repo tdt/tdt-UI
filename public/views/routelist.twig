@@ -8,61 +8,36 @@
 -->
 <!DOCTYPE html>
 <html>
-    
     <head>
         <title>Routelist</title>
         {{ include('header.twig') }}
     </head>
     <body>
-
         {{ include('navbar.twig') }}
-
         <div class="container">
-
             <h1>Routes management</h1>
-
             <a href="{{relpath}}routes/edit" class="add" id="route">Add route</a>
-
             <ul class="ul">
-
                 {% for namespace,core in routes %}
-
                 <li class="useritem">
                     <form action="routes/edit" method="post">
-
                         <h2>{{core.namespace}}</h2>
-
                     </form>
-
                     <ul class="routes">
-                        
                         {% for index,route in core.routes %}
-                        
                         <li class="block">
                             <form action="routes/edit" method="post">
-                                        
                                <h3>{{route.documentation}}</h3>
-
                                 <input type="hidden" name="oldroute" value="{{namespace}}//{{index}}">
-
                                 <div class="buttons" id="remroute">
-
                                     <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
-                                    
                                     <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
-
                                 </div>
-
                             </form>
-                            
                             <ul class="routedoc">
-            
                                 <li> <h4>Method:</h4> {{route.method}}</li>
-                                
                                 <li> <h4>Route:</h4> {{route.route}}</li>
-                                
                                 <li> <h4>Controller:</h4> {{route.controller}}</li>
-                                
                                 <li>
                                     <h4>Users:</h4>
                                     <ul>
@@ -80,7 +55,7 @@
                 </li>
                 {% endfor %}
             </ul>
-
+            {{ include('footer.twig') }}
         </div>
   </body>
 </html>

@@ -101,12 +101,15 @@
             <div id="error" style="display:none; color:red; font-style: italic"></div>
             <div id="result" style="display:none; color:green; "><p>Job added!</p></div>
             <br /><br /><br />
+            {{ include('footer.twig') }}
         </div>
         <script>
             $(function(){
+                // Make sure the RDF part also appears when it is set as default
                 $(document).ready(function() {
                     $("#form_loadtype").click();
                 });
+                // Show or hide the RDF part according to the selected load type
                 $("#form_loadtype").click(function(){
                     if ($("#form_loadtype").val() == "CLI"){
                         $("#RDF").hide();
@@ -115,6 +118,7 @@
                         $("#RDF").show();
                     }
                 });
+                // Show or hide the XML array level field if XML is selected as format
                 $("#form_format").click(function(){
                     if ($("#form_format").val() == "XML"){
                         $("#arrayleveldiv").show();
@@ -124,6 +128,7 @@
                         
                     }
                 });
+                // When submit is clicked, fill in the details according to the chosen format
                 $("#submit").click(function(){
                     var extract = {};
                     switch($("#form_format").val()){
@@ -174,7 +179,7 @@
                     var load = {
                         "type" : $("#form_loadtype").val()
                     }
-
+                    // If the selected load type is RDF, fill the extra fields
                     if ($('#form_loadtype').val() == "RDF"){
                         load.datatank_uri = $('#form_tdturiloading').val();
                         load.datatank_package = $('#form_packageloading').val();
@@ -185,7 +190,7 @@
                         load.endpoint_user = $('#form_endpointuser').val();
                         load.endpoint_password = $('#form_endpointpassword').val();
                     }
-
+                    // Read the data from the form
                     var config = {
                         "name" : $('#form_jobname').val(),
                         "occurence" : $('#form_occurence').val(),
@@ -199,6 +204,7 @@
                         },
                         "load": load
                     };
+                    // Send a PUT to The DataTank with the data from the form to add the job
                     $.ajax({
                         type: "PUT",
                         url: "{{hostname}}tdtinput/"+$('#form_jobname').val(),
