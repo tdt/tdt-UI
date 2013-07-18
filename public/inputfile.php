@@ -59,7 +59,7 @@ $app->match('/ui/inputfile{url}', function (Request $request) use ($app,$hostnam
 	$data['form'] = $form->createView();
 	// adding the datafields title and function for the twig file
 	$data['title']= "";
-	$data['header']= "";
+	$data['header']= "Input Management";
 	return $app['twig']->render('form.twig', $data);
 
 })->value('url', '');

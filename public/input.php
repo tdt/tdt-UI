@@ -24,9 +24,9 @@ $app->match('/ui/input{url}', function (Request $request) use ($app,$hostname,$d
 
     $form = $app['form.factory']->createBuilder('form',array('input' => $fileInput,'mapping' => $fileMapping,'format' => $app['session']->get('typeinput')));
     $form = $form->add('input','textarea',array('label' => 'Data', 'attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
-    $form = $form->add('saveFile','submit',array('attr' => array('class' => 'btn')));
+    $form = $form->add('saveFile','submit',array('attr' => array('class' => 'btnmapping')));
     $form = $form->add('mapping','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
-    $form = $form->add('saveMappingFile','submit',array('attr' => array('class' => 'btn')));
+    $form = $form->add('saveMappingFile','submit',array('attr' => array('class' => 'btnmapping')));
     $form = $form->add('format','hidden');
     $form = $form->getForm();
 

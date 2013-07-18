@@ -49,18 +49,17 @@ body {
 	margin-top: 7px;
 }
 
-.navbar .nav>li>a:hover {
+.navbar .nav>li>a.activemenuitem {
+	color: #FF2C4C;
+}
+
+.navbar .nav>li>a:hover{
 	color: #FF2C4C;
 }
 
 .navbar .nav {
 	float: right;
 	margin: 17px 0 0 0;
-}
-
-.active {
-	color: #FF2C4C;
-
 }
 
 h1 {
@@ -222,6 +221,21 @@ ul {
   	margin: 10px 5px 0 0;
 }
 
+.btnmapping {
+	background-color: #328D81;
+	border-radius: 8px;
+	-moz-border-radius: 8px;
+	font-family: 'Oswald', sans-serif;
+	font-size: 1.2em;
+  	color: #F5F4EE;
+  	font-weight: 300;
+  	padding:5px 10px;
+  	background-image: none;
+  	text-shadow:none;
+  	border:none;
+  	margin: 10px 5px 20px 0;
+}
+
 .btnview:hover {
 	background-color: #FF2C4C;
 	color: #F5F4EE;
@@ -238,6 +252,10 @@ ul {
 
 .push {
 	height: 50px;
+}
+
+label {
+	font-family: 'Open Sans', sans-serif;
 }
 
 .footer {
