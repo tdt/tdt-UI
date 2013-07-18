@@ -28,7 +28,7 @@
 
             <br />
 
-            <textarea id="result" cols="100" rows="20" style="width: 99.5%; height: 110px;"></textarea> <br />
+            <textarea id="result" cols="100" rows="20" style="width: 99.5%; height: 110px; display: none"></textarea> <br />
 
             <div id="error" style="display:none; color:red; font-style: italic"></div>  <br />
 
@@ -104,6 +104,7 @@
                         success: function(data, status){
                             $("#error").hide();
                             $("#result").val(data);
+                            $("#result").show();
                         },
                         error : function(data){
                             $("#error").html("Error "+data.status+": "+data.statusText).show();
