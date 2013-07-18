@@ -56,10 +56,14 @@ $app->get('/ui/package{url}', function () use ($app,$hostname,$data) {
 		// filtering the packages because the tdtinfo and the tdtadmin packages are of no interest to the user
 		if ($key != "tdtinfo" && $key != "tdtadmin"){
 			$packages[$key]= array();
+
 			//getting the resources
 			foreach ($jsonobj->resources->$key as $key2 => $value2) {
-				array_push($packages[$key], $key2);
+				$resource[$key]->name = $key2;
+				$resource[$key]->documentation = $jsonobj->resources->$key->$key2->documentation;
+				array_push($packages[$key], $resource[$key]);
 			}
+
 		}		
 	}
 	$data["packages"] = $packages;

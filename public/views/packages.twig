@@ -48,11 +48,13 @@
                         <div class="routes" id="resources">  
                             {% for resource in package %}
                             
-                            {{resource}} <br/>            
+                            {{resource.name}}<br />
+                            <span class="documentation"> {{resource.documentation}} </span>
                             
+                            <br/>
                             <form action="resource/functions" method="post">
                                 
-                                <input type="hidden" name="path" value="{{key}}/{{resource}}">
+                                <input type="hidden" name="path" value="{{key}}/{{resource.name}}">
 
                                 <div class="buttons" id="remres"> 
                                     <button class="btnedit" type="submit" name="edit" value="edit">
@@ -95,6 +97,8 @@
           </div>
 
           <div class="push"></div>
+
+          
             
         </div>
 

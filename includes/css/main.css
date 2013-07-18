@@ -327,3 +327,7 @@ label {
 .modal-body{
 	font-family: 'Open Sans', sans-serif;
 }
+
+.documentation{
+	font-style: italic;
+}
