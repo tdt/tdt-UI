@@ -17,15 +17,15 @@ git clone https://github.com/oSoc13/tdt-start
 ```
 
 Configure tdt/start, as explained in the "Getting started" section of the [github page](https://github.com/tdt/start#getting-started).
-Alter composer.json and add, on the root level (the same level as "require"):
 
+Alter composer.json and add, on the root level (the same level as "require"):
 ```json
 "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/oSoc13/tdt-core.git"
-        }
-    ]
+    {
+        "type": "vcs",
+        "url": "https://github.com/oSoc13/tdt-core.git"
+    }
+]
 ```
 
 Then add to requirements:
