@@ -3,6 +3,7 @@
 	    <a class="brand" href="#"> <img src="data:image/png;base64,{{logo}}" alt="logo"> </a>
 
 	    <ul class="nav">
+	    	<!-- Check the current path, to activate the right element in the navbar -->
 	    	{% set path = path(app.request.attributes.get('_route')) %}
 			<li class="navtab"> <a {% if "package" in path %} class="activemenuitem" {% endif %} href="{{relpath}}package">Resources</a> </li>
 			<li class="navtab"> <a {% if "users" in path %} class="activemenuitem" {% endif %} href="{{relpath}}users">Users</a> </li>

@@ -48,15 +48,15 @@
         {% if required %}
             {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
         {% endif %}
-        <!-- If the formtitle class is wanted in the label, add it -->
-        {% if "formtitlelabel" in attr %}
-            {% set label_attr = label_attr|merge({'class': 'formtitle'}) %}
-        {% endif %}
         {% if label is empty %}
             {% set label = name|humanize %}
         {% endif %}
         <!-- If the call to this block didn't come from choice_widget_expanded -->
         {% if starttag is not defined and endtag is not defined %}
+            <!-- If the formtitle class is wanted in the label, add it -->
+            {% if "formtitlelabel" in attr %}
+                {% set label_attr = label_attr|merge({'class': 'formtitle'}) %}
+            {% endif %}
             <label {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}> {{ label|trans({}, translation_domain) }}
             <!-- Add the required class if asked -->
             {% if "required" in attr %}
