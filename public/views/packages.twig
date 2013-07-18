@@ -48,16 +48,9 @@
                         <div class="routes" id="resources">  
                             {% for resource in package %}
                             
-                            {{resource.name}}<br />
+                            {{resource.name}}
 
-                            <span> <h4>documentation:</h4> {{resource.documentation}} </span>
-                            
-                            <br/>
-                            <form action="resource/functions" method="post">
-                                
-                                <input type="hidden" name="path" value="{{key}}/{{resource.name}}">
-
-                                <div class="buttons" id="remres"> 
+                            <div class="buttons" id="remres"> 
                                     <button class="btnedit" type="submit" name="edit" value="edit">
                                   
                                     </button> 
@@ -75,6 +68,13 @@
                                         </div>
                                     </div>
                                 </div>
+
+                            <h4 class="doct">documentation:</h4>
+                            <div class="doc"> {{resource.documentation}} </div>
+                            
+                            <form action="resource/functions" method="post">
+                                
+                                <input type="hidden" name="path" value="{{key}}/{{resource.name}}">
 
                                 <div id="view">
                                     <h4 id="viewtitle">view:</h4>

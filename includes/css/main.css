@@ -168,7 +168,7 @@ margin-right: 140px;
 h4 {
 	font-size: 1em;
 	width:100px;
-	margin:0 0 5px 0;
+	margin:0;
 
 }
 
@@ -200,7 +200,7 @@ ul {
 }
 
 #remres {
-	margin-top: -20px;
+	margin: 0px;
 }
 
 #resources {
@@ -214,7 +214,7 @@ ul {
 
 #butview {
 	margin-left: 50px;
-	margin-top: -25px;
+	margin-top: -20px;
 	float: none;
 	margin-bottom: 30px;
 }
@@ -326,4 +326,8 @@ label {
 
 .modal-body{
 	font-family: 'Open Sans', sans-serif;
+}
+
+.doc {
+	margin: -20px 0 0 120px
 }
