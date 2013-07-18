@@ -309,3 +309,7 @@ label {
 .requiredfield{
 	color: red;
 }
+
+.modal-body{
+	font-family: 'Oswald', sans-serif;
+}
