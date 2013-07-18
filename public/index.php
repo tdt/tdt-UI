@@ -67,19 +67,19 @@ $app['session']->set('notedible',array('generic_type' => 'generic_type',
                                         'column_aliases' => 'column_aliases'));
 
 //start with resources management
-require_once 'packagesAndResources.php';
+require_once 'packagesandresources.php';
 require_once 'usermanagement.php';
 require_once 'routemanagement.php';
 require_once 'choosefile.php';
 require_once 'generictypes.php';
 require_once 'puttingfile.php';
-require_once 'editPackagesAndResources.php';
-require_once 'editResource.php';
+require_once 'editpackagesandresources.php';
+require_once 'editresource.php';
 require_once 'inputfile.php';
 require_once 'input.php';
 require_once 'addjob.php';
 require_once 'error.php';
-require_once 'puttingfileOptional.php';
+require_once 'puttingfileoptional.php';
 
 
 // Make sure REQUEST_URI starts with a slash. This is needed for Silex to work properly.
