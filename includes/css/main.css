@@ -244,3 +244,7 @@ ul {
 .modal-body{
 	font-family: 'Oswald', sans-serif;
 }
+
+.documentation{
+	font-style: italic;
+}
