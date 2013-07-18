@@ -21,7 +21,6 @@
 
 {% block form_label %}
 {% spaceless %}
-    
     {% if closingtag is defined %}
         {% if closingtag %}
             <a href="#" onclick="return false;" id="infobutton_{{id}}" data-html="true">(i)</a>
@@ -33,6 +32,9 @@
         {% endif %}
         {% if required %}
             {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' required')|trim}) %}
+        {% endif %}
+        {% if "formtitlelabel" in attr %}
+            {% set label_attr = label_attr|merge({'class': 'formtitle'}) %}
         {% endif %}
         {% if label is empty %}
             {% set label = name|humanize %}

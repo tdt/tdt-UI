@@ -9,7 +9,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title></title>
+        <title>Add job</title>
         {{ include('header.twig') }}
     </head>
     <body>
@@ -98,7 +98,9 @@
             </div>
 
             <button id="submit" class="btn">Add</button>
+            <!-- Error text, shown when appropriate -->
             <div id="error" style="display:none; color:red; font-style: italic"></div>
+            <!-- Result text, shown when appropriate -->
             <div id="result" style="display:none; color:green; "><p>Job added!</p></div>
             <br /><br /><br />
             {{ include('footer.twig') }}
