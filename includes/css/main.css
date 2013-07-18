@@ -49,18 +49,17 @@ body {
 	margin-top: 7px;
 }
 
-.navbar .nav>li>a:hover {
+.navbar .nav>li>a.activemenuitem {
+	color: #FF2C4C;
+}
+
+.navbar .nav>li>a:hover{
 	color: #FF2C4C;
 }
 
 .navbar .nav {
 	float: right;
 	margin: 17px 0 0 0;
-}
-
-.active {
-	color: #FF2C4C;
-
 }
 
 h1 {
@@ -212,19 +211,6 @@ ul {
 	color: #F5F4EE;
 }
 
-.btn {
-	background-color: #F5F4EE;
-  	background-image: none;
-  	text-shadow:none;
-  	border:none;
-  	box-shadow: none;
-  	padding: none;
-}
-
-.btn:hover {
-	background-color: #F5F4EE;
-	background-image: url('data:image/png;base64,{{removered}}');
-}
 
 .push {
 	height: 50px;

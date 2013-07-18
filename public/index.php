@@ -44,6 +44,9 @@ $app->register(new Silex\Provider\TranslationServiceProvider(), array(
 // Register the session service provider object
 $app->register(new Silex\Provider\SessionServiceProvider());
 
+// Register the url generator service provider object
+$app->register(new Silex\Provider\UrlGeneratorServiceProvider());
+
 // Get The DataTank hostname for use in /ui/package
 $hostname = $this->hostname.$this->subdir;
 $data['relpath'] = '/'.$this->subdir.'ui/';
