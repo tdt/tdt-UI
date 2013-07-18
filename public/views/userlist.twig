@@ -17,8 +17,10 @@
             {{ include('navbar.twig') }}
             
             <div class="container">
+
                 <h1>User management</h1>
                 <a href="{{relpath}}users/edit" class="add" id="user">Add user</a>
+                
                 <ul class="ul">
                     {% for username,user in users %}
                     <li class="useritem">
@@ -26,8 +28,8 @@
                             <h2>{{username}}</h2>
                             <input type="hidden" name="oldname" value="{{username}}">
                             <div class="buttons" id="remuser">
-                                <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
-                                <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
+                                <button class="btnedit" type="submit" name="edit" value="edit"></button> 
+                                <button class="btnrem" type="submit" name="remove" value="remove"></button>
                             </div>
                         </form>
                         <ul class="routes">

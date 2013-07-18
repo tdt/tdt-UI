@@ -30,11 +30,11 @@
                         {% for index,route in core.routes %}
                         <li class="block">
                             <form action="routes/edit" method="post">
-                               <h3>{{route.documentation}}</h3>
+                               <h3 id="routetitle">{{route.documentation}}</h3>
                                 <input type="hidden" name="oldroute" value="{{namespace}}//{{index}}">
                                 <div class="buttons" id="remroute">
-                                    <button class="btn btn-mini" type="submit" name="edit" value="edit">Edit</button> 
-                                    <button class="btn btn-mini" type="submit" name="remove" value="remove">Remove</button>
+                                    <button class="btnedit" type="submit" name="edit" value="edit"></button> 
+                                    <button class="btnrem" type="submit" name="remove" value="remove"></button>
                                 </div>
                             </form>
                             <ul class="routedoc">

@@ -50,13 +50,13 @@
                 <input id="form_arraylevel" type="text" />
             </div>
             <div>
-                <label for="form_inputfile">Data file</label> <input id="form_inputfile" type="text" value="{{inputfilepath}}"/>
+                <label class="formtitle" for="form_inputfile">Data file</label> <input id="form_inputfile" type="text" value="{{inputfilepath}}"/>
             </div>
             <div>
-                <label for="form_mappingfile">Mapping file</label> <input id="form_mappingfile" type="text" value="{{mappingfilepath}}"/>
+                <label class="formtitle" for="form_mappingfile">Mapping file</label> <input id="form_mappingfile" type="text" value="{{mappingfilepath}}"/>
             </div>
             <div>
-                <label for="form_loadtype">Load type</label>
+                <label class="formtitle" for="form_loadtype">Load type</label>
                 <select id="form_loadtype" name="loadtype">
                     <option value="RDF">RDF</option>
                     <option value="CLI">CLI</option>
@@ -64,42 +64,42 @@
             </div>
             <div id="RDF" style="display:none">
                 <div>
-                    <label for="form_sparqlendpoint">SPARQL Endpoint URL</label> 
+                    <label class="formtitle" for="form_sparqlendpoint">SPARQL Endpoint URL</label> 
                     <input id="form_sparqlendpoint" type="text"/>
                 </div>
                 <div>
-                    <label for="form_endpointuser">SPARQL Endpoint User</label> 
+                    <label class="formtitle" for="form_endpointuser">SPARQL Endpoint User</label> 
                     <input id="form_endpointuser" type="text"/>
                 </div>
                 <div>
-                    <label for="form_endpointpassword">SPARQL Endpoint Password</label> 
+                    <label class="formtitle" for="form_endpointpassword">SPARQL Endpoint Password</label> 
                     <input id="form_endpointpassword" type="password"/>
                 </div>
                 <div>
-                    <label for="form_tdturiloading">DataTank URL for loading</label> 
+                    <label class="formtitle" for="form_tdturiloading">DataTank URL for loading</label> 
                     <input id="form_tdturiloading" type="text" value="{{hostname}}"/>
                 </div>
                 <div>
-                    <label for="form_packageloading">DataTank package for loading</label>
+                    <label class="formtitle" for="form_packageloading">DataTank package for loading</label>
                     <input id="form_packageloading" type="text" />
                 </div>
                 <div>
-                    <label for="form_resourceloading">DataTank resource for loading</label>
+                    <label class="formtitle" for="form_resourceloading">DataTank resource for loading</label>
                     <input id="form_resourceloading" type="text" />
                 </div>
                 <div>
-                    <label for="form_tdtuser">DataTank User</label> 
+                    <label class="formtitle" for="form_tdtuser">DataTank User</label> 
                     <input id="form_tdtuser" type="text"/>
                 </div>
                 <div>
-                    <label for="form_tdtpassword">DataTank Password</label> 
+                    <label class="formtitle" for="form_tdtpassword">DataTank Password</label> 
                     <input id="form_tdtpassword" type="password"/>
                 </div>
             </div>
 
-            <button id="submit" class="btn">Add</button>
+            <button id="submit" class="btnother">Add</button>
             <div id="error" style="display:none; color:red; font-style: italic"></div>
-            <div id="result" style="display:none; color:green; "><p>Job added!</p></div>
+            <div  id="result" style="display:none; color:green; "><p>Job added!</p></div>
             <br /><br /><br />
             {{ include('footer.twig') }}
         </div>

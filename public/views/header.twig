@@ -23,4 +23,59 @@
     {% autoescape false %}
 	    {{ main_css }}
 	{% endautoescape %}
+
+	.btnrem:hover {
+		background-color: #F5F4EE;
+		background-image: url('data:image/png;base64,{{removered}}');
+		background-size: 20px;
+		background-repeat: no-repeat;
+		text-align: center;
+		z-index: 20;
+	  	text-shadow:none;
+	  	border:none;
+	  	box-shadow: none;
+	  	padding: none;
+
+	}
+
+	.btnrem {
+		background-image: url('data:image/png;base64,{{remove}}');
+		background-size: 20px;
+		background-repeat: no-repeat;
+		width: 20px;
+		height: 20px;
+		background-color: #F5F4EE;
+	  	text-shadow:none;
+	  	border:none;
+	  	box-shadow: none;
+	  	padding: none;
+
+	}
+
+	.btnedit:hover {
+		background-color: #F5F4EE;
+		background-image: url('data:image/png;base64,{{editred}}');
+		background-size: 20px;
+		background-repeat: no-repeat;
+		text-align: center;
+		z-index: 20;
+	  	text-shadow:none;
+	  	border:none;
+	  	box-shadow: none;
+	  	padding: none;
+	}
+
+	.btnedit {
+		background-image: url('data:image/png;base64,{{edit}}');
+		background-size: 20px;
+		background-repeat: no-repeat;
+		width: 20px;
+		height: 20px;
+		background-color: #F5F4EE;
+	  	text-shadow:none;
+	  	border:none;
+	  	box-shadow: none;
+	  	padding: none;
+	}
 </style>
+

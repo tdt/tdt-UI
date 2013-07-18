@@ -13,6 +13,7 @@
         {{ include('header.twig') }}
     </head>
     <body>
+
     <div class="wrapper">
 
         {{ include('navbar.twig') }}
@@ -32,18 +33,17 @@
 
             <div id="error" style="display:none; color:red; font-style: italic"></div>  <br />
 
-            <button id="submit1" class="btn">Map</button>
+            <button class="btnother" id="submit1" >Map</button>
 
-            <button onclick="location.href='{{relpath}}addjob'" class="btn">Add job</button>
+            <button class="btnother" onclick="location.href='{{relpath}}addjob'" >Add job</button>
+
         </div>
 
         <div class="push"></div>
 
     </div>
 
-    {{ include('footer.twig') }}
-
-        <script>
+     <script>
             $(function(){  
                 // When submit is clicked, fill in the details according to the chosen format
                 $("#submit1").click(function(){
@@ -111,6 +111,6 @@
                     });
                 });
             });
-        </script>
+    </script>
     </body>
 </html>

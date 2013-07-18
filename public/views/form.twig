@@ -13,6 +13,8 @@
         {{ include('header.twig') }}
     </head>
     <body>
+
+    <div class="wrapper">
         {{ include('navbar.twig') }}
         <div class="container">
             <h1>{{header}}</h1>
@@ -26,8 +28,8 @@
             {{ include('footer.twig') }}
         </div>
 
-        <div class="push"></div>
-        
+    </div>
+
         {% if infobuttons is defined %}
             <script>
                 $('document').ready(function(){

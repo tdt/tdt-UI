@@ -37,8 +37,8 @@ $app->match('/ui/inputfile{url}', function (Request $request) use ($app,$hostnam
 	);
 	$form = $form->add('inputfile','text',array('label' => 'Choose data file', 'required' => false));
 	$form = $form->add('mappingfile','text',array('label' => 'Choose mapping file', 'required' => false));
-	$form = $form->add('addjobbutton','submit',array('label' => 'Add job', 'attr' => array('class' => 'btn')));
-	$form = $form->add('testmappingbutton','submit',array('label' => 'Test mapping', 'attr' => array('class' => 'btn')));
+	$form = $form->add('addjobbutton','submit',array('label' => 'Add job', 'attr' => array('class' => 'btnother')));
+	$form = $form->add('testmappingbutton','submit',array('label' => 'Test mapping', 'attr' => array('class' => 'btnother')));
 	$form = $form->getForm();
 
 	if ('POST' == $request->getMethod()) {

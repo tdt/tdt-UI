@@ -29,7 +29,7 @@
                         <h2>{{ key }}</h2>
                         <form class="buttons" id="rempack" action="package/remove" method="post">
                             <input type="hidden" name="path" value="{{key}}">
-                            <button class="btn" type="submit" name="remove" value="remove"><img src="data:image/png;base64,{{remove}}" alt="delete" width="20px"></button>
+                            <button class="btnrem" type="submit" name="remove" value="remove"></button>
                         </form>
                     </div>            
                     
@@ -45,11 +45,11 @@
                                 <input type="hidden" name="path" value="{{key}}/{{resource}}">
 
                                 <div class="buttons" id="remres"> 
-                                    <button class="btn" type="submit" name="edit" value="edit">
-                                      <img src="data:image/png;base64,{{edit}}" alt="edit" width="20px">
+                                    <button class="btnedit" type="submit" name="edit" value="edit">
+                                  
                                     </button> 
-                                    <button class="btn" type="submit" name="remove" value="remove">
-                                      <img src="data:image/png;base64,{{remove}}" alt="delete" width="20px">
+                                    <button class="btnrem" type="submit" name="remove" value="remove">
+                   
                                     </button>
                                 </div>
 
