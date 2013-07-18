@@ -81,12 +81,20 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
     }
 
     // Create a Silex form with all the required fields 
+    $globalindex = 0;
     $form = $app['form.factory']->createBuilder('form');
-    $form = $form->add('TargetURI','text',array('label' => "Target URI" ,'constraints' => new Assert\NotBlank(), 'label' => 'TargetURI: destination of the file'));
+    $form = $form->add('TargetURI','text',array('label' => "Target URI" ,'constraints' => new Assert\NotBlank(),'attr' => array('class' => 'infobutton')));
+    $data['infobuttons'][$globalindex] = 'destination of the file';
+    $globalindex++;
     foreach ($requiredcreatevariables as $key => $value) {
         $documentation = $explanationvariables->$value;
-        $form = $form->add($value,'text',array('constraints' => new Assert\NotBlank(), 'label' => $value.": ".$documentation));
+        $form = $form->add($value,'text',array('constraints' => new Assert\NotBlank(), 'attr' => array('class' => 'infobutton')));
+        $data['infobuttons'][$globalindex] = $documentation;
+        $globalindex++;
     }
+
+    $form = $form->add('add','submit',array('label' => 'add','attr' => array('class' => 'btn')));
+    $form = $form->add('addOpt','submit',array('label' => 'add Optional parameters' ,'attr' => array('class' => 'btn')));
 
     // for not required parameter (this is an example, yet to be included!!)
     // $form = $form->add('language','text',array('required' => false));
@@ -96,54 +104,56 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
     // If the method is POST, validate the form
     if ('POST' == $request->getMethod()) {
         $form->bind($request);
-        if ($form->isValid()) {
-            // getting the data from the form
-            $formdata = $form->getData();
-            
-            // making array for the body of the put request
-            $body = array();
-            foreach ($requiredcreatevariables as $key => $value) {
-                $body[$value] = $formdata[$value];
-            }
-
-            // setting the already given info to the body (resource type and if necessary general type)
-            $body['resource_type'] = $app['session']->get('generaltype');
-            if ($body['resource_type'] == 'generic') {
-                $body['generic_type'] = $app['session']->get('filetype');
-            }
-
-            // initializing a new client
-            $client = new Client();
-
-            // the put request
-            try{
-                // checking if once in a session time a username and password is given to authorise for getting
-                // if not, try without authentication
-                if ($app['session']->get('userput') == null || $app['session']->get('pswdput') ==null) {
-                    $request = $client->put($formdata['TargetURI'],null,$body);
-                } else {
-                    $request = $client->put($formdata['TargetURI'],null,$body)->setAuth($app['session']->get('userput'),$app['session']->get('pswdput'));
+        if($form->get('add')->isClicked()){            
+            if ($form->isValid()) {
+                // getting the data from the form
+                $formdata = $form->getData();
+                
+                // making array for the body of the put request
+                $body = array();
+                foreach ($requiredcreatevariables as $key => $value) {
+                    $body[$value] = $formdata[$value];
                 }
-                $response = $request->send();
-            } catch(ClientErrorResponseException $e) {
-                // if tried with authentication and it failed 
-                // or when tried without authentication and authentication is needed
-                if ($e->getResponse()->getStatusCode() == 401) {
-                    // necessary information is stored in the session object, needed to redo the request after authentication
-                    $app['session']->set('method','put');
-                    $app['session']->set('path',$formdata['TargetURI']);
-                    $app['session']->set('body',$body);
-                    $app['session']->set('redirect',$hostname.'ui/package');
-                    $app['session']->set('referer',$hostname.'ui/package/add');
-                    return $app->redirect('../../ui/authentication');
-                } else {
-                    $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-                    return $app->redirect('../../ui/error');
-                }
-            }
 
-            // Redirect to list of packages     
-            return $app->redirect('../../ui/package');
+                // setting the already given info to the body (resource type and if necessary general type)
+                $body['resource_type'] = $app['session']->get('generaltype');
+                if ($body['resource_type'] == 'generic') {
+                    $body['generic_type'] = $app['session']->get('filetype');
+                }
+
+                // initializing a new client
+                $client = new Client();
+
+                // the put request
+                try{
+                    // checking if once in a session time a username and password is given to authorise for getting
+                    // if not, try without authentication
+                    if ($app['session']->get('userput') == null || $app['session']->get('pswdput') ==null) {
+                        $request = $client->put($formdata['TargetURI'],null,$body);
+                    } else {
+                        $request = $client->put($formdata['TargetURI'],null,$body)->setAuth($app['session']->get('userput'),$app['session']->get('pswdput'));
+                    }
+                    $response = $request->send();
+                } catch(ClientErrorResponseException $e) {
+                    // if tried with authentication and it failed 
+                    // or when tried without authentication and authentication is needed
+                    if ($e->getResponse()->getStatusCode() == 401) {
+                        // necessary information is stored in the session object, needed to redo the request after authentication
+                        $app['session']->set('method','put');
+                        $app['session']->set('path',$formdata['TargetURI']);
+                        $app['session']->set('body',$body);
+                        $app['session']->set('redirect',$hostname.'ui/package');
+                        $app['session']->set('referer',$hostname.'ui/package/add');
+                        return $app->redirect('../../ui/authentication');
+                    } else {
+                        $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
+                        return $app->redirect('../../ui/error');
+                    }
+                }
+
+                // Redirect to list of packages     
+                return $app->redirect('../../ui/package');
+            }
         }
     }
 
@@ -152,6 +162,5 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
     // adding the datafields title and function for the twig file
     $data['title']= "Putting a file";
     $data['header']= "Putting ".$type." file";
-    $data['button']= "Add";
     return $app['twig']->render('form.twig', $data);
 })->value('url', '');

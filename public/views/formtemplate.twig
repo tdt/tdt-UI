@@ -38,10 +38,15 @@
             {% set label = name|humanize %}
         {% endif %}
         {% if starttag is not defined and endtag is not defined %}
-        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>{{ label|trans({}, translation_domain) }}
+        
+        <label {% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}> {{ label|trans({}, translation_domain) }}
+            {% if "required" in attr %}
+                    <span class="requiredfield" title="This field is required">*</span>
+            {% endif %}
             {% if "infobutton" in attr %}
                 <a href="#" onclick="return false;" id="infobutton_{{id}}" data-html="true">(i)</a>
             {% endif %}
+            
         </label>
         {% elseif starttag is defined %}
         	<label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>

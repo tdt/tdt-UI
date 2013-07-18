@@ -236,3 +236,7 @@ ul {
 .popover{
 	max-width: 500px;
 }
+
+.requiredfield{
+	color: red;
+}
