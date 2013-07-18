@@ -89,8 +89,8 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
         $globalindex++;
     }
 
-    $form = $form->add('add','submit',array('label' => 'add','attr' => array('class' => 'btn')));
-    $form = $form->add('addOpt','submit',array('label' => 'add Optional parameters' ,'attr' => array('class' => 'btn')));
+    $form = $form->add('add','submit',array('label' => 'Add','attr' => array('class' => 'btn')));
+    $form = $form->add('addOpt','submit',array('label' => 'Add optional parameters' ,'attr' => array('class' => 'btn')));
 
     // for not required parameter (this is an example, yet to be included!!)
     // $form = $form->add('language','text',array('required' => false));
