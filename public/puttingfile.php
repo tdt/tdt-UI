@@ -58,16 +58,12 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
     if ( $generaltype == 'generic'){
         $type = $app['session']->get('filetype');
         $requiredcreatevariables = $jsonobj->admin->create->generic->$type->requiredparameters;
-    }
-    else {
-        $requiredcreatevariables = $jsonobj->admin->create->$generaltype->requiredparameters;
-    }
-
-    // getting documentation over the fields that must be filled in
-    if ( $generaltype == 'generic'){
+        // getting documentation over the fields that must be filled in
         $explanationvariables = $jsonobj->admin->create->generic->$type->parameters;
     }
     else {
+        $requiredcreatevariables = $jsonobj->admin->create->$generaltype->requiredparameters;
+        // getting documentation over the fields that must be filled in
         $explanationvariables = $jsonobj->admin->create->$generaltype->parameters;
     }
 
@@ -153,6 +149,21 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
 
                 // Redirect to list of packages     
                 return $app->redirect('../../ui/package');
+            }
+        }
+        elseif($form->get('addOpt')->isClicked()){
+             if ($form->isValid()) {
+                // getting the data from the form
+                $formdata = $form->getData();
+                
+                // making array for the body of the put request
+                $body = array();
+                $app['session']->set('TargetURI',$formdata['TargetURI']);
+                foreach ($requiredcreatevariables as $key => $value) {
+                    $app['session']->set($value,$formdata[$value]);
+                }
+
+                return $app->redirect('../../ui/package/optionaladd');
             }
         }
     }
