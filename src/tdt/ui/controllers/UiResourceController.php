@@ -86,6 +86,12 @@ class UiResourceController extends \tdt\core\controllers\AController {
                 $data['editred'] .= base64_encode($editred);
             }
 
+            $data['info'] = "";
+            $editred = @file_get_contents(__DIR__."/../../../../includes/img/info.png");
+            if ($info){
+                $data['info'] .= base64_encode($info);
+            }
+
             include(__DIR__."/../../../../public/index.php");
     }
 

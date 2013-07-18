@@ -20,15 +20,20 @@
             <h1>{{header}}</h1>
             <form action="#" method="post" {{form_enctype(form)}}>
                 {% form_theme form 'formtemplate.twig' %}
-                <div class="formdiv">{{ form_widget(form) }}</div>
+                <div class="formdiv">{{ form_widget(form) }}
                 {% if button is defined %}
-                    <button type="submit" class="btn">{{button}}</button>
+                    <button type="submit" class="btnother">{{button}}</button>
                 {% endif %}
+                </div>
             </form>
-            {{ include('footer.twig') }}
+            
         </div>
 
+        <div class="push"></div>
+
     </div>
+
+    {{ include('footer.twig') }}
 
         {% if infobuttons is defined %}
             <script>

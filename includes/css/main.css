@@ -8,10 +8,6 @@ body {
   
 }
 
-.modal-body{
-	font-family: 'Oswald', sans-serif;
-}
-
 .wrapper {
 	height: 100%;
 	margin-bottom: -50px;
@@ -155,6 +151,20 @@ li {
 	float: right;
 }
 
+#form_typeinput {
+	margin-left: 250px;
+}
+
+#form_addjobbutton {
+	float: right;
+margin-right: 140px;
+}
+
+#form_testmappingbutton{
+	float: right;
+
+}
+
 h4 {
 	font-size: 1em;
 	width:100px;
@@ -248,6 +258,10 @@ ul {
   	margin: 10px 5px 0 0;
 }
 
+.btnother:hover {
+	background-color: #FF2C4C;
+}
+
 .btnmapping {
 	background-color: #328D81;
 	border-radius: 8px;
@@ -311,5 +325,5 @@ label {
 }
 
 .modal-body{
-	font-family: 'Oswald', sans-serif;
+	font-family: 'Open Sans', sans-serif;
 }

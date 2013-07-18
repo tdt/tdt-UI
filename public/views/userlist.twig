@@ -28,8 +28,8 @@
                             <h2>{{username}}</h2>
                             <input type="hidden" name="oldname" value="{{username}}">
                             <div class="buttons" id="remuser">
-                                <button class="btnedit" type="submit" name="edit" value="edit">Edit</button> 
-                                <button href="#deleteModal" class="btnrem"  data-toggle="modal">Remove</button>
+                                <button class="btnedit" type="submit" name="edit" value="edit"></button> 
+                                <button href="#deleteModal" class="btnrem"  data-toggle="modal"></button>
                             </div>
                             <!-- Popup when trying to delete a user -->
                             <div id="deleteModal" class="modal hide fade" tabindex="-1">
@@ -51,7 +51,7 @@
                                 <ul class="routelist">
                                     {% if userroutes[username] is defined %}
                                         {% for route in userroutes[username].routes %}
-                                            <li>{{routes[route.namespace].routes[route.index].documentation}}<a id="pop_{{route.namespace}}{{route.index}}" onclick="return false;"> (i)</a></li>
+                                            <li>{{routes[route.namespace].routes[route.index].documentation}}<a class="infoimg" id="pop_{{route.namespace}}{{route.index}}" onclick="return false;">(i)</a></li>
                                         {% endfor %}
                                     {% else %}
                                         No routes

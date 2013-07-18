@@ -29,7 +29,7 @@
                         <h2>{{ key }}</h2>
                         <form class="buttons" id="rempack" action="package/remove" method="post">
                             <input type="hidden" name="path" value="{{key}}">
-                            <button href="#deletepackModal" data-toggle="modal" class="btnrem"><img src="data:image/png;base64,{{remove}}" alt="delete" width="20px"></button>
+                            <button href="#deletepackModal" data-toggle="modal" class="btnrem"></button>
                             <!-- Popup when trying to delete a resource -->
                             <div id="deletepackModal" class="modal hide fade" tabindex="-1">
                                 <div class="modal-body">
@@ -59,7 +59,7 @@
                                   
                                     </button> 
                                     <button href="#deleteresModal" data-toggle="modal" class="btnrem">
-                                      <img src="data:image/png;base64,{{remove}}" alt="delete" width="20px">
+                                  
                                     </button>
                                     <!-- Popup when trying to delete a resource -->
                                     <div id="deleteresModal" class="modal hide fade" tabindex="-1">
