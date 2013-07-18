@@ -115,15 +115,18 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
     
     // Create a Silex form with all the fields to be changed and the fields already set on the value
     $form = $app['form.factory']->createBuilder('form',$parameterstobechanged);
+    $globalindex = 0;
     foreach ($parameterstobechanged as $key => $value) {
         $documentation = $explanationvariables->$key;
+        $data['infobuttons'][$globalindex] = $documentation;
+        $globalindex++;
         // All the variables that are required
         if (in_array($key, $requiredcreatevariables)) {
-            $form = $form->add($key,'text',array('label' => $key.": ".$documentation,'constraints' => new Assert\NotBlank()));
+            $form = $form->add($key,'text',array('constraints' => new Assert\NotBlank(), 'attr' => array('class' => 'infobutton', 'required' => 'required')));
         }
         // All the variables that are not required
         else {
-            $form = $form->add($key,'text',array('label' => $key.": ".$documentation,'required' => false));
+            $form = $form->add($key,'text',array('required' => false, 'attr' => array('class' => 'infobutton')));
         }
         
     }

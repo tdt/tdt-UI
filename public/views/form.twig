@@ -20,7 +20,7 @@
             <h1>{{header}}</h1>
             <form action="#" method="post" {{form_enctype(form)}}>
                 {% form_theme form 'formtemplate.twig' %}
-                <div class="formtitle">{{ form_widget(form) }}</div>
+                <div class="formdiv">{{ form_widget(form) }}</div>
                 {% if button is defined %}
                     <button type="submit" class="btn">{{button}}</button>
                 {% endif %}

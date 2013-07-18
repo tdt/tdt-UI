@@ -13,96 +13,107 @@
         {{ include('header.twig') }}
     </head>
     <body>
+
+    <div class="wrapper">
+
         {{ include('navbar.twig') }}
         <div class="container">
-            <div>
-                <label class="formtitle" for="form_jobname">Job name</label> <input id="form_jobname" type="text" />
-            </div>
-            <div>
-                <label class="formtitle" for="form_occurence">Occurence</label> <input id="form_occurence" type="text" />
-            </div>
-            <div>
-                <label class="formtitle" for="form_tdturimapping">DataTank URL for mapping</label> 
-                <input id="form_tdturimapping" type="text" value="{{hostname}}" />
-            </div>
-            <div>
-                <label class="formtitle" for="form_packagemapping">DataTank package for mapping</label> 
-                <input id="form_packagemapping" type="text" />
-            </div>
-            <div>
-                <label class="formtitle" for="form_resourcemapping">DataTank resource for mapping</label> 
-                <input id="form_resourcemapping" type="text" />
-            </div>
-            <div>
-                <label class="formtitle" for="form_format">Data file type</label>
-                
-                <select id="form_format" name="type">
-                    <option value="CSV0" {% if inputfiletype == "CSV0" %} selected="selected" {% endif %}>CSV with header row and ; as a delimiter</option>
-                    <option value="CSV1" {% if inputfiletype == "CSV1" %} selected="selected" {% endif %}>CSV with header row and , as a delimiter</option>
-                    <option value="CSV2" {% if inputfiletype == "CSV2" %} selected="selected" {% endif %}>CSV without header row and ; as a delimiter</option>
-                    <option value="CSV3" {% if inputfiletype == "CSV3" %} selected="selected" {% endif %}>CSV without header row and , as a delimiter</option>
-                    <option value="JSON" {% if inputfiletype == "JSON" %} selected="selected" {% endif %}>JSON</option>
-                    <option value="XML" {% if inputfiletype == "XML" %} selected="selected" {% endif %}>XML</option>
-                </select>
-            </div>
-            <div id="arrayleveldiv" {% if inputfiletype != "XML" %}style="display:none"{% endif %}>
-                <label for="form_arraylevel">Array level</label> 
-                <input id="form_arraylevel" type="text" />
-            </div>
-            <div>
-                <label class="formtitle" for="form_inputfile">Data file</label> <input id="form_inputfile" type="text" value="{{inputfilepath}}"/>
-            </div>
-            <div>
-                <label class="formtitle" for="form_mappingfile">Mapping file</label> <input id="form_mappingfile" type="text" value="{{mappingfilepath}}"/>
-            </div>
-            <div>
-                <label class="formtitle" for="form_loadtype">Load type</label>
-                <select id="form_loadtype" name="loadtype">
-                    <option value="RDF">RDF</option>
-                    <option value="CLI">CLI</option>
-                </select>
-            </div>
-            <div id="RDF" style="display:none">
-                <div>
-                    <label class="formtitle" for="form_sparqlendpoint">SPARQL Endpoint URL</label> 
-                    <input id="form_sparqlendpoint" type="text"/>
-                </div>
-                <div>
-                    <label class="formtitle" for="form_endpointuser">SPARQL Endpoint User</label> 
-                    <input id="form_endpointuser" type="text"/>
-                </div>
-                <div>
-                    <label class="formtitle" for="form_endpointpassword">SPARQL Endpoint Password</label> 
-                    <input id="form_endpointpassword" type="password"/>
-                </div>
-                <div>
-                    <label class="formtitle" for="form_tdturiloading">DataTank URL for loading</label> 
-                    <input id="form_tdturiloading" type="text" value="{{hostname}}"/>
-                </div>
-                <div>
-                    <label class="formtitle" for="form_packageloading">DataTank package for loading</label>
-                    <input id="form_packageloading" type="text" />
-                </div>
-                <div>
-                    <label class="formtitle" for="form_resourceloading">DataTank resource for loading</label>
-                    <input id="form_resourceloading" type="text" />
-                </div>
-                <div>
-                    <label class="formtitle" for="form_tdtuser">DataTank User</label> 
-                    <input id="form_tdtuser" type="text"/>
-                </div>
-                <div>
-                    <label class="formtitle" for="form_tdtpassword">DataTank Password</label> 
-                    <input id="form_tdtpassword" type="password"/>
-                </div>
-            </div>
 
-            <button id="submit" class="btnother">Add</button>
-            <div id="error" style="display:none; color:red; font-style: italic"></div>
-            <div  id="result" style="display:none; color:green; "><p>Job added!</p></div>
-            <br /><br /><br />
+            <h1>Add a job</h1>
+
+            <div class="formdiv">
+                
+                <div>
+                    <label class="formtitle" for="form_jobname">Job name</label> <input id="form_jobname" type="text" />
+                </div>
+                <div>
+                    <label class="formtitle" for="form_occurence">Occurence</label> <input id="form_occurence" type="text" />
+                </div>
+                <div>
+                    <label class="formtitle" for="form_tdturimapping">DataTank URL for mapping</label> 
+                    <input class="textbox" id="form_tdturimapping" type="text" value="{{hostname}}" />
+                </div>
+                <div>
+                    <label class="formtitle" for="form_packagemapping">DataTank package for mapping</label> 
+                    <input id="form_packagemapping" type="text" />
+                </div>
+                <div>
+                    <label class="formtitle" for="form_resourcemapping">DataTank resource for mapping</label> 
+                    <input id="form_resourcemapping" type="text" />
+                </div>
+                <div>
+                    <label class="formtitle" for="form_format">Data file type</label>
+                    
+                    <select id="form_format" name="type">
+                        <option value="CSV0" {% if inputfiletype == "CSV0" %} selected="selected" {% endif %}>CSV with header row and ; as a delimiter</option>
+                        <option value="CSV1" {% if inputfiletype == "CSV1" %} selected="selected" {% endif %}>CSV with header row and , as a delimiter</option>
+                        <option value="CSV2" {% if inputfiletype == "CSV2" %} selected="selected" {% endif %}>CSV without header row and ; as a delimiter</option>
+                        <option value="CSV3" {% if inputfiletype == "CSV3" %} selected="selected" {% endif %}>CSV without header row and , as a delimiter</option>
+                        <option value="JSON" {% if inputfiletype == "JSON" %} selected="selected" {% endif %}>JSON</option>
+                        <option value="XML" {% if inputfiletype == "XML" %} selected="selected" {% endif %}>XML</option>
+                    </select>
+                </div>
+                <div id="arrayleveldiv" {% if inputfiletype != "XML" %}style="display:none"{% endif %}>
+                    <label for="form_arraylevel">Array level</label> 
+                    <input id="form_arraylevel" type="text" />
+                </div>
+                <div>
+                    <label class="formtitle" for="form_inputfile">Data file</label> <input id="form_inputfile" type="text" value="{{inputfilepath}}"/>
+                </div>
+                <div>
+                    <label class="formtitle" for="form_mappingfile">Mapping file</label> <input id="form_mappingfile" type="text" value="{{mappingfilepath}}"/>
+                </div>
+                <div>
+                    <label class="formtitle" for="form_loadtype">Load type</label>
+                    <select id="form_loadtype" name="loadtype">
+                        <option value="RDF">RDF</option>
+                        <option value="CLI">CLI</option>
+                    </select>
+                </div>
+                <div id="RDF" style="display:none">
+                    <div>
+                        <label class="formtitle" for="form_sparqlendpoint">SPARQL Endpoint URL</label> 
+                        <input id="form_sparqlendpoint" type="text"/>
+                    </div>
+                    <div>
+                        <label class="formtitle" for="form_endpointuser">SPARQL Endpoint User</label> 
+                        <input id="form_endpointuser" type="text"/>
+                    </div>
+                    <div>
+                        <label class="formtitle" for="form_endpointpassword">SPARQL Endpoint Password</label> 
+                        <input id="form_endpointpassword" type="password"/>
+                    </div>
+                    <div>
+                        <label class="formtitle" for="form_tdturiloading">DataTank URL for loading</label> 
+                        <input id="form_tdturiloading" type="text" value="{{hostname}}"/>
+                    </div>
+                    <div>
+                        <label class="formtitle" for="form_packageloading">DataTank package for loading</label>
+                        <input id="form_packageloading" type="text" />
+                    </div>
+                    <div>
+                        <label class="formtitle" for="form_resourceloading">DataTank resource for loading</label>
+                        <input id="form_resourceloading" type="text" />
+                    </div>
+                    <div>
+                        <label class="formtitle" for="form_tdtuser">DataTank User</label> 
+                        <input id="form_tdtuser" type="text"/>
+                    </div>
+                    <div>
+                        <label class="formtitle" for="form_tdtpassword">DataTank Password</label> 
+                        <input id="form_tdtpassword" type="password"/>
+                    </div>
+                </div>
+
+                <button id="submit" class="btnother">Add</button>
+                <div id="error" style="display:none; color:red; font-style: italic"></div>
+                <div  id="result" style="display:none; color:green; "><p>Job added!</p></div>
+                <br /><br /><br />
+
+            </div>
             {{ include('footer.twig') }}
         </div>
+    </div>
 
         <div class="push"></div>
         

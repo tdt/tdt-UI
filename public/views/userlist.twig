@@ -28,8 +28,19 @@
                             <h2>{{username}}</h2>
                             <input type="hidden" name="oldname" value="{{username}}">
                             <div class="buttons" id="remuser">
-                                <button class="btnedit" type="submit" name="edit" value="edit"></button> 
-                                <button class="btnrem" type="submit" name="remove" value="remove"></button>
+                                <button class="btnedit" type="submit" name="edit" value="edit">Edit</button> 
+                                <button href="#deleteModal" class="btnrem"  data-toggle="modal">Remove</button>
+                            </div>
+                            <!-- Popup when trying to delete a user -->
+                            <div id="deleteModal" class="modal hide fade" tabindex="-1">
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete {{username}}?</p>
+                                    <p>If {{username}} is the only user that has access to a certain path, that path will now be freely accessible.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+                                    <button name="remove" value="remove" type="submit" class="btn btn-primary">Yes</button>
+                                </div>
                             </div>
                         </form>
                         <ul class="routes">
@@ -54,7 +65,6 @@
             
             </div>
         </div>
-        
         {{ include('footer.twig') }}
         <script>
             $(function () {
