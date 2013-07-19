@@ -46,3 +46,5 @@ Now update your project (in the tdt/start folder):
 ```bash
 composer update
 ```
+
+If anything goes wrong with this command, try to run it as superuser (because the folders may be owned by the php user).
