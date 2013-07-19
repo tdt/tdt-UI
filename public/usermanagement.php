@@ -136,21 +136,25 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 	    	->add('oldname','hidden')
 	        ->add('username','text',array(
 	        	'label' => "Username",
+	        	'attr' => array('formtitlelabel' => 'formtitlelabel'),
 	        	'constraints' => new Assert\NotBlank()
 	        	)
         	)
 	        ->add('password','password',array(
 	        	'label' => "Password",
+	        	'attr' => array('formtitlelabel' => 'formtitlelabel'),
 	        	'constraints' => new Assert\NotBlank()
 	        	)
 	        )
 	        ->add('documentation','textarea',array(
 	        	'label' => "Documentation",
+	        	'attr' => array('formtitlelabel' => 'formtitlelabel'),
 	        	'required' => false
 	        	)
 	        )
 	        ->add('authenticationtype', 'choice', array(
 	        	'label' => 'Authentication type',
+	        	'attr' => array('formtitlelabel' => 'formtitlelabel'),
 	            'choices' => array('BasicAuth' => 'BasicAuth'),
 	            )
 	        )->add('routes','choice', array(
@@ -159,7 +163,7 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
     			'required' => false,
     			'expanded' => true,
     			'multiple' => true,
-    			'attr' => array('class' => 'infobuttonlist')
+    			'attr' => array('class' => 'infobuttonlist', 'formtitlelabel' => 'formtitlelabel')
         		)
         	)->getForm();
 	    // If the method is POST, validate the form

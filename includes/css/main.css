@@ -196,11 +196,13 @@ ul {
 
 .routelist {
 	margin-left: 70px;
-	margin-top: -24px;
+	margin-top: -20px;
 }
 
 #remres {
-	margin: 0px;
+	margin-bottom: 6px;
+	float: none;
+	margin-top: -21px;
 }
 
 #resources {
@@ -330,4 +332,12 @@ label {
 
 .doc {
 	margin: -20px 0 0 120px
+}
+
+.formtitlelist {
+	margin-left: 250px;
+}
+
+.docroute {
+	margin-bottom: 10px;
 }

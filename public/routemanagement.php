@@ -86,6 +86,7 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
 	    	->add('index','hidden')
 	    	->add('namespace','choice', array(
 	        	'label' => 'Namespace',
+	        	'attr' => array('formtitlelabel' => 'formtitlelabel'),
 	            'choices' => array('core' => 'Core', 'input' => 'Input'),
 	            'expanded' => false,
 	            'multiple' => false
@@ -93,17 +94,20 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
 	      	)
 	    	->add('description','text',array(
 	        	'label' => 'Description',
+	        	'attr' => array('formtitlelabel' => 'formtitlelabel'),
 	        	'constraints' => new Assert\NotBlank()
 	        	)
 	    	)
 	    	->add('route','text',array(
 	    		'label' => 'Route regex',
+	    		'attr' => array('formtitlelabel' => 'formtitlelabel'),
 	    		// TODO: add regex constraint
 	    		'constraints' => new Assert\NotBlank() 
 	    		)
 	    	)
 	    	->add('method', 'choice', array(
 	        	'label' => 'Method',
+	        	'attr' => array('formtitlelabel' => 'formtitlelabel'),
 	            'choices' => array('GET' => 'GET', 'POST' => 'POST', 'PUT' => 'PUT', 'PATCH' => 'PATCH', 'DELETE' => 'DELETE'),
 	            'expanded' => false,
 	            'multiple' => false
@@ -111,6 +115,7 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
 	      	)
 	        ->add('controller', 'choice', array(
 	        	'label' => 'Controller',
+	        	'attr' => array('formtitlelabel' => 'formtitlelabel'),
 	            'choices' => array(
 	            	'controllers\RController' => 'RController',
 	            	'controllers\CUDController' => 'CUDController',
@@ -125,6 +130,7 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
 	        )
 	        ->add('users', 'choice', array(
 	        	'label' => 'Users',
+	        	'attr' => array('formtitlelabel' => 'formtitlelabel'),
 	        	'choices' => $users,
 	        	'expanded' => true,
 	            'multiple' => true,
