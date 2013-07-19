@@ -26,7 +26,7 @@ Download [tdt/installer](https://github.com/oSoc13/tdt-Installer) to install The
 
 After this, follow the complete installation process described [here](https://github.com/oSoc13/tdt-Installer).
 
-Finally, you need to [configure tdt/start](https://github.com/oSoc13/tdt-UI/tree/development#configure-tdt/start).
+Finally, you need to [configure tdt/start](https://github.com/oSoc13/tdt-UI/tree/development#configure-tdtstart).
 
 ### Setup using composer
 
@@ -37,7 +37,7 @@ git clone https://github.com/oSoc13/tdt-start
 
 Setup tdt/start, as explained in the "Getting started" section of the [github page](https://github.com/tdt/start#getting-started).
 
-Now, the only thing left to do, is to [configure tdt/start](https://github.com/oSoc13/tdt-UI/tree/development#configure-tdt/start).
+Now, the only thing left to do, is to [configure tdt/start](https://github.com/oSoc13/tdt-UI/tree/development#configure-tdtstart).
 
 ## Configure tdt/start
 
