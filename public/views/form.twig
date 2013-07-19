@@ -40,7 +40,7 @@
                         infobuttons[{{index}}] = {% autoescape false %} "{{value}}" {% endautoescape %};
                     {% endfor %}
                     // Setup each hyperlink of which the id starts with infobutton as infobutton
-                    $('a[id^="infobutton"]').each(function( index, value) {
+                    $('button[id^="infobutton"]').each(function( index, value) {
                         $("#"+value.id).popover({
                             "content" : infobuttons[index],
                             "html" : true,
