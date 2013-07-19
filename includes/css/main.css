@@ -162,6 +162,12 @@ li {
 margin-right: 140px;
 }
 
+#form_Choose{
+	float: right;
+	margin-right: 290px;
+	margin-top: 30px;
+}
+
 #form_testmappingbutton{
 	float: right;
 

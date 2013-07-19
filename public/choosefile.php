@@ -66,7 +66,11 @@ $app->match('/ui/package/resourcetype{url}', function (Request $request) use ($a
     $form = $form->add('Type','choice',array('choices' => $possibilities, 
                                             'multiple' => false, 
                                             'expanded' => true,
-                                            'label' => false));
+                                            'label' => false,
+                                            'attr' => array('formtitlelabel' => 'formtitlelabel')
+                                            )
+    );
+    $form = $form->add('Choose','button',array('attr' => array('class' => 'btnother')));
 
     $form = $form->getForm();
 
@@ -98,7 +102,6 @@ $app->match('/ui/package/resourcetype{url}', function (Request $request) use ($a
     // adding the datafields title and function for the twig file
     $data['title']= "Choose resource type";
     $data['header']= "Resource types";
-    $data['button']= "Choose";
     return $app['twig']->render('form.twig', $data);
 
 })->value('url', '');
