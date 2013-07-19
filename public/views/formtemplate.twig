@@ -42,7 +42,7 @@
     <!-- If there is a infobutton, add it before closing the labeltag -->
     {% if closingtag is defined %}
         {% if closingtag %}
-            <a href="#" onclick="return false;" id="infobutton_{{id}}" data-html="true">(i)</a>
+            <button class="infoimg" onclick="return false;" id="infobutton_{{id}}" data-html="true"></button>
         {% endif %}
         </label>
     {% elseif label is not sameas(false) %}
@@ -68,7 +68,7 @@
             {% endif %}
             <!-- Add the infobutton if wanted -->
             {% if "infobutton" in attr %}
-                <a href="#" onclick="return false;" id="infobutton_{{id}}" data-html="true">(i)</a>
+                <button class="infoimg" onclick="return false;" id="infobutton_{{id}}" data-html="true"></button>
             {% endif %}
         </label>
         <!-- If the call came from choice_widget and starttag was asked -->

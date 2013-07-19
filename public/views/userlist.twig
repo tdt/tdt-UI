@@ -45,13 +45,13 @@
                         </form>
                         <ul class="routes">
                             <li>{{user.type}}</li>
-                            <li>{{user.documentation}}</li>
+                            <li class="docroute">{{user.documentation}}</li>
                             <li>
                                 <h4>Routes:</h4>
                                 <ul class="routelist">
                                     {% if userroutes[username] is defined %}
                                         {% for route in userroutes[username].routes %}
-                                            <li>{{routes[route.namespace].routes[route.index].documentation}}<a class="infoimg" id="pop_{{route.namespace}}{{route.index}}" onclick="return false;">(i)</a></li>
+                                            <li>{{routes[route.namespace].routes[route.index].documentation}}<button class="infoimg" id="pop_{{route.namespace}}{{route.index}}" onclick="return false;"></button></li>
                                         {% endfor %}
                                     {% else %}
                                         No routes
@@ -64,6 +64,7 @@
                 </ul>               
             
             </div>
+            <div class="push"></div>
         </div>
         {{ include('footer.twig') }}
         <script>
