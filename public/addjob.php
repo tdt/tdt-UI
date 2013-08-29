@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Add a new job to tdtinput
  * @copyright (C) 2013 by OKFN Belgium
@@ -16,8 +16,8 @@ use Guzzle\Http\Exception\ClientErrorResponseException;
 use Symfony\Component\HttpFoundation\Request;
 
 $app->get('/ui/addjob{url}', function (Request $request) use ($app,$hostname,$data) {
-	$data['inputfiletype'] = $app['session']->get('typeinput');
-	$data['inputfilepath'] = $app['session']->get('inputfile');
-	$data['mappingfilepath'] = $app['session']->get('mappingfile');
-	return $app['twig']->render('addjob.twig', $data);
+    $data['inputfiletype'] = $app['session']->get('typeinput');
+    $data['inputfilepath'] = $app['session']->get('inputfile');
+    $data['mappingfilepath'] = $app['session']->get('mappingfile');
+    return $app['twig']->render('addjob.twig', $data);
 })->value('url', '');

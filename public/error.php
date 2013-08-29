@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Handling the error
  * @copyright (C) 2013 by OKFN Belgium
@@ -10,7 +10,7 @@
  */
 
 $app->match('/ui/error{url}', function () use ($app,$data) {
-	$data['error'] = $app['session']->get('error');
-	return $app['twig']->render('error.twig', $data);
+    $data['error'] = $app['session']->get('error');
+    return $app['twig']->render('error.twig', $data);
 
 })->value('url', '');

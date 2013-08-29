@@ -19,7 +19,7 @@ use Symfony\Component\Form\FormError;
 
 $app->match('/ui/inputtest{url}', function (Request $request) use ($app,$hostname,$data) {
     // getting the input and mapping file (inserted by the user and saved in session-object)
-	$fileInput = @file_get_contents($app['session']->get('inputfile'));
+    $fileInput = @file_get_contents($app['session']->get('inputfile'));
     $fileMapping = @file_get_contents($app['session']->get('mappingfile'));
 
     $form = $app['form.factory']->createBuilder('form',array('input' => $fileInput,'mapping' => $fileMapping,'format' => $app['session']->get('typeinput')));
@@ -62,7 +62,7 @@ $app->match('/ui/inputtest{url}', function (Request $request) use ($app,$hostnam
     $data['form'] = $form->createView();
     // adding the datafields title and function for the twig file
 
-	return $app['twig']->render('tdtinput.twig', $data);
+    return $app['twig']->render('tdtinput.twig', $data);
 })->value('url', '');
 
 /**
