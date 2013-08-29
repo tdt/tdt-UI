@@ -1,0 +1,37 @@
+{{ include('header.twig') }}
+
+    <h1>{{header}}</h1>
+    <form action="#" method="post" {{form_enctype(form)}}>
+
+        {% form_theme form 'formtemplate.twig' %}
+
+        <div class="formdiv">{{ form_widget(form) }}
+            {% if button is defined %}
+                <button type="submit" class="button">{{button}}</button>
+            {% endif %}
+        </div>
+
+    </form>
+
+    <!-- If info popovers are defined -->
+    {% if infobuttons is defined %}
+        <script>
+            $('document').ready(function(){
+                var infobuttons = new Array();
+                // Put the infobutton texts in JS variables
+                {% for index,value in infobuttons %}
+                    infobuttons[{{index}}] = {% autoescape false %} "{{value}}" {% endautoescape %};
+                {% endfor %}
+                // Setup each hyperlink of which the id starts with infobutton as infobutton
+                $('button[id^="infobutton"]').each(function( index, value) {
+                    $("#"+value.id).popover({
+                        "content" : infobuttons[index],
+                        "html" : true,
+                        "trigger": "hover"
+                    });
+                });
+            });
+        </script>
+    {% endif %}
+
+{{ include('footer.twig') }}

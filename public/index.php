@@ -1,7 +1,6 @@
 <?php
- 
+
 /**
- * Index page
  * @copyright (C) 2013 by OKFN Belgium
  * @license AGPLv3
  * @author Leen De Baets
@@ -19,13 +18,18 @@ if (defined('ENVIRONMENT') && strcmp(ENVIRONMENT,'development') == 0){
 }
 
 // Website document root
-define('UIDOCROOT', __DIR__.DIRECTORY_SEPARATOR);
+define('UIDOCROOT', __DIR__. '/../');
 
 // Vendor directory
 define('UIVENDORPATH', realpath(__DIR__.'/../vendor/').DIRECTORY_SEPARATOR);
 
 // Path to the local tdt-start folder
-define("STARTPATH", __DIR__.'/../../../../');
+// TODO: improve
+// define("STARTPATH", __DIR__.'/../../../../');
+define("STARTPATH", __DIR__.'/../../start/');
+
+define("BASE_URL", $this->hostname . $this->subdir);
+$data['BASE_URL'] = BASE_URL;
 
 //Register the Twig Service Provider
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
@@ -47,12 +51,7 @@ $app->register(new Silex\Provider\SessionServiceProvider());
 // Register the url generator service provider object
 $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 
-// Get The DataTank hostname for use in /ui/package
-$hostname = $this->hostname.$this->subdir;
-$data['relpath'] = '/'.$this->subdir.'ui/';
-$data['hostname'] = $hostname;
-
-// must be included first
+// Must be included first
 require_once 'authentication.php';
 
 // If root is asked, redirect to the resource management
@@ -61,7 +60,7 @@ $app->get('/ui{url}', function () use ($app) {
 })->value('url', '');
 
 // The parameters that cannot be edited
-$app['session']->set('notedible',array('generic_type' => 'generic_type', 
+$app['session']->set('notedible',array('generic_type' => 'generic_type',
                                         'resource_type' => 'resource_type',
                                         'columns' => 'columns',
                                         'column_aliases' => 'column_aliases'));
@@ -69,17 +68,17 @@ $app['session']->set('notedible',array('generic_type' => 'generic_type',
 //start with resources management
 require_once 'packagesandresources.php';
 require_once 'usermanagement.php';
-require_once 'routemanagement.php';
-require_once 'choosefile.php';
-require_once 'generictypes.php';
-require_once 'puttingfile.php';
-require_once 'editpackagesandresources.php';
-require_once 'editresource.php';
-require_once 'inputfile.php';
-require_once 'input.php';
-require_once 'addjob.php';
-require_once 'error.php';
-require_once 'puttingfileoptional.php';
+// require_once 'routemanagement.php';
+// require_once 'choosefile.php';
+// require_once 'generictypes.php';
+// require_once 'puttingfile.php';
+// require_once 'editpackagesandresources.php';
+// require_once 'editresource.php';
+// require_once 'inputfile.php';
+// require_once 'input.php';
+// require_once 'addjob.php';
+// require_once 'error.php';
+// require_once 'puttingfileoptional.php';
 
 
 // Make sure REQUEST_URI starts with a slash. This is needed for Silex to work properly.

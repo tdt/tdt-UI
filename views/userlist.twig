@@ -1,0 +1,73 @@
+{{ include('header.twig') }}
+
+    <h1>User management</h1>
+    <a href="{{ BASE_URL }}ui/users/edit" class="add btn btn-primary" id="user">Add user</a>
+
+    {% for username,user in users %}
+
+        <div class="buttons" id="remuser">
+            <button class="btnedit" type="submit" name="edit" value="edit"></button>
+            <button href="#deleteModal" class="btnrem"  data-toggle="modal"></button>
+        </div>
+
+        <!-- Popup when trying to delete a user -->
+        <div id="deleteModal" class="modal hide fade" tabindex="-1">
+            <div class="modal-body">
+                <p>Are you sure you want to delete {{username}}?</p>
+                <p>If {{username}} is the only user that has access to a certain path, that path will now be freely accessible.</p>
+            </div>
+            <div class="modal-footer">
+                <button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
+                <button name="remove" value="remove" type="submit" class="btn">Yes</button>
+            </div>
+        </div>
+
+        <h2>{{username}}</h2>
+
+        <div class="well">
+            <p class="docroute">{{user.documentation}}</p>
+            <div>
+                <h3>Routes:</h3>
+                <ul class="routelist">
+
+                    {% if userroutes[username] is defined %}
+
+                        {% for route in userroutes[username].routes %}
+                            <li>
+                                {{routes[route.namespace].routes[route.index].documentation}}
+                                <button class="infoimg" id="pop_{{route.namespace}}{{route.index}}"></button>
+                            </li>
+                        {% endfor %}
+
+                    {% else %}
+
+                        No routes
+
+                    {% endif %}
+
+                </ul>
+            </div>
+        </div>
+
+    {% endfor %}
+
+    <script>
+        $(function () {
+            {% for username,user in users %}
+                {% if userroutes[username] is defined %}
+                    {% for route in userroutes[username].routes %}
+                        {% autoescape false %}
+                            {% set controller = routes[route.namespace].routes[route.index].controller %}
+                        {% endautoescape %}
+                        $("#pop_{{route.namespace}}{{route.index}}").popover({
+                            "content" : "Method: {{routes[route.namespace].routes[route.index].method}}<br />Route: {{routes[route.namespace].routes[route.index].route}}<br />Controller: {{controller|replace({'\\':'\\\\'})}}",
+                            "html" : true,
+                            "trigger": "hover"
+                        });
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+        });
+    </script>
+
+{{ include('footer.twig') }}

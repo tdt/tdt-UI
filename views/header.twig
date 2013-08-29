@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang='en'>
+    <head>
+        <title>title</title>
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+        <link href='{{ BASE_URL }}packages/tdt/ui/css/main.css' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700,800' rel='stylesheet' type='text/css'>
+    </head>
+
+    <body>
+        <div class="navbar navbar-fixed-top">
+            <div class="container">
+                <a class="navbar-brand" href="">
+                    <img src='{{ BASE_URL }}packages/tdt/ui/img/logo.png' alt='Datatank logo' />
+                </a>
+
+                <!-- Check the current path, to activate the right element in the navbar -->
+                {% set path = path(app.request.attributes.get('_route')) %}
+                <ul class="nav navbar-nav">
+                    <li {% if "/ui/datasets" in path %} class="active" {% endif %}>
+                        <a href="{{ BASE_URL }}ui/datasets">Datasets</a>
+                    </li>
+                    <li {% if "/ui/users" in path %} class="active" {% endif %}>
+                        <a href="{{ BASE_URL }}ui/users">Users</a>
+                    </li>
+                    <li {% if "/ui/routes" in path %} class="active" {% endif %}>
+                        <a href="{{ BASE_URL }}ui/routes">Routes</a>
+                    </li>
+                    <li {% if "/ui/input" in path %} class="active" {% endif %}>
+                        <a href="{{ BASE_URL }}ui/input">Input</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="container wrapper">
+            <div class="row">

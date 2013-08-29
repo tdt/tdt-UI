@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Shows the list of users
  * @copyright (C) 2013 by OKFN Belgium
@@ -33,17 +33,27 @@ $routes = get_object_vars($routeObject);
 
 // Save the routes used per user
 $userroutes = array();
+// Loop through all cores
 foreach ($routes as $namespace => $core) {
+    // Loop through all routes within a core object
 	foreach ($core->routes as $index => $route) {
+        // Loop through all users within a route object
 		foreach ($route->users as $user) {
-			$numberofroutes = 0;
-			if (isset($userroutes[$user]->routes)){
-				$numberofroutes = count($userroutes[$user]->routes);
-			}
-			$userroutes[$user]->routes[$numberofroutes]->namespace = $namespace;
-			$userroutes[$user]->routes[$numberofroutes]->index = $index;
+
+            // Create array if empty
+            if(!isset($userroutes[$user])){
+                $userroutes[$user] = new \stdClass();
+                $userroutes[$user]->routes = array();
+            }
+
+            $user_route = new \stdClass();
+            $user_route->namespace = $namespace;
+            $user_route->index = $index;
+
+
+            array_push($userroutes[$user]->routes, $user_route);
 		}
-	}	
+	}
 }
 
 // List users in auth.json
@@ -61,7 +71,7 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 
 	//If the request comes from the userlist, a parameter oldname will be in the request
 	$oldname = $request->get('oldname',null);
-	
+
 	// Check if the request is to remove the user
 	if ($request->get("remove") != null){
 		//Remove the user from the array
@@ -106,17 +116,17 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 		        'type' => $userObject->$oldname->type,
 		        'routes' => $routedefaults
 		    );
-		    
+
 		    $data['button'] = "Edit";
 		}
-		// If there is no old username, it means an add is wanted 
+		// If there is no old username, it means an add is wanted
 		else{
 			$defaultdata = array(
 				'function' => 'Add',
 			);
 			$data['button'] = "Add";
-		}	 
-		
+		}
+
 		// Create the route checkboxes
 		$routecheckboxes = array();
 		$globalindex = 0;
@@ -129,7 +139,7 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 	        	$globalindex++;
 	        }
 	    }
-	    
+
 	    // Create a Silex form with all the needed fields
 	    $form = $app['form.factory']->createBuilder('form', $defaultdata)
 	    	->add('function','hidden')
@@ -174,7 +184,7 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 	        $formdata = $form->getData();
 	    	$data['button'] = $formdata['function'];
 
-	    	//Validate the form	    	
+	    	//Validate the form
 	        if ($form->isValid()) {
 	            // Fetch the correct old name of the user from the form
 	        	$oldname = $formdata['oldname'];
@@ -212,7 +222,7 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 							// Look for the user in the user array of the current route
 							$newindex = array_search($newname,$route->users);
 							$oldindex = array_search($oldname,$route->users);
-							
+
 							// Route was checked
 							if (in_array($index, $routedata[$namespace])){
 								// If the username has changed, remove the access for the old username first
@@ -244,7 +254,7 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 		file_put_contents($routeFile, json_format($routeObject));
 
         // Redirect to the userlist
-        return $app->redirect('../../ui/users'); 
+        return $app->redirect('../../ui/users');
     }
     // Show the form
     else{

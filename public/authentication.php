@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * asking the username and password of the user
  * @copyright (C) 2013 by OKFN Belgium
@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
-$app->match('/ui/authentication{url}', function (Request $request) use ($app,$data,$hostname) {
+$app->match('/ui/authentication{url}', function (Request $request) use ($app, $data) {
 	$referer = $app['session']->get('referer');
 
 	if ($referer === null){
@@ -34,7 +34,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 		// it means the login failed (otherwise, you wouldn't be back at authentication)
 		if ($referer == $app['session']->get('formerreferer')){
 			// Indicate that the combination is wrong and reset the former referer
-			// This is needed to make sure there isn't given an error when you wouldn't post the form 
+			// This is needed to make sure there isn't given an error when you wouldn't post the form
 			// and try the same function again at a later time (before the session got reset)
 			$wrongcombo = true;
 			$app['session']->remove('formerreferer');
@@ -62,7 +62,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 				$title = $title."for getting";
 	} elseif ($app['session']->get('method') == 'patch') {
 				$title = $title."for editing";
-	} elseif ($app['session']->get('method') == 'put') {				
+	} elseif ($app['session']->get('method') == 'put') {
 				$title = $title."for putting";
 	}
 
@@ -87,13 +87,13 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
 					if ($e->getResponse()->getStatusCode() == 401) {
-						return $app->redirect($hostname.'ui/authentication');
+						return $app->redirect(BASE_URL.'ui/authentication');
 					} else{
 						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
                     	return $app->redirect('../../ui/error');
 					}
 				}
-				
+
 			}
 			elseif ($app['session']->get('method') == 'getFile') {
 				$title = $title."for getting File";
@@ -104,7 +104,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$response = $request->send()->getBody();
 				} catch (ClientErrorResponseException $e) {
 					if ($e->getResponse()->getStatusCode() == 401) {
-						return $app->redirect($hostname.'ui/authentication');
+						return $app->redirect(BASE_URL.'ui/authentication');
 					} else{
 						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
                     	return $app->redirect('../../ui/error');
@@ -127,14 +127,14 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
 					if ($e->getResponse()->getStatusCode() == 401) {
-						return $app->redirect($hostname.'ui/authentication');
+						return $app->redirect(BASE_URL.'ui/authentication');
 					} else{
 						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
                     	return $app->redirect('../../ui/error');
 					}
 				}
 			}
-			elseif ($app['session']->get('method') == 'put') {				
+			elseif ($app['session']->get('method') == 'put') {
 				$title = $title."for putting";
 				$app['session']->set('userput',$formdata['Username']);
 				$app['session']->set('pswdput',$formdata['Password']);
@@ -143,7 +143,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app,$da
 					$response = $request->send();
 				} catch (ClientErrorResponseException $e) {
 					if ($e->getResponse()->getStatusCode() == 401) {
-						return $app->redirect($hostname.'ui/authentication');
+						return $app->redirect(BASE_URL.'ui/authentication');
 					} else{
 						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
                     	return $app->redirect('../../ui/error');

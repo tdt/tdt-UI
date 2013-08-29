@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Getting the packages and resources
  * @copyright (C) 2013 by OKFN Belgium
@@ -15,9 +15,9 @@ use Guzzle\Http\Client;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
 // Representing the data in twig.
-$app->get('/ui/package{url}', function () use ($app,$hostname,$data) {
+$app->get('/ui/package{url}', function () use ($app, $data) {
 	// Create a client (to get the data)
-	$client = new Client($hostname);
+	$client = new Client(BASE_URL);
 
 	// getting the packages in json format
 	try {
@@ -30,20 +30,20 @@ $app->get('/ui/package{url}', function () use ($app,$hostname,$data) {
 		}
 		$obj = $request->send()->getBody();
 	} catch (ClientErrorResponseException $e) {
-		// if tried with authentication and it failed 
+		// if tried with authentication and it failed
         // or when tried without authentication and authentication is needed
 		if ($e->getResponse()->getStatusCode() == 401) {
 			// necessary information is stored in the session object, needed to redo the request after authentication
 			$app['session']->set('method','get');
-			$app['session']->set('redirect',$hostname.'ui/package');
-			$app['session']->set('referer',$hostname.'ui/package');
-			return $app->redirect('../../ui/authentication');	
+			$app['session']->set('redirect',BASE_URL.'ui/package');
+			$app['session']->set('referer',BASE_URL.'ui/package');
+			return $app->redirect('../../ui/authentication');
 		} else {
 	 		$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
             return $app->redirect('../../ui/error');
 	 	}
 	}
-	
+
 	// transform to a json object
 	$jsonobj = json_decode($obj);
 
@@ -64,7 +64,7 @@ $app->get('/ui/package{url}', function () use ($app,$hostname,$data) {
 				array_push($packages[$key], $resource[$key]);
 			}
 
-		}		
+		}
 	}
 	$data["packages"] = $packages;
 	return $app['twig']->render('packages.twig',$data);
