@@ -6,8 +6,8 @@
     {% for username,user in users %}
 
         <div class="buttons" id="remuser">
-            <button class="btnedit" type="submit" name="edit" value="edit"></button>
-            <button href="#deleteModal" class="btnrem"  data-toggle="modal"></button>
+            <a href="{{ BASE_URL }}ui/users/edit" class="btnedit"></a>
+            <a href="#deleteModal" class="btnrem" data-toggle="modal"></a>
         </div>
 
         <!-- Popup when trying to delete a user -->
@@ -33,15 +33,24 @@
                     {% if userroutes[username] is defined %}
 
                         {% for route in userroutes[username].routes %}
+
+                            {% autoescape false %}
+                                {% set controller = routes[route.namespace].routes[route.index].controller %}
+                            {% endautoescape %}
+
                             <li>
-                                {{routes[route.namespace].routes[route.index].documentation}}
-                                <button class="infoimg" id="pop_{{route.namespace}}{{route.index}}"></button>
+                                {{routes[route.namespace].routes[route.index].documentation | default('(No documentation for this route)')}}
+                                <button class="infoimg popover_route"
+                                    data-method='<strong>Method</strong>: {{routes[route.namespace].routes[route.index].method}}'
+                                    data-route='<strong>Route</strong>: {{routes[route.namespace].routes[route.index].route}}'
+                                    data-controller='<strong>Controller</strong>: {{routes[route.namespace].namespace}}\{{controller}}' >
+                                </button>
                             </li>
                         {% endfor %}
 
                     {% else %}
 
-                        No routes
+                        There are no routes assigned to this user.
 
                     {% endif %}
 
@@ -52,21 +61,16 @@
     {% endfor %}
 
     <script>
-        $(function () {
-            {% for username,user in users %}
-                {% if userroutes[username] is defined %}
-                    {% for route in userroutes[username].routes %}
-                        {% autoescape false %}
-                            {% set controller = routes[route.namespace].routes[route.index].controller %}
-                        {% endautoescape %}
-                        $("#pop_{{route.namespace}}{{route.index}}").popover({
-                            "content" : "Method: {{routes[route.namespace].routes[route.index].method}}<br />Route: {{routes[route.namespace].routes[route.index].route}}<br />Controller: {{controller|replace({'\\':'\\\\'})}}",
-                            "html" : true,
-                            "trigger": "hover"
-                        });
-                    {% endfor %}
-                {% endif %}
-            {% endfor %}
+        $(document).on('ready', function(){
+            $(".popover_route").each(function(){
+                var content = $(this).data('method') + '<br/>' + $(this).data('route') + '<br/>' + $(this).data('controller') + '<br/>';
+
+                $(this).popover({
+                    "content" : content,
+                    "html" : true,
+                    "trigger": "hover"
+                });
+            });
         });
     </script>
 

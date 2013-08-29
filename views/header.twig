@@ -17,7 +17,6 @@
                     <img src='{{ BASE_URL }}packages/tdt/ui/img/logo.png' alt='Datatank logo' />
                 </a>
 
-                <!-- Check the current path, to activate the right element in the navbar -->
                 {% set path = path(app.request.attributes.get('_route')) %}
                 <ul class="nav navbar-nav">
                     <li {% if "/ui/datasets" in path %} class="active" {% endif %}>

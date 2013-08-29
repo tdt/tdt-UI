@@ -125,12 +125,12 @@ footer{
 h1 {
     font-weight: 400;
     font-size: 2.2em;
-    color: darken(#328D81, 10%);
+    color: darken($green, 10%);
     margin-bottom: 40px;
 }
 
 h2 {
-    color: #328D81;
+    color: $green;
     font-size: 1.8em;
     font-weight: 300;
     padding-bottom: 5px;
@@ -138,13 +138,13 @@ h2 {
 }
 
 h2 + .well{
-    border-top: 2px solid #328D81 !important;
+    border-top: 2px solid $green !important;
 }
 
 h3 {
     font-weight: 300;
     font-size: 1.3em;
-    color: #328D81;
+    color: $green;
     margin: 0;
 }
 
@@ -157,12 +157,30 @@ li {
     list-style: none;
 }
 
+strong{
+    font-weight: 500;
+}
+
 .buttons {
     float: right;
 }
 
-.useritem {
-    margin-bottom: 50px;
+.popover{
+    max-width: 500px;
+    border-radius: 3px;
+    box-shadow: none;
+    color: #fff;
+    background-color: $green;
+    font-weight: 100;
+    border-color: transparent;
+
+    .arrow{
+        border-color: transparent !important;
+    }
+
+    &.right .arrow:after{
+        border-right-color: $green;
+    }
 }
 
 // .routes {
@@ -286,7 +304,7 @@ li {
 //     -moz-border-radius: 8px;
 //     font-size: 0.8em;
 //     font-family: 'Open Sans', sans-serif;
-//     color: #328D81;
+//     color: $green;
 //     font-weight: 300;
 //     padding:0px 7px;
 //     background-image: none;
@@ -295,7 +313,7 @@ li {
 // }
 
 // .btnother {
-//     background-color: #328D81;
+//     background-color: $green;
 //     border-radius: 8px;
 //     -moz-border-radius: 8px;
 //     font-family: 'Oswald', sans-serif;
@@ -314,7 +332,7 @@ li {
 // }
 
 // .btnmapping {
-//     background-color: #328D81;
+//     background-color: $green;
 //     border-radius: 8px;
 //     -moz-border-radius: 8px;
 //     font-family: 'Oswald', sans-serif;
@@ -343,15 +361,12 @@ li {
 // }
 
 // .link {
-//     color: #328D81;
+//     color: $green;
 // }
 
 // .link:hover {
 //     color:#FF2C4C;
 //     text-decoration: none;
-// }
-// .popover{
-//     max-width: 500px;
 // }
 
 // .requiredfield{
@@ -371,12 +386,7 @@ li {
 // }
 
 .btnrem:hover {
-    background-color: #F5F4EE;
     background-image: url('../img/removered.png');
-    background-size: 30px;
-    background-repeat: no-repeat;
-    text-align: center;
-    z-index: 20;
 }
 
 .btnrem {
@@ -390,19 +400,11 @@ li {
     border:none;
     box-shadow: none;
     padding: none;
+    display: inline-block;
 }
 
 .btnedit:hover {
-    background-color: #F5F4EE;
     background-image: url('../img/editred.png');
-    background-size: 30px;
-    background-repeat: no-repeat;
-    text-align: center;
-    z-index: 20;
-    text-shadow:none;
-    border:none;
-    box-shadow: none;
-    padding: none;
 }
 
 .btnedit {
@@ -416,11 +418,13 @@ li {
     border:none;
     box-shadow: none;
     padding: none;
+    display: inline-block;
 }
 
 .infoimg {
     background-image: url('../img/info.png');
-    background-size: 20px;
+    background-size: 17px;
+    background-position: left bottom;
     background-repeat: no-repeat;
     width: 20px;
     height: 20px;
@@ -429,6 +433,6 @@ li {
     box-shadow: none;
     padding: none;
     background-color: #F5F4EE;
-    margin-left: 5px;
+    margin-left: 3px;
 
 }

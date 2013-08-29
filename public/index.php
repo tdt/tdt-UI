@@ -18,10 +18,10 @@ if (defined('ENVIRONMENT') && strcmp(ENVIRONMENT,'development') == 0){
 }
 
 // Website document root
-define('UIDOCROOT', __DIR__. '/../');
+define('UI_DOCROOT', __DIR__. '/../');
 
 // Vendor directory
-define('UIVENDORPATH', realpath(__DIR__.'/../vendor/').DIRECTORY_SEPARATOR);
+define('UI_VENDORPATH', realpath(__DIR__.'/../vendor/').DIRECTORY_SEPARATOR);
 
 // Path to the local tdt-start folder
 // TODO: improve
@@ -33,7 +33,7 @@ $data['BASE_URL'] = BASE_URL;
 
 //Register the Twig Service Provider
 $app->register(new Silex\Provider\TwigServiceProvider(), array(
-    'twig.path' => UIDOCROOT.'views'
+    'twig.path' => UI_DOCROOT.'views'
 ));
 
 // Register the Form Service Provider
