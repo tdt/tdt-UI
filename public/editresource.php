@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * editing a resource
  * @copyright (C) 2013 by OKFN Belgium
@@ -36,19 +36,19 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
         }
         $obj = $request2->send()->getBody();
      } catch (ClientErrorResponseException $e) {
-        // if tried with authentication and it failed 
+        // if tried with authentication and it failed
         // or when tried without authentication and authentication is needed
         if ($e->getResponse()->getStatusCode() == 401) {
             // necessary information is stored in the session object, needed to redo the request after authentication
             $app['session']->set('method','get');
             $app['session']->set('redirect',$hostname.'ui/resource/edit');
             $app['session']->set('referer',$hostname.'ui/resource/edit');
-            return $app->redirect('../../ui/authentication');   
+            return $app->redirect(BASE_URL . ' /authentication');
         } else {
             $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-            return $app->redirect('../../ui/error');
+            return $app->redirect(BASE_URL . ' /error');
         }
-     } 
+     }
 
     // transform to a json object
     $jsonobj = json_decode($obj);
@@ -64,17 +64,17 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
         }
         $obj2 = $request3->send()->getBody();
     } catch (ClientErrorResponseException $e) {
-        // if tried with authentication and it failed 
+        // if tried with authentication and it failed
         // or when tried without authentication and authentication is needed
         if ($e->getResponse()->getStatusCode() == 401) {
             // necessary information is stored in the session object, needed to redo the request after authentication
             $app['session']->set('method','get');
             $app['session']->set('redirect',$hostname.'ui/package/add');
             $app['session']->set('referer',$hostname.'ui/package/add');
-            return $app->redirect('../../ui/authentication');   
+            return $app->redirect(BASE_URL . ' /authentication');
         } else {
             $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-            return $app->redirect('../../ui/error');
+            return $app->redirect(BASE_URL . ' /error');
         }
      }
     $jsonobj2 = json_decode($obj2);
@@ -112,7 +112,7 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
     else {
         $explanationvariables = $jsonobj2->admin->create->$generaltype->parameters;
     }
-    
+
     // Create a Silex form with all the fields to be changed and the fields already set on the value
     $form = $app['form.factory']->createBuilder('form',$parameterstobechanged);
     $globalindex = 0;
@@ -128,7 +128,7 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
         else {
             $form = $form->add($key,'text',array('required' => false, 'attr' => array('class' => 'infobutton')));
         }
-        
+
     }
 
     $form = $form->getForm();
@@ -162,7 +162,7 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
                 }
                 $response = $request->send();
             } catch(ClientErrorResponseException $e) {
-                // if tried with authentication and it failed 
+                // if tried with authentication and it failed
                 // or when tried without authentication and authentication is needed
                 if ($e->getResponse()->getStatusCode() == 401) {
                     // necessary information is stored in the session object, needed to redo the request after authentication
@@ -171,15 +171,15 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
                     $app['session']->set('body',$body);
                     $app['session']->set('redirect',$hostname.'ui/package');
                     $app['session']->set('referer',$hostname.'ui/resource/edit');
-                    return $app->redirect('../../ui/authentication');
+                    return $app->redirect(BASE_URL . ' /authentication');
                 } else {
                     $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-                    return $app->redirect('../../ui/error');
-                } 
+                    return $app->redirect(BASE_URL . ' /error');
+                }
             }
 
-            // Redirect to list of packages     
-            return $app->redirect('../../ui/package');
+            // Redirect to list of packages
+            return $app->redirect(BASE_URL . ' /package');
         }
     }
 

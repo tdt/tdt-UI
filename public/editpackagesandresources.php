@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * editting, deleting, showing the packages and resources
  * @copyright (C) 2013 by OKFN Belgium
@@ -22,7 +22,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
 $app->match('/ui/package/remove{url}', function (Request $request) use ($app,$hostname) {
-	
+
 	$client = new Client();
 
 	try{
@@ -37,7 +37,7 @@ $app->match('/ui/package/remove{url}', function (Request $request) use ($app,$ho
 		}
 		$response = $request->send();
 	} catch(ClientErrorResponseException $e) {
-		// if tried with authentication and it failed 
+		// if tried with authentication and it failed
 		// or when tried without authentication and authentication is needed
 		if ($e->getResponse()->getStatusCode() == 401) {
 			// necessary information is stored in the session object, needed to redo the request after authentication
@@ -45,14 +45,14 @@ $app->match('/ui/package/remove{url}', function (Request $request) use ($app,$ho
 			$app['session']->set('path',$path);
 			$app['session']->set('redirect',$hostname.'ui/package');
 			$app['session']->set('referer',$hostname.'ui/package/remove');
-			return $app->redirect('../../ui/authentication');
+			return $app->redirect(BASE_URL . ' /authentication');
 		} else {
 	 		$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-            return $app->redirect('../../ui/error');
+            return $app->redirect(BASE_URL . ' /error');
 	 	}
-	}	
-	return $app->redirect('../../ui/package');
-	
+	}
+	return $app->redirect(BASE_URL . ' /package');
+
 })->value('url', '');
 
 $app->match('/ui/resource/functions{url}', function (Request $request) use ($app,$hostname) {
@@ -72,7 +72,7 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 			}
 			$response = $request->send();
 		} catch(ClientErrorResponseException $e) {
-			// if tried with authentication and it failed 
+			// if tried with authentication and it failed
 			// or when tried without authentication and authentication is needed
 			if ($e->getResponse()->getStatusCode() == 401) {
 				// necessary information is stored in the session object, needed to redo the request after authentication
@@ -80,19 +80,19 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 				$app['session']->set('path',$path);
 				$app['session']->set('redirect',$hostname.'ui/package');
 				$app['session']->set('referer',$hostname.'ui/resource/functions');
-				return $app->redirect('../../ui/authentication');
+				return $app->redirect(BASE_URL . ' /authentication');
 			} else {
 		 		$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-                return $app->redirect('../../ui/error');
+                return $app->redirect(BASE_URL . ' /error');
 		 	}
 		}
-		return $app->redirect('../../ui/package');
+		return $app->redirect(BASE_URL . ' /package');
 	}
 	// if you want to edit a resource
 	else if($request->get("edit") != null){
 		// redirecting to the page that will render the form for editing
 		$app['session']->set('pathtoresource',$request->get('path'));
-		return $app->redirect('../../ui/resource/edit');
+		return $app->redirect(BASE_URL . ' /resource/edit');
 	}
 	// if you want to get a resource in json format
 	else if($request->get("json") != null){
@@ -104,13 +104,13 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 			// if not, try without authentication
 			if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
 				$request = $client->get($path);
-			}	
+			}
 			else{
 				$request = $client->get($path)->setAuth($app['session']->get('userget'),$app['session']->get('pswdget'));
 			}
 			$response = $request->send()->getBody();
 		} catch(ClientErrorResponseException $e) {
-			// if tried with authentication and it failed 
+			// if tried with authentication and it failed
 			// or when tried without authentication and authentication is needed
 			if ($e->getResponse()->getStatusCode() == 401) {
 				// necessary information is stored in the session object, needed to redo the request after authentication
@@ -118,10 +118,10 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 				$app['session']->set('path',$path);
 				$app['session']->set('redirect',$hostname.'ui/package');
 				$app['session']->set('referer',$hostname.'ui/resource/functions');
-				return $app->redirect('../../ui/authentication');
+				return $app->redirect(BASE_URL . ' /authentication');
 			} else{
 				$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-                return $app->redirect('../../ui/error');
+                return $app->redirect(BASE_URL . ' /error');
 			}
 		}
 		return $response;
@@ -136,13 +136,13 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 			// if not, try without authentication
 			if ($app['session']->get('userget') == null || $app['session']->get('pswdget') ==null) {
 				$request = $client->get($path);
-			}	
+			}
 			else{
 				$request = $client->get($path)->setAuth($app['session']->get('userget'),$app['session']->get('pswdget'));
 			}
 			$response = $request->send()->getBody();
 		} catch(ClientErrorResponseException $e) {
-			// if tried with authentication and it failed 
+			// if tried with authentication and it failed
 			// or when tried without authentication and authentication is needed
 			if ($e->getResponse()->getStatusCode() == 401) {
 				// necessary information is stored in the session object, needed to redo the request after authentication
@@ -150,10 +150,10 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
 				$app['session']->set('path',$path);
 				$app['session']->set('redirect',$hostname.'ui/package');
 				$app['session']->set('referer',$hostname.'ui/resource/functions');
-				return $app->redirect('../../ui/authentication');
+				return $app->redirect(BASE_URL . ' /authentication');
 			} else {
 		 		$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-                return $app->redirect('../../ui/error');
+                return $app->redirect(BASE_URL . ' /error');
 		 	}
 		}
 		return $response;

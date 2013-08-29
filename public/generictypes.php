@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Choosing which resource type is needed
  * @copyright (C) 2013 by OKFN Belgium
@@ -34,17 +34,17 @@ $app->match('/ui/package/generictype{url}', function (Request $request) use ($ap
         }
         $obj = $request2->send()->getBody();
     } catch (ClientErrorResponseException $e) {
-        // if tried with authentication and it failed 
+        // if tried with authentication and it failed
         // or when tried without authentication and authentication is needed
         if ($e->getResponse()->getStatusCode() == 401) {
             // necessary information is stored in the session object, needed to redo the request after authentication
             $app['session']->set('method','get');
             $app['session']->set('redirect',$hostname.'ui/package/generictype');
             $app['session']->set('referer',$hostname.'ui/package/generictype');
-            return $app->redirect('../../ui/authentication');   
+            return $app->redirect(BASE_URL . ' /authentication');
         } else {
             $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-            return $app->redirect('../../ui/error');
+            return $app->redirect(BASE_URL . ' /error');
         }
     }
 
@@ -73,7 +73,7 @@ $app->match('/ui/package/generictype{url}', function (Request $request) use ($ap
             $formdata = $form->getData();
             // saving the filetype for the postrequest that is executed later
             $app['session']->set('filetype',$formdata['Type']);
-            return $app->redirect('../../ui/package/add');
+            return $app->redirect(BASE_URL . ' /package/add');
         }
     }
 

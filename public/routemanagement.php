@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Shows the list of routes
  * @copyright (C) 2013 by OKFN Belgium
@@ -24,7 +24,7 @@ $app->get('ui/routes{url}', function () use ($app,$routes,$data) {
 
 // Add, edit or remove a route
 $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes,$routeFile,$routeObject,$userObject,$data) {
-	
+
 	// Default = no write
 	$write = false;
 
@@ -66,7 +66,7 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
 		    );
 		    $data['button'] = "Edit";
 		}
-		// If there is no old route, it means an add is wanted 
+		// If there is no old route, it means an add is wanted
 		else{
 			$defaultdata = array(
 				'function' => 'Add'
@@ -102,7 +102,7 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
 	    		'label' => 'Route regex',
 	    		'attr' => array('formtitlelabel' => 'formtitlelabel'),
 	    		// TODO: add regex constraint
-	    		'constraints' => new Assert\NotBlank() 
+	    		'constraints' => new Assert\NotBlank()
 	    		)
 	    	)
 	    	->add('method', 'choice', array(
@@ -137,7 +137,7 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
 	            'required' => false
 	        	)
 	      	)->getForm();
-      	
+
       	// If the method is POST, validate the form
 	    if ('POST' == $request->getMethod() && !$fromroutelist) {
 	        $form->bind($request);
@@ -177,7 +177,7 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
 		file_put_contents($routeFile, json_format($routeObject));
 
         // Redirect to the userlist
-        return $app->redirect('../../ui/routes'); 
+        return $app->redirect(BASE_URL . ' /routes');
     }
     // Show the form
     else{

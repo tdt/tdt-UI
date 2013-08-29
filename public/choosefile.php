@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Choosing which resource type is needed
  * @copyright (C) 2013 by OKFN Belgium
@@ -41,13 +41,13 @@ $app->match('/ui/package/resourcetype{url}', function (Request $request) use ($a
             $app['session']->set('method','get');
             $app['session']->set('redirect',$hostname.'ui/package/resourcetype');
             $app['session']->set('referer',$hostname.'ui/package/resourcetype');
-            return $app->redirect('../../ui/authentication');   
+            return $app->redirect(BASE_URL . ' /authentication');
         } else {
             $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-            return $app->redirect('../../ui/error');
+            return $app->redirect(BASE_URL . ' /error');
         }
-    } 
-    
+    }
+
     // transform to a json object
     $jsonobj = json_decode($obj);
 
@@ -63,8 +63,8 @@ $app->match('/ui/package/resourcetype{url}', function (Request $request) use ($a
     }
 
     // making the form
-    $form = $form->add('Type','choice',array('choices' => $possibilities, 
-                                            'multiple' => false, 
+    $form = $form->add('Type','choice',array('choices' => $possibilities,
+                                            'multiple' => false,
                                             'expanded' => true,
                                             'label' => false,
                                             'attr' => array('formtitlelabel' => 'formtitlelabel')
@@ -80,17 +80,17 @@ $app->match('/ui/package/resourcetype{url}', function (Request $request) use ($a
         if ($form->isValid()) {
             // getting the data from the form
             $formdata = $form->getData();
-            
+
             // checking the general type that was given by the user, needed for redirection
             $app['session']->set('generaltype',$formdata['Type']);
 
             // Redirect to specific page of the resource type
             if ($formdata['Type'] == generic) {
                 // In generic you have to choose a specific filetype
-                $path = '../../ui/package/generictype';
+                $path = BASE_URL . ' /package/generictype';
             } else{
                 // for the types installed and remote, you don't have to chosse a specific filetype
-                $path = '../../ui/package/add';
+                $path = BASE_URL . ' /package/add';
             }
 
             return $app->redirect($path);

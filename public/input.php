@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Input the mapping file and input file
  * @copyright (C) 2013 by OKFN Belgium
@@ -14,71 +14,52 @@ use Guzzle\Http\Client;
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Form\FormError;
 
 
-$app->match('/ui/input{url}', function (Request $request) use ($app,$hostname,$data) {
-    // getting the input and mapping file (inserted by the user and saved in session-object)
-	$fileInput = @file_get_contents($app['session']->get('inputfile'));
-    $fileMapping = @file_get_contents($app['session']->get('mappingfile'));
+$app->match('/ui/input{url}', function (Request $request) use ($app, $data) {
 
-    $form = $app['form.factory']->createBuilder('form',array('input' => $fileInput,'mapping' => $fileMapping,'format' => $app['session']->get('typeinput')));
-    $form = $form->add('input','textarea',array('label' => 'Data', 'attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
-    $form = $form->add('saveFile','submit',array('attr' => array('class' => 'btnmapping')));
-    $form = $form->add('mapping','textarea',array('attr' => array('cols' => "100", 'rows' => "200", 'style' => "width: 100%; height: 110px;")));
-    $form = $form->add('saveMappingFile','submit',array('attr' => array('class' => 'btnmapping')));
-    $form = $form->add('format','hidden');
-    $form = $form->getForm();
 
-    if ('POST' == $request->getMethod()){
-        $form->bind($request);
-        // Retrieve the form data
-        $formdata = $form->getData();
+	// enumerating the possible types of input files
+	$possibilities['JSON'] = "JSON";
+	$possibilities['XML'] = "XML";
+	$possibilities['CSV0'] = "CSV with header row and ; as a delimiter";
+	$possibilities['CSV1'] = "CSV with header row and , as a delimiter";
+	$possibilities['CSV2'] = "CSV without header row and ; as a delimiter";
+	$possibilities['CSV3'] = "CSV without header row and , as a delimiter";
 
-        // Check the validity of the form
-        if ($form->isValid()){
-            $write = false;
-            // Button to save the file was clicked
-            if ($form->get('saveFile')->isClicked()){
-                $fieldname = "input";
-                $write = true;
-            }
-            // Button to save the mapping file was clicked
-            else if ($form->get('saveMappingFile')->isClicked()){
-                $fieldname = "mapping";
-                $write = true;
-            }            
-            if ($write){
-                $filename = $app['session']->get($fieldname.'file');
-                $error = writeToFile($filename,$formdata[$fieldname]);
-                if ($error !== TRUE){
-                    $form->get($fieldname)->addError(new FormError($error));
-                }
-            }
+	$form = $app['form.factory']->createBuilder('form');
+	$form = $form->add('typeinput','choice',array(
+		'choices' => $possibilities,
+		'multiple' => false,
+		'expanded' => false,
+		'label' => false
+		)
+	);
+	$form = $form->add('inputfile','text',array('label' => 'Choose data file', 'required' => false, 'attr' => array('formtitlelabel' => 'formtitlelabel')));
+	$form = $form->add('mappingfile','text',array('label' => 'Choose mapping file', 'required' => false, 'attr' => array('formtitlelabel' => 'formtitlelabel')));
+	$form = $form->add('addjobbutton','submit',array('label' => 'Add job', 'attr' => array('class' => 'btnother')));
+	$form = $form->add('testmappingbutton','submit',array('label' => 'Test mapping', 'attr' => array('class' => 'btnother')));
+	$form = $form->getForm();
 
-        }
-    }
-    $data['hostname'] = $hostname;
-    $data['form'] = $form->createView();
-    // adding the datafields title and function for the twig file
+	if ('POST' == $request->getMethod()) {
+		$form->bind($request);
+		$data2 = $form->getData();
+		$app['session']->set('inputfile',$data2['inputfile']);
+		$app['session']->set('mappingfile',$data2['mappingfile']);
+		$app['session']->set('typeinput',$data2['typeinput']);
 
-	return $app['twig']->render('tdtinput.twig', $data);
+		if ($form->get('addjobbutton')->isClicked()){
+			return $app->redirect(BASE_URL.'ui/addjob');
+		}
+		else{
+			return $app->redirect(BASE_URL.'ui/input');
+		}
+	}
+
+	$data['form'] = $form->createView();
+	// adding the datafields title and function for the twig file
+	$data['title']= "";
+	$data['header']= "Input Management";
+	return $app['twig']->render('form.twig', $data);
+
 })->value('url', '');
-
-/**
- * Write data to file, taking into account the filetype for formatting
- * @param $file The filepath to write to
- * @param $data The textstring to write to the file
- * @return if success, TRUE is returned, else an errorstring is returned
- */
-function writeToFile($filepath,$data){
-    $filename = basename($filepath);
-    $dirname = dirname($filepath);
-    if (!is_writable($dirname)){
-        return $dirname." is not writable";
-    }
-    if (file_put_contents($filepath, $data) === FALSE){
-        return "Write to file ".$filename." failed";
-    }
-    return TRUE;
-}

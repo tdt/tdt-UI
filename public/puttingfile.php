@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Publishing a file on datatank
  * @copyright (C) 2013 by OKFN Belgium
@@ -38,17 +38,17 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
         }
         $obj = $request2->send()->getBody();
     } catch (ClientErrorResponseException $e) {
-        // if tried with authentication and it failed 
+        // if tried with authentication and it failed
         // or when tried without authentication and authentication is needed
         if ($e->getResponse()->getStatusCode() == 401) {
             // necessary information is stored in the session object, needed to redo the request after authentication
             $app['session']->set('method','get');
             $app['session']->set('redirect',$hostname.'ui/package/add');
             $app['session']->set('referer',$hostname.'ui/package/add');
-            return $app->redirect('../../ui/authentication');   
+            return $app->redirect(BASE_URL . ' /authentication');
         } else {
             $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-            return $app->redirect('../../ui/error');
+            return $app->redirect(BASE_URL . ' /error');
         }
     }
     // transform to a json object
@@ -76,7 +76,7 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
         unset($requiredcreatevariables[$key]);
     }
 
-    // Create a Silex form with all the required fields 
+    // Create a Silex form with all the required fields
     $globalindex = 0;
     $form = $app['form.factory']->createBuilder('form');
     $form = $form->add('TargetURI','text',array('label' => "Target URI" ,'constraints' => new Assert\NotBlank(),'attr' => array('class' => 'infobutton')));
@@ -100,11 +100,11 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
     // If the method is POST, validate the form
     if ('POST' == $request->getMethod()) {
         $form->bind($request);
-        if($form->get('add')->isClicked()){            
+        if($form->get('add')->isClicked()){
             if ($form->isValid()) {
                 // getting the data from the form
                 $formdata = $form->getData();
-                
+
                 // making array for the body of the put request
                 $body = array();
                 foreach ($requiredcreatevariables as $key => $value) {
@@ -131,7 +131,7 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
                     }
                     $response = $request->send();
                 } catch(ClientErrorResponseException $e) {
-                    // if tried with authentication and it failed 
+                    // if tried with authentication and it failed
                     // or when tried without authentication and authentication is needed
                     if ($e->getResponse()->getStatusCode() == 401) {
                         // necessary information is stored in the session object, needed to redo the request after authentication
@@ -140,22 +140,22 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
                         $app['session']->set('body',$body);
                         $app['session']->set('redirect',$hostname.'ui/package');
                         $app['session']->set('referer',$hostname.'ui/package/add');
-                        return $app->redirect('../../ui/authentication');
+                        return $app->redirect(BASE_URL . ' /authentication');
                     } else {
                         $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-                        return $app->redirect('../../ui/error');
+                        return $app->redirect(BASE_URL . ' /error');
                     }
                 }
 
-                // Redirect to list of packages     
-                return $app->redirect('../../ui/package');
+                // Redirect to list of packages
+                return $app->redirect(BASE_URL . ' /package');
             }
         }
         elseif($form->get('addOpt')->isClicked()){
              if ($form->isValid()) {
                 // getting the data from the form
                 $formdata = $form->getData();
-                
+
                 // making array for the body of the put request
                 $body = array();
                 $app['session']->set('TargetURI',$formdata['TargetURI']);
@@ -163,7 +163,7 @@ $app->match('/ui/package/add{url}', function (Request $request) use ($app,$hostn
                     $app['session']->set($value,$formdata[$value]);
                 }
 
-                return $app->redirect('../../ui/package/optionaladd');
+                return $app->redirect(BASE_URL . ' /package/optionaladd');
             }
         }
     }

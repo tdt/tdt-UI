@@ -65,19 +65,19 @@ $app['session']->set('notedible',array('generic_type' => 'generic_type',
                                         'columns' => 'columns',
                                         'column_aliases' => 'column_aliases'));
 
-//start with resources management
+
 require_once 'packagesandresources.php';
 require_once 'usermanagement.php';
-// require_once 'routemanagement.php';
+require_once 'routemanagement.php';
+require_once 'input.php';
 // require_once 'choosefile.php';
 // require_once 'generictypes.php';
 // require_once 'puttingfile.php';
 // require_once 'editpackagesandresources.php';
 // require_once 'editresource.php';
-// require_once 'inputfile.php';
 // require_once 'input.php';
 // require_once 'addjob.php';
-// require_once 'error.php';
+require_once 'error.php';
 // require_once 'puttingfileoptional.php';
 
 

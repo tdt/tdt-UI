@@ -15,7 +15,7 @@ use Guzzle\Http\Client;
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
 // Representing the data in twig.
-$app->get('/ui/package{url}', function () use ($app, $data) {
+$app->get('/ui/datasets{url}', function () use ($app, $data) {
 	// Create a client (to get the data)
 	$client = new Client(BASE_URL);
 
@@ -35,12 +35,12 @@ $app->get('/ui/package{url}', function () use ($app, $data) {
 		if ($e->getResponse()->getStatusCode() == 401) {
 			// necessary information is stored in the session object, needed to redo the request after authentication
 			$app['session']->set('method','get');
-			$app['session']->set('redirect',BASE_URL.'ui/package');
-			$app['session']->set('referer',BASE_URL.'ui/package');
-			return $app->redirect('../../ui/authentication');
+			$app['session']->set('redirect',BASE_URL.'ui/datasets');
+			$app['session']->set('referer',BASE_URL.'ui/datasets');
+			return $app->redirect(BASE_URL . 'ui/authentication');
 		} else {
 	 		$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-            return $app->redirect('../../ui/error');
+            return $app->redirect(BASE_URL . 'ui/error');
 	 	}
 	}
 
@@ -67,5 +67,5 @@ $app->get('/ui/package{url}', function () use ($app, $data) {
 		}
 	}
 	$data["packages"] = $packages;
-	return $app['twig']->render('packages.twig',$data);
+	return $app['twig']->render('datasets.twig',$data);
 })->value('url', '');

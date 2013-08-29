@@ -1,7 +1,7 @@
 {{ include('header.twig') }}
 
     <h1>User management</h1>
-    <a href="{{ BASE_URL }}ui/users/edit" class="add btn btn-primary" id="user">Add user</a>
+    <a href="{{ BASE_URL }}ui/users/edit" class="add btn btn-primary">Add user</a>
 
     {% for username,user in users %}
 
@@ -18,7 +18,7 @@
             </div>
             <div class="modal-footer">
                 <button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
-                <button name="remove" value="remove" type="submit" class="btn">Yes</button>
+                <button name="remove" value="remove" class="btn">Yes</button>
             </div>
         </div>
 
@@ -39,9 +39,8 @@
                             {% endautoescape %}
 
                             <li>
-                                {{routes[route.namespace].routes[route.index].documentation | default('(No documentation for this route)')}}
+                                {{routes[route.namespace].routes[route.index].method}} &mdash; {{routes[route.namespace].routes[route.index].documentation | default('(No documentation for this route)')}}
                                 <button class="infoimg popover_route"
-                                    data-method='<strong>Method</strong>: {{routes[route.namespace].routes[route.index].method}}'
                                     data-route='<strong>Route</strong>: {{routes[route.namespace].routes[route.index].route}}'
                                     data-controller='<strong>Controller</strong>: {{routes[route.namespace].namespace}}\{{controller}}' >
                                 </button>
@@ -63,7 +62,7 @@
     <script>
         $(document).on('ready', function(){
             $(".popover_route").each(function(){
-                var content = $(this).data('method') + '<br/>' + $(this).data('route') + '<br/>' + $(this).data('controller') + '<br/>';
+                var content = $(this).data('route') + '<br/>' + $(this).data('controller') + '<br/>';
 
                 $(this).popover({
                     "content" : content,

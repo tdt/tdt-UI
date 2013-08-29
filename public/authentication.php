@@ -90,7 +90,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app, $d
 						return $app->redirect(BASE_URL.'ui/authentication');
 					} else{
 						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-                    	return $app->redirect('../../ui/error');
+                    	return $app->redirect(BASE_URL . ' /error');
 					}
 				}
 
@@ -107,7 +107,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app, $d
 						return $app->redirect(BASE_URL.'ui/authentication');
 					} else{
 						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-                    	return $app->redirect('../../ui/error');
+                    	return $app->redirect(BASE_URL . ' /error');
 					}
 				}
 				// return the response (the json or php file)
@@ -130,7 +130,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app, $d
 						return $app->redirect(BASE_URL.'ui/authentication');
 					} else{
 						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-                    	return $app->redirect('../../ui/error');
+                    	return $app->redirect(BASE_URL . ' /error');
 					}
 				}
 			}
@@ -146,7 +146,7 @@ $app->match('/ui/authentication{url}', function (Request $request) use ($app, $d
 						return $app->redirect(BASE_URL.'ui/authentication');
 					} else{
 						$app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-                    	return $app->redirect('../../ui/error');
+                    	return $app->redirect(BASE_URL . ' /error');
 					}
 				}
 			}

@@ -1,5 +1,5 @@
 <?php
- 
+
 /**
  * Making a form for optional parameters
  * @copyright (C) 2013 by OKFN Belgium
@@ -37,17 +37,17 @@ $app->match('/ui/package/optionaladd{url}', function (Request $request) use ($ap
         }
         $obj = $request2->send()->getBody();
     } catch (ClientErrorResponseException $e) {
-        // if tried with authentication and it failed 
+        // if tried with authentication and it failed
         // or when tried without authentication and authentication is needed
         if ($e->getResponse()->getStatusCode() == 401) {
             // necessary information is stored in the session object, needed to redo the request after authentication
             $app['session']->set('method','get');
             $app['session']->set('redirect',$hostname.'ui/package/add');
             $app['session']->set('referer',$hostname.'ui/package/add');
-            return $app->redirect('../../ui/authentication');   
+            return $app->redirect(BASE_URL . ' /authentication');
         } else {
             $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-            return $app->redirect('../../ui/error');
+            return $app->redirect(BASE_URL . ' /error');
         }
     }
     // transform to a json object
@@ -66,7 +66,7 @@ $app->match('/ui/package/optionaladd{url}', function (Request $request) use ($ap
         $explanationvariables = $jsonobj->admin->create->$generaltype->parameters;
     }
 
-    // Create a Silex form with all the required fields 
+    // Create a Silex form with all the required fields
     $globalindex = 0;
     $form = $app['form.factory']->createBuilder('form');
     foreach ($variables as $key => $value) {
@@ -74,15 +74,15 @@ $app->match('/ui/package/optionaladd{url}', function (Request $request) use ($ap
             $documentation = $explanationvariables->$key;
             $form = $form->add($key,'text',array('required' => false, 'attr' => array('class' => 'infobutton')));
             $data['infobuttons'][$globalindex] = $documentation;
-            $globalindex++; 
+            $globalindex++;
         }
-        
+
     }
 
     $form = $form->getForm();
 
     if ('POST' == $request->getMethod()) {
-        $form->bind($request);           
+        $form->bind($request);
         if ($form->isValid()) {
             // getting the data from the form
             $formdata = $form->getData();
@@ -97,9 +97,9 @@ $app->match('/ui/package/optionaladd{url}', function (Request $request) use ($ap
                 if ($formdata[$key] != NULL) {
                     $body[$key] = $formdata[$key];
                 }
-                
+
             }
-            
+
             // setting the already given info to the body (resource type and if necessary general type)
             $body['resource_type'] = $app['session']->get('generaltype');
             if ($body['resource_type'] == 'generic') {
@@ -121,7 +121,7 @@ $app->match('/ui/package/optionaladd{url}', function (Request $request) use ($ap
                 }
                 $response = $request->send();
             } catch(ClientErrorResponseException $e) {
-                // if tried with authentication and it failed 
+                // if tried with authentication and it failed
                 // or when tried without authentication and authentication is needed
                 if ($e->getResponse()->getStatusCode() == 401) {
                     // necessary information is stored in the session object, needed to redo the request after authentication
@@ -130,15 +130,15 @@ $app->match('/ui/package/optionaladd{url}', function (Request $request) use ($ap
                     $app['session']->set('body',$body);
                     $app['session']->set('redirect',$hostname.'ui/package');
                     $app['session']->set('referer',$hostname.'ui/package/add');
-                    return $app->redirect('../../ui/authentication');
+                    return $app->redirect(BASE_URL . ' /authentication');
                 } else {
                     $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
-                    return $app->redirect('../../ui/error');
+                    return $app->redirect(BASE_URL . ' /error');
                 }
             }
 
-            // Redirect to list of packages     
-            return $app->redirect('../../ui/package');
+            // Redirect to list of packages
+            return $app->redirect(BASE_URL . ' /package');
         }
     }
 

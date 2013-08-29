@@ -254,7 +254,7 @@ $app->match('/ui/users/edit{url}', function (Request $request) use ($app,$userOb
 		file_put_contents($routeFile, json_format($routeObject));
 
         // Redirect to the userlist
-        return $app->redirect('../../ui/users');
+        return $app->redirect(BASE_URL . ' /users');
     }
     // Show the form
     else{
