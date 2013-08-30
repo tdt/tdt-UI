@@ -21,10 +21,10 @@ use Symfony\Component\Validator\Constraints as Assert;
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
-$app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hostname,$data) {
+$app->match('/ui/datasets/edit{url}', function (Request $request) use ($app, $data) {
 
     // Create a client (to get the data)
-    $client = new Client($hostname);
+    $client = new Client( BASE_URL );
     // getting information about all the resources
     try {
         // checking if once in a session time a username and password is given to authorise for getting
@@ -41,8 +41,8 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
         if ($e->getResponse()->getStatusCode() == 401) {
             // necessary information is stored in the session object, needed to redo the request after authentication
             $app['session']->set('method','get');
-            $app['session']->set('redirect',$hostname.'ui/resource/edit');
-            $app['session']->set('referer',$hostname.'ui/resource/edit');
+            $app['session']->set('redirect', BASE_URL .'ui/resource/edit');
+            $app['session']->set('referer', BASE_URL .'ui/resource/edit');
             return $app->redirect(BASE_URL . ' /authentication');
         } else {
             $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
@@ -69,8 +69,8 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
         if ($e->getResponse()->getStatusCode() == 401) {
             // necessary information is stored in the session object, needed to redo the request after authentication
             $app['session']->set('method','get');
-            $app['session']->set('redirect',$hostname.'ui/package/add');
-            $app['session']->set('referer',$hostname.'ui/package/add');
+            $app['session']->set('redirect', BASE_URL .'ui/package/add');
+            $app['session']->set('referer', BASE_URL .'ui/package/add');
             return $app->redirect(BASE_URL . ' /authentication');
         } else {
             $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
@@ -150,7 +150,7 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
             $client2 = new Client();
 
             try{
-                $path = $hostname."tdtadmin/resources/".$app['session']->get('pathtoresource');
+                $path =  BASE_URL ."tdtadmin/resources/".$app['session']->get('pathtoresource');
                 // the put request
                 // checking if once in a session time a username and password is given to authorise for patching
                 // if not, try without authentication
@@ -169,8 +169,8 @@ $app->match('/ui/resource/edit{url}', function (Request $request) use ($app,$hos
                     $app['session']->set('method','patch');
                     $app['session']->set('path',$path);
                     $app['session']->set('body',$body);
-                    $app['session']->set('redirect',$hostname.'ui/package');
-                    $app['session']->set('referer',$hostname.'ui/resource/edit');
+                    $app['session']->set('redirect', BASE_URL .'ui/package');
+                    $app['session']->set('referer', BASE_URL .'ui/resource/edit');
                     return $app->redirect(BASE_URL . ' /authentication');
                 } else {
                     $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());

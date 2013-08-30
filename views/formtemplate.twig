@@ -1,11 +1,3 @@
-<!--
-    Override some elements of the general twig template from Silex
-    @copyright (C) 2013 by OKFN Belgium
-    @license AGPLv3
-    @author Leen De Baets
-    @author Jeppe Knockaert
-    @author Nicolas Dierck
--->
 {% form_theme form _self %}
 
 <!-- Checkbox list/Radio button list -->
@@ -24,14 +16,14 @@
             {% set class = class ~ " formtitlelist" %}
         {% endif %}
         <!-- Add the starttag for the label -->
-        {{ form_label(child,null,{"starttag" : true, "label_attr" : { "class" : class }}) }}
+        {{ form_label(child, null, {"starttag" : true, "label_attr" : { "class" : class }}) }}
         <!-- Add the input fields itself -->
         {{ form_widget(child) }}
         <!-- Add the endtag for the label -->
-        {{ form_label(child,null,{"endtag" : true}) }}
+        {{ form_label(child, null, {"endtag" : true}) }}
         <!-- If infobuttons are wanted, let this know to the child elements -->
-        {{ form_label(child,null,{"closingtag" : ("infobuttonlist" in attr)}) }}
-        
+        {{ form_label(child, null, {"closingtag" : ("infobuttonlist" in attr)}) }}
+
     {% endfor %}
     </div>
 {% endspaceless %}

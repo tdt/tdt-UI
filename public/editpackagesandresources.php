@@ -21,12 +21,12 @@ use Symfony\Component\Validator\Constraints as Assert;
 // included for catching the 401 errors (authorization needed)
 use Guzzle\Http\Exception\ClientErrorResponseException;
 
-$app->match('/ui/package/remove{url}', function (Request $request) use ($app,$hostname) {
+$app->match('/ui/datasets/remove{url}', function (Request $request) use ($app) {
 
     $client = new Client();
 
     try{
-        $path = $hostname."tdtadmin/resources/".$request->get('path');
+        $path =  BASE_URL ."tdtadmin/resources/".$request->get('path');
         // checking if once in a session time a username and password is given to authorise for deleting
         // if not, try without authentication
         if ($app['session']->get('userrm') == null || $app['session']->get('pswdrm') ==null) {
@@ -43,8 +43,8 @@ $app->match('/ui/package/remove{url}', function (Request $request) use ($app,$ho
             // necessary information is stored in the session object, needed to redo the request after authentication
             $app['session']->set('method','remove');
             $app['session']->set('path',$path);
-            $app['session']->set('redirect',$hostname.'ui/package');
-            $app['session']->set('referer',$hostname.'ui/package/remove');
+            $app['session']->set('redirect', BASE_URL .'ui/package');
+            $app['session']->set('referer', BASE_URL .'ui/package/remove');
             return $app->redirect(BASE_URL . ' /authentication');
         } else {
             $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
@@ -55,13 +55,13 @@ $app->match('/ui/package/remove{url}', function (Request $request) use ($app,$ho
 
 })->value('url', '');
 
-$app->match('/ui/resource/functions{url}', function (Request $request) use ($app,$hostname) {
+$app->match('/ui/datasets/functions{url}', function (Request $request) use ($app) {
 
     // if you want to remove a resource
     if ($request->get("remove") != null){
         $client = new Client();
         try{
-            $path = $hostname."tdtadmin/resources/".$request->get('path');
+            $path =  BASE_URL ."definitions/".$request->get('path');
             // controlling if once in a time a username and password is given to authorise for deleting
             // if not, try without authentication
             if ($app['session']->get('userrm') == null || $app['session']->get('pswdrm') ==null) {
@@ -78,8 +78,8 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
                 // necessary information is stored in the session object, needed to redo the request after authentication
                 $app['session']->set('method','remove');
                 $app['session']->set('path',$path);
-                $app['session']->set('redirect',$hostname.'ui/package');
-                $app['session']->set('referer',$hostname.'ui/resource/functions');
+                $app['session']->set('redirect', BASE_URL .'ui/package');
+                $app['session']->set('referer', BASE_URL .'ui/resource/functions');
                 return $app->redirect(BASE_URL . ' /authentication');
             } else {
                 $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
@@ -96,7 +96,7 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
     }
     // if you want to get a resource in json format
     else if($request->get("json") != null){
-        $client = new Client($hostname);
+        $client = new Client( BASE_URL );
         try{
             // adding .json to the path to get it in a json format
             $path = $request->get('path').".json";
@@ -116,8 +116,8 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
                 // necessary information is stored in the session object, needed to redo the request after authentication
                 $app['session']->set('method','getFile');
                 $app['session']->set('path',$path);
-                $app['session']->set('redirect',$hostname.'ui/package');
-                $app['session']->set('referer',$hostname.'ui/resource/functions');
+                $app['session']->set('redirect', BASE_URL .'ui/package');
+                $app['session']->set('referer', BASE_URL .'ui/resource/functions');
                 return $app->redirect(BASE_URL . ' /authentication');
             } else{
                 $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());
@@ -128,7 +128,7 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
     }
     // if you want to get a resource in php format
     else{
-        $client = new Client($hostname);
+        $client = new Client( BASE_URL );
         try{
             // adding .php to the path to get it in a php format
             $path = $request->get('path').".php";
@@ -148,8 +148,8 @@ $app->match('/ui/resource/functions{url}', function (Request $request) use ($app
                 // necessary information is stored in the session object, needed to redo the request after authentication
                 $app['session']->set('method','getFile');
                 $app['session']->set('path',$path);
-                $app['session']->set('redirect',$hostname.'ui/package');
-                $app['session']->set('referer',$hostname.'ui/resource/functions');
+                $app['session']->set('redirect', BASE_URL .'ui/package');
+                $app['session']->set('referer', BASE_URL .'ui/resource/functions');
                 return $app->redirect(BASE_URL . ' /authentication');
             } else {
                 $app['session']->set('error',$e->getResponse()->getStatusCode().": ".$e->getResponse()->getReasonPhrase());

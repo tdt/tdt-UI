@@ -55,20 +55,20 @@ $app->get('/ui/datasets{url}', function () use ($app, $data) {
 
     // Iterating over all the elements in the json object
     foreach ($jsonobj->datasets as $key => $value) {
-        // Filtering the packages because the tdtinfo and the tdtadmin packages are of no interest to the user
-        if ($key != "info" && $key != "tdtadmin"){
+        // Filtering the packages because the info and the definitions packages are of no interest to the user
+        if ($key != "info" && $key != "definitions"){
             $packages[$key]= array();
 
             // Getting the resources
-            foreach ($jsonobj->datasets->$key as $key2 => $value2) {
+            foreach ($jsonobj->datasets->$key as $datasetName => $datasetObj) {
 
                 if(!isset($resource[$key])){
                     $resource[$key] = new \stdClass();
                 }
 
-                $resource[$key]->name = $key2;
-                $resource[$key]->documentation = $jsonobj->datasets->$key->$key2->documentation;
-                $resource[$key]->uri = $jsonobj->datasets->$key->$key2->uri;
+                $resource[$key]->name = $datasetName;
+                $resource[$key]->documentation = $datasetObj->documentation;
+                $resource[$key]->uri = $datasetObj->uri;
 
                 array_push($packages[$key], $resource[$key]);
             }
@@ -77,5 +77,6 @@ $app->get('/ui/datasets{url}', function () use ($app, $data) {
     }
 
     $data["packages"] = $packages;
+    $data['title'] = 'Dataset management' . TITLE_PREFIX;
     return $app['twig']->render('datasets.twig',$data);
 })->value('url', '');

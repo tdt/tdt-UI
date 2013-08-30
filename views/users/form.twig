@@ -1,0 +1,37 @@
+{{ include('header.twig') }}
+
+    <h1>{{header}}</h1>
+    <form action="" role="form" method="post">
+
+        <div class='col-lg-6'>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" class="form-control" placeholder="Username" value="{% if account is defined %}{{account}}{% endif %}">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" class="form-control" placeholder="Password">
+                <p class="help-block">Only fill out if you want to change the current password.</p>
+            </div>
+            <div class="form-group">
+                <label>Documentation</label>
+                <textarea class="form-control">{% if documentation is defined %}{{documentation}}{% endif %}</textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">{{button}}</button>
+        </div>
+        <div class='col-lg-6'>
+            {% for namespace, core in routes %}
+                {% for index, route in core.routes %}
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" {% if (route_defaults[namespace] is defined) and index in route_defaults[namespace] %} checked='checked' {% endif %}> {{ route.method }} &mdash; {{ route.documentation | default('(No documentation for this route)') }}
+                        </label>
+                        <p class="help-block">{{ route.route }} &rarr; {{ route.controller }}</p>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+    </form>
+
+{{ include('footer.twig') }}

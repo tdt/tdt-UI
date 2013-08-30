@@ -94,11 +94,17 @@ body {
 
 a{
     color: $green;
+    outline: none !important;
 
     &:focus, &:hover{
         text-decoration: none;
         color: $highlight;
+        outline: none !important;
     }
+}
+
+button:focus{
+    outline: none !important;
 }
 
 .well{
@@ -211,6 +217,26 @@ strong{
     }
 }
 
+input[type=text], input[type=password], textarea{
+    border: 1px solid darken($beige, 10%) !important;
+    background: rgba(255,255,255, 0.3) !important;
+    padding: 5px 8px;
+
+    font-family: 'Open Sans';
+
+    box-shadow: none !important;
+
+    outline: none !important;
+    outline-width: 0px !important;
+
+    &:focus{
+        border-bottom: 1px solid $green !important;
+    }
+}
+
+textarea{
+    resize: vertical;
+}
 
 // form {
 //     margin-bottom: 0;
@@ -398,4 +424,37 @@ strong{
     background-color: #F5F4EE;
     margin-left: 3px;
 
+}
+
+@media(max-width:768px){
+
+    body{
+        padding-top: 0px;
+    }
+
+    .navbar {
+        position: relative;
+        height: auto;
+        padding: 0px;
+
+        .nav{
+            margin: 0px;
+
+            a{
+                border-radius: 0px;
+            }
+        }
+    }
+
+    .wrapper{
+        padding: 0px 15px;
+    }
+
+    h1{
+        font-size: 1.6em;
+    }
+
+    .add {
+        margin-top: -70px;
+    }
 }

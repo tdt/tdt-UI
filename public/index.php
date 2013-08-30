@@ -17,6 +17,9 @@ if (defined('ENVIRONMENT') && strcmp(ENVIRONMENT,'development') == 0){
     $app['debug'] = true;
 }
 
+// HTML title prefix
+define('TITLE_PREFIX', ' | The DataTank');
+
 // Website document root
 define('UI_DOCROOT', __DIR__. '/../');
 
@@ -54,10 +57,10 @@ $app->register(new Silex\Provider\UrlGeneratorServiceProvider());
 // Must be included first
 require_once 'authentication.php';
 
-// If root is asked, redirect to the resource management
-$app->get('/ui{url}', function () use ($app) {
-    return $app->redirect('ui/package');
-})->value('url', '');
+// If root is asked, redirect to the dataset management
+$app->get('/ui{suffix}', function () use ($app) {
+    return $app->redirect(BASE_URL . 'ui/datasets');
+})->assert('suffix', '/?');
 
 // The parameters that cannot be edited
 $app['session']->set('notedible',array('generic_type' => 'generic_type',
@@ -82,8 +85,8 @@ require_once 'error.php';
 
 
 // Make sure REQUEST_URI starts with a slash. This is needed for Silex to work properly.
-if (strpos($_SERVER['REQUEST_URI'],"/") !== 0){
-    $_SERVER['REQUEST_URI'] = "/".$_SERVER['REQUEST_URI'];
+if (strpos($_SERVER['REQUEST_URI'], "/") !== 0){
+    $_SERVER['REQUEST_URI'] = "/" . $_SERVER['REQUEST_URI'];
 }
 
 $app->run();

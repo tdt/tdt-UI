@@ -16,14 +16,16 @@ use Symfony\Component\Validator\Constraints as Assert;
 require_once STARTPATH.'app/core/configurator.php';
 
 // Render a list of routes using Twig
-$app->get('ui/routes{url}', function () use ($app,$routes,$data) {
+$app->get('ui/routes', function () use ($app, $routes, $data) {
     // Give the array with cores to Twig, it contains the routes per core
     $data['routes'] = $routes;
-    return $app['twig']->render('routelist.twig',$data);
-})->value('url', '');
+    $data['title'] = 'Route management' . TITLE_PREFIX;
+
+    return $app['twig']->render('routelist.twig', $data);
+});
 
 // Add, edit or remove a route
-$app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes,$routeFile,$routeObject,$userObject,$data) {
+$app->match('ui/routes/edit{url}', function (Request $request) use ($app, $routes, $routeFile, $routeObject, $userObject, $data) {
 
     // Default = no write
     $write = false;
@@ -31,7 +33,7 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
     // If the request comes from the routelist, a parameter route will be in the request
     $oldroute = $request->get('oldroute',null);
     if ($oldroute != null){
-        $exploded = explode("//",$oldroute);
+        $exploded = explode("//", $oldroute);
         $oldnamespace = $exploded[count($exploded)-2];
         $oldindex = $exploded[count($exploded)-1];
         $oldroute = $routes[$oldnamespace]->routes[$oldindex];
@@ -184,8 +186,8 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app,$routes
         $data['form'] = $form->createView();
         $data['title'] = $data['button']." route";
         $data['header'] = $data['title'];
+        $data['title'] = 'Route management' . TITLE_PREFIX;
         // display the form
         return $app['twig']->render('form.twig', $data);
     }
 })->value('url', '');
-

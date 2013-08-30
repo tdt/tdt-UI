@@ -6,7 +6,7 @@
     {% for username,user in users %}
 
         <div class="buttons" id="remuser">
-            <a href="{{ BASE_URL }}ui/users/edit" class="btnedit"></a>
+            <a href="{{ BASE_URL }}ui/users/edit/{{username}}" class="btnedit"></a>
             <a href="#deleteModal" class="btnrem" data-toggle="modal"></a>
         </div>
 
