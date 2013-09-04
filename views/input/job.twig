@@ -4,20 +4,24 @@
         <h1>Add a job</h1>
     </div>
 
-    <form class="form-horizontal" role="form">
-        <div class='col-lg-12 panel'>
-            <div class="panel-heading">
-                Schedule a job
-            </div>
-            <div class='panel-body'>
-                <div class='col-lg-6'>
-                    <label>Job name</label>
-                    <input type="text" class="form-control" id="form_jobname" placeholder="Name of the scheduled job">
+    <form action="" class="form-horizontal" role="form" onsubmit='return false;'>
+        <div class='col-lg-12'>
+            <div class='panel'>
+                <div class="panel-heading">
+                    Schedule a job
                 </div>
-                <div class='col-lg-6'>
-                    <label>Occurence</label>
-                    <input type="text" class="form-control" id="form_occurence" placeholder="">
-                    <span class='help-block'>Frequency of the job (in minutes)</p>
+                <div class='panel-body'>
+                    <div class='row'>
+                        <div class='col-lg-6'>
+                            <label>Job name</label>
+                            <input type="text" class="form-control" id="form_jobname" placeholder="Name of the scheduled job">
+                        </div>
+                        <div class='col-lg-6'>
+                            <label>Occurence</label>
+                            <input type="text" class="form-control" id="form_occurence" placeholder="">
+                            <span class='help-block'>Frequency of the job (in minutes)</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -52,7 +56,7 @@
                 <div class='form-group {% if type.value != "XML" %}hide{% endif %}'>
                     <label>Index of objectroot</label>
                     <input id="form_arraylevel" type="text" class='form-control' placeholder='Object root index (number > 0)'/>
-                    <span class='help-block'>Because you selected XML as the format, you need to fill this field out. It specifies the level of the XML tag that wraps the objects that need to be published. The index of the first element is 1.</p>
+                    <span class='help-block'>Because you selected XML as the format, you need to fill this field out. It specifies the level of the XML tag that wraps the objects that need to be published. The index of the first element is 1.</span>
                 </div>
 
 
@@ -81,7 +85,7 @@
                         </div>
 
                         <div class='col-xs-12 col-sm-12 col-lg-12'>
-                            <span class='help-block'>The DataTank user that has access to create resource definitions</p>
+                            <span class='help-block'>The DataTank user that has access to create resource definitions</span>
                         </div>
                     </div>
                 </div>
@@ -150,10 +154,11 @@
 
 
                 <div class='form-group'>
-                    <button id="submit" class="btn btn-primary">Add</button>
+                    <button id="btnAdd" class="btn btn-primary">Add</button>
 
-                    <div id="error" style="display:none; color:red; font-style: italic"></div>
-
+                    <br/>
+                    <br/>
+                    <div id="error" class="alert alert-danger"></div>
                     <div  id="result" style="display:none; color:green; "><p>Job added!</p></div>
                 </div>
 
@@ -162,82 +167,26 @@
     </form>
 
     <script>
-        // Make sure the RDF part also appears when it is set as default
-        $(document).ready(function() {
-            $("#form_loadtype").click();
-        });
-        // Show or hide the RDF part according to the selected load type
-        $("#form_loadtype").click(function(){
-            if ($("#form_loadtype").val() == "CLI"){
-                $("#RDF").hide();
-            }
-            else{
-                $("#RDF").show();
-            }
-        });
-        // Show or hide the XML array level field if XML is selected as format
-        $("#form_format").click(function(){
-            if ($("#form_format").val() == "XML"){
-                $("#arrayleveldiv").show();
-            }
-            else{
-                $("#arrayleveldiv").hide();
+        $('#error').hide();
 
-            }
-        });
-        // When submit is clicked, fill in the details according to the chosen format
-        $("#submit").click(function(){
-            var extract = {};
-            switch($("#form_format").val()){
-                case "CSV0":
-                    extract = {
-                        "type": "CSV",
-                        "delimiter": ";",
-                        "has_header_row": "1"
-                    }
-                    break;
-                case "CSV1":
-                    extract = {
-                        "type": "CSV",
-                        "delimiter": ",",
-                        "has_header_row": "1"
-                    }
-                    break;
-                case "CSV2":
-                    extract = {
-                        "type": "CSV",
-                        "delimiter": ";",
-                        "has_header_row": "0"
-                    }
-                    break;
-                case "CSV3":
-                    extract = {
-                        "type": "CSV",
-                        "delimiter": ",",
-                        "has_header_row": "0"
-                    }
-                    break;
-                case "JSON":
-                    extract = {
-                        "type": "JSON"
-                    }
-                    break;
+        // When add is clicked, fill in the details according to the chosen format
+        $("#btnAdd").click(function(){
 
-                case "XML":
-                    extract = {
-                        "type": "XML",
-                        "arraylevel": $('#form_arraylevel').val()
-                    }
-                    break;
-                default:
+            var extract = {% autoescape false %}{{ type.options | json_encode() }}{% endautoescape %};
+
+            if('{{ type.value }}' == 'XML'){
+                extract.arraylevel = $('#form_arraylevel').val();
             }
-            extract.source = $('#form_inputfile').val();
+            extract.source = '{{ inputfile }}';
+
+            // Load type
+            var loadtype = $('.tab-content .active').attr('id').toUpperCase();
 
             var load = {
-                "type" : $("#form_loadtype").val()
+                "type" : loadtype
             }
             // If the selected load type is RDF, fill the extra fields
-            if ($('#form_loadtype').val() == "RDF"){
+            if (loadtype == "RDF"){
                 load.datatank_uri = $('#form_tdturiloading').val();
                 load.datatank_package = $('#form_packageloading').val();
                 load.datatank_resource = $('#form_resourceloading').val();
@@ -254,25 +203,26 @@
                 "extract": extract,
                 "map": {
                     "type" : "RDF",
-                    "mapfile" : $('#form_mappingfile').val(),
+                    "mapfile" : '{{ mappingfile }}',
                     "datatank_uri" : $('#form_tdturimapping').val(),
                     "datatank_package" : $('#form_packagemapping').val(),
                     "datatank_resource" : $('#form_resourcemapping').val()
                 },
                 "load": load
             };
+
             // Send a PUT to The DataTank with the data from the form to add the job
             $.ajax({
                 type: "PUT",
-                url: "{{ BASE_URL }}tdtinput/"+$('#form_jobname').val(),
+                url: "{{ BASE_URL }}input/" + $('#form_jobname').val(),
                 data: JSON.stringify(config),
                 success: function(data, status){
-                    $("#error").hide();
-                    $("#result").show();
+                    $('#error').hide();
+                    $('#result').slideUp().slideDown();
                 },
                 error : function(data){
                     $("#result").hide();
-                    $("#error").html("Error "+data.status+": "+data.statusText).show();
+                    $('#error').html('<b>Error ' + data.status + '</b>: ' + data.statusText).fadeIn();
                 }
             });
         });
