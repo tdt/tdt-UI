@@ -28,8 +28,8 @@ define('UI_VENDORPATH', realpath(__DIR__.'/../vendor/').DIRECTORY_SEPARATOR);
 
 // Path to the local tdt-start folder
 // TODO: improve
-// define("STARTPATH", __DIR__.'/../../../../');
-define("STARTPATH", __DIR__.'/../../start/');
+define("STARTPATH", __DIR__.'/../../../../');
+// define("STARTPATH", __DIR__.'/../../start/');
 
 define("BASE_URL", $this->hostname . $this->subdir);
 $data['BASE_URL'] = BASE_URL;
