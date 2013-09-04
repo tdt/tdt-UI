@@ -43,9 +43,9 @@
 
             // Read the data from the form
             var config = {
-                "mapping": $('#inputfile').val(),
+                "mapping": $('#mappingfile').val(),
                 "extract": {% autoescape false %}{{ type.options | json_encode() }}{% endautoescape %},
-                "chunk": $('#mappingfile').val()
+                "chunk": $('#inputfile').val()
             };
 
             // Send a POST to The DataTank with the data from the form
