@@ -25,7 +25,7 @@ $app->get('ui/routes', function () use ($app, $routes, $data) {
 });
 
 // Add, edit or remove a route
-$app->match('ui/routes/edit{url}', function (Request $request) use ($app, $routes, $routeFile, $routeObject, $userObject, $data) {
+$app->match('ui/routes/edit{url}', function (Request $request) use ($app, $routes, $route_config_file, $routeObject, $userObject, $data) {
 
     // Default = no write
     $write = false;
@@ -176,7 +176,7 @@ $app->match('ui/routes/edit{url}', function (Request $request) use ($app, $route
     // If a remove/edit/add is executed, we need to write to the config files
     if ($write){
         // Write to cores.json
-        file_put_contents($routeFile, json_format($routeObject));
+        file_put_contents($route_config_file, json_format($routeObject));
 
         // Redirect to the userlist
         return $app->redirect(BASE_URL . ' /routes');

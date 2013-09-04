@@ -458,3 +458,36 @@ textarea{
         margin-top: -70px;
     }
 }
+
+.panel{
+    .panel-heading{
+        background-color: $green;
+        color: white;
+    }
+}
+
+.alert{
+    padding: 15px 15px 15px 15px;
+}
+
+@media (min-width: 768px){
+    .row.nopadding{
+        .form-group > div:first-child{
+            padding-right: 0px;
+        }
+    }
+}
+
+.tab-content{
+    background: #fff;
+    padding: 15px;
+    padding-bottom: 0px;
+    border: 1px solid #ddd;
+    border-top: 0px none;
+
+}
+
+.form-group{
+    margin-left: 0px !important;
+    margin-right: 0px !important;
+}

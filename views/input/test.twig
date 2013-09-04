@@ -1,0 +1,68 @@
+{{ include('header.twig') }}
+
+
+    <div class='col-lg-12'>
+        <h1>Test mapping</h1>
+    </div>
+
+    <div class='col-lg-9'>
+
+        <form action="" role="form" method="post">
+            <div id='result' class="form-group">
+                <label>Result</label>
+                <textarea rows='20' class='form-control'></textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Data file</label>
+                <textarea id='inputfile' rows='8' class='form-control' disabled>{{ inputfile }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Mapping file</label>
+                <textarea id='mappingfile'  rows='8' class='form-control' disabled>{{ mappingfile }}</textarea>
+            </div>
+        </form>
+    </div>
+
+    <div class='col-lg-3'>
+        <button id='btnMap' class="btn btn-primary btn-block" name='map'>Map</button>
+        <a href='{{ BASE_URL }}ui/input/job' class="btn btn-block">Add job</a>
+
+        <br/>
+        <div id="error" class="alert alert-danger"></div>
+        <br/>
+    </div>
+
+    <script>
+        $('#error').hide();
+        $('#result').hide();
+
+        // When submit is clicked, fill in the details according to the chosen format
+        $("#btnMap").click(function(){
+
+            // Read the data from the form
+            var config = {
+                "mapping": $('#inputfile').val(),
+                "extract": {% autoescape false %}{{ type.options | json_encode() }}{% endautoescape %},
+                "chunk": $('#mappingfile').val()
+            };
+
+            // Send a POST to The DataTank with the data from the form
+            $.ajax({
+                type: 'POST',
+                url: '{{BASE_URL}}input/test',
+                data: JSON.stringify(config),
+                success: function(data, status){
+                    $('#error').hide();
+                    $('#result textarea').val(data);
+                    $('#result').slideUp().slideDown();
+                },
+                error : function(data){
+                    $('#error').html('<b>Error ' + data.status + '</b>: ' + data.statusText).fadeIn();
+                }
+            });
+        });
+    </script>
+
+{{ include('footer.twig') }}

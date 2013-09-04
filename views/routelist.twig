@@ -1,53 +1,60 @@
 {{ include('header.twig') }}
 
-    <h1>Route management</h1>
-    <a href="{{ BASE_URL }}ui/routes/edit" class="add btn btn-primary">Add route</a>
+    <div class='col-lg-12'>
+        <h1>Route management</h1>
+        <a href="{{ BASE_URL }}ui/routes/edit" class="add btn btn-primary">Add route</a>
 
-    {% for namespace,core in routes %}
-        <h2>{{core.namespace}}</h2>
+        {% for namespace,core in routes %}
+            <h2>{{core.namespace}}</h2>
 
-        <div class="routes well">
-            {% for index,route in core.routes %}
+            <div class="routes well">
+                {% for index,route in core.routes %}
 
-                <h3>
-                    {{route.method}} &mdash; {{route.documentation | default('(No documentation for this route)')}}
-                </h3>
+                    <h3>
+                        {{route.method}} &mdash; {{route.documentation | default('(No documentation for this route)')}}
+                    </h3>
 
-                <div class="buttons" id="remroute">
-                    <a href="{{ BASE_URL }}ui/routes/edit" class="btnedit"></a>
-                    <a href="#deleteModal" class="btnrem" data-toggle="modal"></a>
-                </div>
-                <!-- Popup when trying to delete a route -->
-                <div id="deleteModal" class="modal hide fade" tabindex="-1">
-                    <div class="modal-body">
-                        <p>Are you sure you want to delete this route?</p>
-                        <p>This action will result in no one having access to this route anymore.</p>
+                    <div class="buttons" id="remroute">
+                        <a href="{{ BASE_URL }}ui/routes/edit" class="btnedit"></a>
+                        <a href="#deleteModal" class="btnrem" data-toggle="modal"></a>
                     </div>
-                    <div class="modal-footer">
-                        <button class="btn" data-dismiss="modal" aria-hidden="true">No</button>
-                        <button name="remove" value="remove" class="btn">Yes</button>
+                    {# Popup when trying to delete a route #}
+
+                    <div  id="deleteModal" class="modal fade">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete this route?</p>
+                                    <p>This action will result in no one having access to this route anymore.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" data-dismiss="modal" aria-hidden="true" class="btn btn-default" >No</button>
+                                    <button type="button" name="remove" value="remove" type="submit" class="btn btn-primary">Yes</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <ul>
-                    <li>
-                        <h4>Route:</h4> {{route.route}}
-                    </li>
-                    <li>
-                        <h4>Controller:</h4> {{core.namespace}}\{{route.controller}}
-                    </li>
-                    <li>
-                        <h4>Users:</h4>
-                        {% if route.users is not empty  %}
-                            {{ route.users | join(', ') }}
-                        {% else %}
-                            Everyone has access
-                        {% endif %}
-                    </li>
-                </ul>
+                    <ul>
+                        <li>
+                            <h4>Route:</h4> {{route.route}}
+                        </li>
+                        <li>
+                            <h4>Controller:</h4> {{core.namespace}}\{{route.controller}}
+                        </li>
+                        <li>
+                            <h4>Users:</h4>
+                            {% if route.users is not empty  %}
+                                {{ route.users | join(', ') }}
+                            {% else %}
+                                Everyone has access
+                            {% endif %}
+                        </li>
+                    </ul>
 
-            {% endfor %}
-        </div>
-    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endfor %}
+    </div>
 
 {{ include('footer.twig') }}

@@ -28,8 +28,8 @@ $userObject = json_decode(file_get_contents($auth_config_file));
 $users = get_object_vars($userObject);
 
 // Fetch routes from file
-$routeFile = STARTPATH. "app/config/cores.json";
-$routeObject = json_decode(Configurator::stripComments(file_get_contents($routeFile)));
+$route_config_file = STARTPATH. "app/config/cores.json";
+$routeObject = json_decode(Configurator::stripComments(file_get_contents($route_config_file)));
 $routes = get_object_vars($routeObject);
 
 // Save the routes used per user
@@ -70,12 +70,9 @@ $app->get('/ui/users', function () use ($app, $userObject, $routes, $userroutes,
 });
 
 // Add, edit or remove a user
-$app->match('/ui/users/edit/{account}', function (Request $request, $account = null) use ($app, $userObject, $auth_config_file, $userroutes, $routes, $routeFile, $routeObject, $data) {
+$app->match('/ui/users/edit/{account}', function (Request $request, $account = null) use ($app, $userObject, $auth_config_file, $userroutes, $routes, $route_config_file, $routeObject, $data) {
     // Default = no write
     $write = false;
-
-    //If the request comes from the userlist, a parameter account will be in the request
-    $account = $request->get('account', null);
 
     // Check if the request is to remove the user
     if ($request->get("remove") != null){
@@ -211,7 +208,7 @@ $app->match('/ui/users/edit/{account}', function (Request $request, $account = n
         file_put_contents($auth_config_file, json_format($userObject));
 
         // Write to cores.json
-        file_put_contents($routeFile, json_format($routeObject));
+        file_put_contents($route_config_file, json_format($routeObject));
 
         // Redirect to the userlist
         return $app->redirect(BASE_URL . 'ui/users');

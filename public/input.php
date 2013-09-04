@@ -16,50 +16,103 @@ use Guzzle\Http\Exception\ClientErrorResponseException;
 use Symfony\Component\HttpFoundation\Request;
 
 
-$app->match('/ui/input{url}', function (Request $request) use ($app, $data) {
+// Define type of input files
+$input_types = array(
+    'JSON' => array(
+        'value' => 'JSON',
+        'text' => 'JSON',
+        'options' => array(
+            'type' => 'JSON',
+        ),
+    ),
+    'XML' => array(
+        'value' => 'XML',
+        'text' => 'XML',
+        'options' => array(
+            'type' => 'XML',
+        ),
+    ),
+    'CSV0' => array(
+        'value' => 'CSV0',
+        'text' => 'CSV with header row and ; as a delimiter',
+        'options' => array(
+            'type' => 'CSV',
+            'delimiter' => ';',
+            'has_header_row' => '1',
+        ),
+    ),
+    'CSV1' => array(
+        'value' => 'CSV1',
+        'text' => 'CSV with header row and , as a delimiter',
+        'options' => array(
+            'type' => 'CSV',
+            'delimiter' => ',',
+            'has_header_row' => '1',
+        ),
+    ),
+    'CSV2' => array(
+        'value' => 'CSV2',
+        'text' => 'CSV without header row and ; as a delimiter',
+        'options' => array(
+            'type' => 'CSV',
+            'delimiter' => ';',
+            'has_header_row' => '0',
+        ),
+    ),
+    'CSV3' => array(
+        'value' => 'CSV3',
+        'text' => 'CSV without header row and , as a delimiter',
+        'options' => array(
+            'type' => 'CSV',
+            'delimiter' => ',',
+            'has_header_row' => '0',
+        ),
+    ),
+);
 
+// Index route
+$app->match('/ui/input', function (Request $request) use ($app, $data, $input_types) {
 
-    // enumerating the possible types of input files
-    $possibilities['JSON'] = "JSON";
-    $possibilities['XML'] = "XML";
-    $possibilities['CSV0'] = "CSV with header row and ; as a delimiter";
-    $possibilities['CSV1'] = "CSV with header row and , as a delimiter";
-    $possibilities['CSV2'] = "CSV without header row and ; as a delimiter";
-    $possibilities['CSV3'] = "CSV without header row and , as a delimiter";
+    $data['types'] = $input_types;
 
-    $form = $app['form.factory']->createBuilder('form');
-    $form = $form->add('typeinput','choice',array(
-        'choices' => $possibilities,
-        'multiple' => false,
-        'expanded' => false,
-        'label' => false
-        )
-    );
-    $form = $form->add('inputfile','text',array('label' => 'Choose data file', 'required' => false, 'attr' => array('formtitlelabel' => 'formtitlelabel')));
-    $form = $form->add('mappingfile','text',array('label' => 'Choose mapping file', 'required' => false, 'attr' => array('formtitlelabel' => 'formtitlelabel')));
-    $form = $form->add('addjobbutton','submit',array('label' => 'Add job', 'attr' => array('class' => 'btnother')));
-    $form = $form->add('testmappingbutton','submit',array('label' => 'Test mapping', 'attr' => array('class' => 'btnother')));
-    $form = $form->getForm();
+    if ($request->getMethod() == 'POST') {
 
-    if ('POST' == $request->getMethod()) {
-        $form->bind($request);
-        $data2 = $form->getData();
-        $app['session']->set('inputfile',$data2['inputfile']);
-        $app['session']->set('mappingfile',$data2['mappingfile']);
-        $app['session']->set('typeinput',$data2['typeinput']);
+        $app['session']->set('inputfile', $request->get('inputfile'));
+        $app['session']->set('mappingfile', $request->get('mappingfile'));
+        $app['session']->set('type', $request->get('type'));
 
-        if ($form->get('addjobbutton')->isClicked()){
-            return $app->redirect(BASE_URL.'ui/addjob');
-        }
-        else{
-            return $app->redirect(BASE_URL.'ui/input');
+        if($request->get('addjob')){
+            return $app->redirect(BASE_URL . 'ui/input/job');
+        }else{
+            return $app->redirect(BASE_URL . 'ui/input/test');
         }
     }
 
-    $data['form'] = $form->createView();
-    // adding the datafields title and function for the twig file
-    $data['title']= "";
-    $data['header']= "Input Management";
-    return $app['twig']->render('form.twig', $data);
+    $data['title']= "Input Management" . TITLE_PREFIX;
+    return $app['twig']->render('input/form.twig', $data);
 
-})->value('url', '');
+});
+
+// Test route
+$app->match('/ui/input/test', function (Request $request) use ($app, $data, $input_types) {
+
+    // Getting the input and mapping file (inserted by the user and saved in session-object)
+    $data['inputfile'] = @file_get_contents($app['session']->get('inputfile'));
+    $data['mappingfile'] = @file_get_contents($app['session']->get('mappingfile'));
+    $data['type'] = $input_types[$app['session']->get('type')];
+
+    $data['title']= "Test Mapping" . TITLE_PREFIX;
+
+    return $app['twig']->render('input/test.twig', $data);
+});
+
+// Add the job
+$app->get('/ui/input/job', function (Request $request) use ($app, $data, $input_types) {
+
+    $data['inputfile'] = $app['session']->get('inputfile');
+    $data['mappingfile'] = $app['session']->get('mappingfile');
+    $data['type'] = $input_types[$app['session']->get('type')];
+
+    $data['title']= "Add a job" . TITLE_PREFIX;
+    return $app['twig']->render('input/job.twig', $data);
+});
