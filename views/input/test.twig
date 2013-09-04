@@ -15,12 +15,12 @@
 
             <div class="form-group">
                 <label>Data file</label>
-                <textarea id='inputfile' rows='8' class='form-control' disabled>{{ inputfile }}</textarea>
+                <textarea id='inputfile' rows='8' class='form-control' disabled>{% autoescape false %}{{ inputfile }}{% endautoescape %}</textarea>
             </div>
 
             <div class="form-group">
                 <label>Mapping file</label>
-                <textarea id='mappingfile'  rows='8' class='form-control' disabled>{{ mappingfile }}</textarea>
+                <textarea id='mappingfile'  rows='8' class='form-control' disabled>{% autoescape false %}{{ mappingfile }}{% endautoescape %}</textarea>
             </div>
         </form>
     </div>
